@@ -1,0 +1,18 @@
+version: '3.4'
+
+services:
+  doctors.api:
+    image: ${DOCKER_REGISTRY-}doctorsapi
+    build:
+      context: .
+      dockerfile: Doctors.API/Dockerfile
+    depends_on: 
+     - sqlServer
+  sqlServer:
+    image: mcr.microsoft.com/mssql/server:2022-latest
+    container_name: sqlServer
+    environment:
+     - MSSQL_SA_PASSWORD=P@ssword1
+     - ACCEPT_EULA=Y
+    ports:
+     - 1435:1433

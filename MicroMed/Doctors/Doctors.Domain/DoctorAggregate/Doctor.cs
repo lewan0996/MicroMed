@@ -1,4 +1,5 @@
-﻿using Shared.Domain;
+﻿using System.Diagnostics.CodeAnalysis;
+using Shared.Domain;
 
 namespace Doctors.Domain.DoctorAggregate;
 
@@ -7,11 +8,8 @@ public class Doctor : Entity<int>, IAggregateRoot
     public required Name Name { get; init; }
     public required Specialty Specialty { get; init; }
 
-    public Doctor(Name name, Specialty specialty)
-    {
-        Name = name;
-        Specialty = specialty;
-    }
+    [SetsRequiredMembers]
+    public Doctor(Name name, Specialty specialty) => (Name, Specialty) = (name, specialty);
 
     protected Doctor() { }
 }

@@ -17,21 +17,23 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Timetable", "Timetable", "{
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Drugs", "Drugs", "{555BEA52-D048-4C1B-8A30-076101FBA352}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Doctors.Domain", "Doctors\Doctors.Domain\Doctors.Domain.csproj", "{168F1F43-054A-4756-B5E8-59E20DD83808}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Doctors.Domain", "Doctors\Doctors.Domain\Doctors.Domain.csproj", "{168F1F43-054A-4756-B5E8-59E20DD83808}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Doctors.Services", "Doctors\Doctors.Services\Doctors.Services.csproj", "{1CC608FE-8B6E-4834-960C-F04DCD883D21}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Doctors.Services", "Doctors\Doctors.Services\Doctors.Services.csproj", "{1CC608FE-8B6E-4834-960C-F04DCD883D21}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Doctors.Infrastructure", "Doctors\Doctors.Infrastructure\Doctors.Infrastructure.csproj", "{4D145F84-83B7-4F9C-A39A-0079DBB7C64E}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Doctors.Infrastructure", "Doctors\Doctors.Infrastructure\Doctors.Infrastructure.csproj", "{4D145F84-83B7-4F9C-A39A-0079DBB7C64E}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Shared", "Shared", "{CAFD1A98-36A4-4DF3-B39A-2F82ADED93E7}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Shared.Domain", "Shared\Shared.Domain\Shared.Domain.csproj", "{E1A3A14E-6508-4C8D-ACE1-9B43AA230CCC}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Shared.Domain", "Shared\Shared.Domain\Shared.Domain.csproj", "{E1A3A14E-6508-4C8D-ACE1-9B43AA230CCC}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Shared.Services", "Shared\Shared.Services\Shared.Services.csproj", "{50A59804-7438-475C-A057-0BE39DFE2B01}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Shared.Services", "Shared\Shared.Services\Shared.Services.csproj", "{50A59804-7438-475C-A057-0BE39DFE2B01}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Shared.Infrastructure", "Shared\Shared.Infrastructure\Shared.Infrastructure.csproj", "{17F1C08B-0EA1-400F-B59D-D2B7A10D803C}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Shared.Infrastructure", "Shared\Shared.Infrastructure\Shared.Infrastructure.csproj", "{17F1C08B-0EA1-400F-B59D-D2B7A10D803C}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Doctors.API", "Doctors\Doctors.API\Doctors.API.csproj", "{3DAB5C3F-1086-4FF2-B84B-1C3B755904BA}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Doctors.API", "Doctors\Doctors.API\Doctors.API.csproj", "{3DAB5C3F-1086-4FF2-B84B-1C3B755904BA}"
+EndProject
+Project("{E53339B2-1760-4266-BCC7-CA923CBCF16C}") = "docker-compose-doctors", "Doctors\docker-compose-doctors.dcproj", "{E455AF9E-6D51-4579-9296-B1992616637B}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -67,6 +69,10 @@ Global
 		{3DAB5C3F-1086-4FF2-B84B-1C3B755904BA}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{3DAB5C3F-1086-4FF2-B84B-1C3B755904BA}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{3DAB5C3F-1086-4FF2-B84B-1C3B755904BA}.Release|Any CPU.Build.0 = Release|Any CPU
+		{E455AF9E-6D51-4579-9296-B1992616637B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{E455AF9E-6D51-4579-9296-B1992616637B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{E455AF9E-6D51-4579-9296-B1992616637B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{E455AF9E-6D51-4579-9296-B1992616637B}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -79,6 +85,7 @@ Global
 		{50A59804-7438-475C-A057-0BE39DFE2B01} = {CAFD1A98-36A4-4DF3-B39A-2F82ADED93E7}
 		{17F1C08B-0EA1-400F-B59D-D2B7A10D803C} = {CAFD1A98-36A4-4DF3-B39A-2F82ADED93E7}
 		{3DAB5C3F-1086-4FF2-B84B-1C3B755904BA} = {5B6B416C-C0BA-4AAD-A5BF-9010D0BC585D}
+		{E455AF9E-6D51-4579-9296-B1992616637B} = {5B6B416C-C0BA-4AAD-A5BF-9010D0BC585D}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {91AC8CE2-8495-4A43-B7C6-B9595ECA7EE1}
