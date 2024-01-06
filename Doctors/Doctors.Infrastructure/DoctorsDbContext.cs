@@ -1,5 +1,4 @@
 ﻿using Doctors.Domain.DoctorAggregate;
-using Doctors.Services;
 using Microsoft.EntityFrameworkCore;
 using Shared.Domain;
 using Shared.Services;
@@ -22,6 +21,6 @@ public class DoctorsDbContext : DbContext, IUnitOfWork
             x.Property(y => y.FirstName).HasConversion(y => y.Value, value => new FirstName(value)).HasColumnName("FirstName");
             x.Property(y => y.LastName).HasConversion(y => y.Value, value => new LastName(value)).HasColumnName("LastName");
         });
-        doctorsBuilder.Property(x => x.Specialty).HasConversion<string>();
+        doctorsBuilder.Property(x => x.Specialty).HasConversion(x => x.Name, x => Specialty.Get(x));
     }
 }
