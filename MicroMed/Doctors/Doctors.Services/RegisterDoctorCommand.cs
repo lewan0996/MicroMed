@@ -10,10 +10,11 @@ public class RegisterDoctorCommand : IRequest
     public Name Name { get; }
     public Specialty Specialty { get; }
 
-    public RegisterDoctorCommand(string firstName, string lastName, Specialty specialty)
+    public RegisterDoctorCommand(string firstName, string lastName, int specialtyId)
     {
         Name = new Name(firstName, lastName);
-        Specialty = specialty;
+
+        Specialty = Specialty.Get(specialtyId);
     }
 }
 

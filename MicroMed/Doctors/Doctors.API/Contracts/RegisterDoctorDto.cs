@@ -1,5 +1,3 @@
-﻿using Doctors.Domain.DoctorAggregate;
+﻿namespace Doctors.API.Contracts;
 
-namespace Doctors.API.Contracts;
-
-public record RegisterDoctorDto(string FirstName, string LastName, Specialty Specialty); //todo how to enforce valid enum values?
+public record RegisterDoctorDto(string FirstName, string LastName, int SpecialtyId);
