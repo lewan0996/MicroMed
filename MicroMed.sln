@@ -37,7 +37,9 @@ Project("{E53339B2-1760-4266-BCC7-CA923CBCF16C}") = "docker-compose-doctors", "D
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Shared.API", "Shared\Shared.API\Shared.API.csproj", "{BA7D9855-DE22-4129-9FD9-15DDCFD1D399}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Clinics.Domain", "Clinics\Clinics.Domain\Clinics.Domain.csproj", "{6C4412FD-CAC4-4853-A266-665902EF4DAF}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Clinics.Domain", "Clinics\Clinics.Domain\Clinics.Domain.csproj", "{6C4412FD-CAC4-4853-A266-665902EF4DAF}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Clinics.Services", "Clinics\Clinics.Services\Clinics.Services.csproj", "{B3DC5887-2E4A-4F26-A6A4-6FCBD0761C8A}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -85,6 +87,10 @@ Global
 		{6C4412FD-CAC4-4853-A266-665902EF4DAF}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{6C4412FD-CAC4-4853-A266-665902EF4DAF}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{6C4412FD-CAC4-4853-A266-665902EF4DAF}.Release|Any CPU.Build.0 = Release|Any CPU
+		{B3DC5887-2E4A-4F26-A6A4-6FCBD0761C8A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B3DC5887-2E4A-4F26-A6A4-6FCBD0761C8A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B3DC5887-2E4A-4F26-A6A4-6FCBD0761C8A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B3DC5887-2E4A-4F26-A6A4-6FCBD0761C8A}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -100,6 +106,7 @@ Global
 		{E455AF9E-6D51-4579-9296-B1992616637B} = {5B6B416C-C0BA-4AAD-A5BF-9010D0BC585D}
 		{BA7D9855-DE22-4129-9FD9-15DDCFD1D399} = {CAFD1A98-36A4-4DF3-B39A-2F82ADED93E7}
 		{6C4412FD-CAC4-4853-A266-665902EF4DAF} = {3F1D7D5D-B370-4420-8910-41991B52E15A}
+		{B3DC5887-2E4A-4F26-A6A4-6FCBD0761C8A} = {3F1D7D5D-B370-4420-8910-41991B52E15A}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {91AC8CE2-8495-4A43-B7C6-B9595ECA7EE1}

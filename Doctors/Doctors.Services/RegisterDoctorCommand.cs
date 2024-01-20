@@ -5,17 +5,9 @@ using Shared.Services;
 
 namespace Doctors.Services;
 
-public class RegisterDoctorCommand : IRequest
+public record RegisterDoctorCommand(Name Name, Specialty Specialty) : IRequest
 {
-    public Name Name { get; }
-    public Specialty Specialty { get; }
-
-    public RegisterDoctorCommand(string firstName, string lastName, int specialtyId)
-    {
-        Name = new Name(firstName, lastName);
-
-        Specialty = Specialty.Get(specialtyId);
-    }
+    public RegisterDoctorCommand(string firstName, string lastName, int specialtyId) : this(new Name(firstName, lastName), Specialty.Get(specialtyId)) { }
 }
 
 public class RegisterDoctorCommandHandler : IRequestHandler<RegisterDoctorCommand>

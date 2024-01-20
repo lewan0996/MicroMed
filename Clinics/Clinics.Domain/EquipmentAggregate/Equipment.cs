@@ -6,6 +6,11 @@ public class Equipment : Entity
 {
     public EquipmentName Name { get; }
 
+    public Equipment(EquipmentName name)
+    {
+        Name = name;
+    }
+
     private Equipment() { }
 }
 
