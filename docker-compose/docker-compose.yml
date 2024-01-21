@@ -4,10 +4,19 @@ services:
   doctors.api:
     image: ${DOCKER_REGISTRY-}doctorsapi
     build:
-      context: .
-      dockerfile: Doctors.API/Dockerfile
+      context: ..
+      dockerfile: Doctors/Doctors.API/Dockerfile
     depends_on: 
      - sqlServer
+
+  clinics.api:
+    image: ${DOCKER_REGISTRY-}clinicsapi
+    build:
+      context: ..
+      dockerfile: Clinics/Clinics.API/Dockerfile
+    depends_on:
+    - sqlServer
+ 
   sqlServer:
     image: mcr.microsoft.com/mssql/server:2022-latest
     container_name: sqlServer

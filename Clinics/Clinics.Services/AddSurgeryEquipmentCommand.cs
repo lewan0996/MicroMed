@@ -1,4 +1,5 @@
 ﻿using Clinics.Domain.EquipmentAggregate;
+using Clinics.Services.Repositories;
 using MediatR;
 using Shared.Services;
 

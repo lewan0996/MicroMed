@@ -1,5 +1,4 @@
-﻿using System.Data.SqlTypes;
-using Shared.Domain;
+﻿using Shared.Domain;
 using Shared.Domain.Exceptions;
 
 namespace Clinics.Domain.ClinicAggregate;

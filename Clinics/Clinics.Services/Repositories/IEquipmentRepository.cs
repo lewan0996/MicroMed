@@ -1,6 +1,6 @@
 ﻿using Clinics.Domain.EquipmentAggregate;
 
-namespace Clinics.Services;
+namespace Clinics.Services.Repositories;
 
 public interface IEquipmentRepository
 {

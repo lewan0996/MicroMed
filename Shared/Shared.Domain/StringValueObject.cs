@@ -1,10 +1,15 @@
-﻿namespace Shared.Domain;
+﻿using Shared.Domain.Exceptions;
 
-public abstract record StringValueObject(string Value, int MaxLength) : ValueObject
+namespace Shared.Domain;
+
+public abstract record StringValueObject(string Value, int MaxLength, bool IsRequired = true) : ValueObject
 {
     protected override void Validate()
     {
         if (Value.Length > MaxLength)
-            throw new ArgumentException($"{GetType().Name} cannot be longer than {MaxLength}.");
+            throw new DomainException($"{GetType().Name} cannot be longer than {MaxLength}.");
+
+        if (IsRequired && Value.IsNullOrEmptyOrWhitespace())
+            throw new DomainException($"{GetType().Name} is required");
     }
 }

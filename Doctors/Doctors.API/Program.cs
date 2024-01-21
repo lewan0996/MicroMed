@@ -1,4 +1,3 @@
-using Doctors.API.Contracts;
 using Doctors.Infrastructure;
 using Doctors.Services;
 using MediatR;
@@ -8,7 +7,8 @@ using Shared.Services;
 
 var builder = WebApplication.CreateBuilder(args);
 
-builder.Services.AddEndpointsApiExplorer()
+builder.Services
+    .AddEndpointsApiExplorer()
     .AddSwaggerGen()
     .AddMediatR(x => x.RegisterServicesFromAssemblyContaining<RegisterDoctorCommand>())
     .AddDbContext<DoctorsDbContext>(options =>
@@ -51,3 +51,5 @@ app.MapPost("Doctors",
     }).ProducesProblem(StatusCodes.Status400BadRequest);
 
 app.Run();
+
+public record RegisterDoctorDto(string FirstName, string LastName, int SpecialtyId);

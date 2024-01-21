@@ -1,10 +1,11 @@
 ﻿using Clinics.Domain.ClinicAggregate;
+using Clinics.Services.Repositories;
 using MediatR;
 using Shared.Services;
 
 namespace Clinics.Services;
 
-public record AddClinicCommand(ClinicName Name, Address Address) : IRequest
+public record AddClinicCommand(ClinicName Name, Address Address) : IRequest<int>
 {
     public AddClinicCommand(string name, string city, string street, string streetNumber, string additionalInfo)
         : this(
@@ -19,7 +20,7 @@ public record AddClinicCommand(ClinicName Name, Address Address) : IRequest
     { }
 }
 
-public class AddClinicCommandHandler : IRequestHandler<AddClinicCommand>
+public class AddClinicCommandHandler : IRequestHandler<AddClinicCommand, int>
 {
     private readonly IClinicRepository _clinicRepository;
     private readonly IUnitOfWork _unitOfWork;
@@ -30,11 +31,13 @@ public class AddClinicCommandHandler : IRequestHandler<AddClinicCommand>
         _unitOfWork = unitOfWork;
     }
 
-    public async Task Handle(AddClinicCommand request, CancellationToken cancellationToken)
+    public async Task<int> Handle(AddClinicCommand request, CancellationToken cancellationToken)
     {
         var clinic = new Clinic(request.Name, request.Address);
 
         await _clinicRepository.AddAsync(clinic, cancellationToken);
         await _unitOfWork.SaveChangesAsync(cancellationToken);
+
+        return clinic.Id;
     }
 }

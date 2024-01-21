@@ -1,6 +1,6 @@
 ﻿using Doctors.Domain.DoctorAggregate;
 using Microsoft.EntityFrameworkCore;
-using Shared.Domain;
+using Shared.Infrastructure;
 using Shared.Services;
 
 namespace Doctors.Infrastructure;
@@ -16,11 +16,12 @@ public class DoctorsDbContext : DbContext, IUnitOfWork
         var doctorsBuilder = modelBuilder.Entity<Doctor>();
 
         doctorsBuilder.ToTable("Doctors");
-        doctorsBuilder.OwnsOne(x => x.Name, x =>
+        doctorsBuilder.ComplexProperty(x => x.Name, x =>
         {
-            x.Property(y => y.FirstName).HasConversion(y => y.Value, value => new FirstName(value)).HasColumnName("FirstName");
-            x.Property(y => y.LastName).HasConversion(y => y.Value, value => new LastName(value)).HasColumnName("LastName");
+            x.HasStringValueObject(y => y.FirstName);
+            x.HasStringValueObject(y => y.LastName);
         });
+        
         doctorsBuilder.Property(x => x.Specialty).HasConversion(x => x.Name, x => Specialty.Get(x));
     }
 }

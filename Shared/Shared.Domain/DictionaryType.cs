@@ -24,14 +24,14 @@ namespace Shared.Domain
         {
             var result = All.SingleOrDefault(x => x.Id == id);
 
-            return result ?? throw new ObjectNotFoundException();
+            return result ?? throw new ObjectNotFoundException($"{nameof(TDictionary)} item of id {id} not found");
         }
 
         public static TDictionary Get(string name)
         {
             var result = All.SingleOrDefault(x => x.Name == name);
 
-            return result ?? throw new ObjectNotFoundException();
+            return result ?? throw new ObjectNotFoundException($"{nameof(TDictionary)} item of name {name} not found");
         }
     }
 }

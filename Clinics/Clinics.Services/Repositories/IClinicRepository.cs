@@ -1,9 +1,9 @@
 ﻿using Clinics.Domain.ClinicAggregate;
 
-namespace Clinics.Services;
+namespace Clinics.Services.Repositories;
 
 public interface IClinicRepository
 {
-    Task<Clinic?> GetOptionalAsync(int id, CancellationToken cancellationToken);
+    Task<Clinic> GetAsync(int id, CancellationToken cancellationToken);
     Task AddAsync(Clinic clinic, CancellationToken cancellationToken);
 }

@@ -1,6 +1,6 @@
 ﻿using Clinics.Domain.ClinicAggregate;
+using Clinics.Services.Repositories;
 using MediatR;
-using Shared.Domain.Exceptions;
 using Shared.Services;
 
 namespace Clinics.Services;
@@ -26,7 +26,7 @@ public class AddSurgeryCommandHandler : IRequestHandler<AddSurgeryCommand>
 
     public async Task Handle(AddSurgeryCommand request, CancellationToken cancellationToken)
     {
-        var clinic = await _clinicRepository.GetOptionalAsync(request.ClinicId, cancellationToken) ?? throw new ObjectNotFoundException();
+        var clinic = await _clinicRepository.GetAsync(request.ClinicId, cancellationToken);
 
         var equipment = await _equipmentRepository.GetEquipmentAsync(request.EquipmentIds, cancellationToken);
 

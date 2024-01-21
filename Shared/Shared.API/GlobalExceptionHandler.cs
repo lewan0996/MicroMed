@@ -13,28 +13,27 @@ public class GlobalExceptionHandler : IExceptionHandler
         if (exception is not DomainException and not ObjectNotFoundException) 
             return false;
 
-        switch (exception)
+        var problemDetails = exception switch
         {
-            case DomainException ex:
+            DomainException ex => new ProblemDetails
             {
-                var problemDetails = new ProblemDetails
-                {
-                    Status = StatusCodes.Status400BadRequest,
-                    Title = "Bad request",
-                    Detail = ex.Message
-                };
+                Status = StatusCodes.Status400BadRequest,
+                Title = "Bad request",
+                Detail = ex.Message
+            },
+            ObjectNotFoundException ex => new ProblemDetails
+            {
+                Status = StatusCodes.Status404NotFound,
+                Title = "Bad request",
+                Detail = ex.Message
+            },
+            _ => throw new ArgumentOutOfRangeException(nameof(exception))
+        };
 
-                httpContext.Response.StatusCode = problemDetails.Status.Value;
-                await httpContext.Response.WriteAsJsonAsync(problemDetails, cancellationToken);
+        httpContext.Response.StatusCode = problemDetails.Status!.Value;
+        await httpContext.Response.WriteAsJsonAsync(problemDetails, cancellationToken);
 
-                return true;
-            }
-            case ObjectNotFoundException:
-                httpContext.Response.StatusCode = StatusCodes.Status404NotFound;
-                return true;
-            default:
-                return false;
-        }
+        return true;
     }
 }
 
