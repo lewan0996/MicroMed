@@ -1,4 +1,5 @@
-﻿Microsoft Visual Studio Solution File, Format Version 12.00
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.6.33815.320
 MinimumVisualStudioVersion = 10.0.40219.1
@@ -38,11 +39,15 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Shared.API", "Shared\Shared
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Clinics.Domain", "Clinics\Clinics.Domain\Clinics.Domain.csproj", "{6C4412FD-CAC4-4853-A266-665902EF4DAF}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Clinics.Services", "Clinics\Clinics.Services\Clinics.Services.csproj", "{B3DC5887-2E4A-4F26-A6A4-6FCBD0761C8A}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Clinics.Services", "Clinics\Clinics.Services\Clinics.Services.csproj", "{B3DC5887-2E4A-4F26-A6A4-6FCBD0761C8A}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Clinics.Infrastructure", "Clinics\Clinics.Infrastructure\Clinics.Infrastructure.csproj", "{8067FAC7-6576-4482-ADB7-66CE028005EC}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Clinics.Infrastructure", "Clinics\Clinics.Infrastructure\Clinics.Infrastructure.csproj", "{8067FAC7-6576-4482-ADB7-66CE028005EC}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Clinics.API", "Clinics\Clinics.API\Clinics.API.csproj", "{661AB8DB-9419-4FD2-B383-524C8E0A5379}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Clinics.API", "Clinics\Clinics.API\Clinics.API.csproj", "{661AB8DB-9419-4FD2-B383-524C8E0A5379}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Timetable.Domain", "Timetable\Timetable.Domain\Timetable.Domain.csproj", "{093A4650-53E4-471F-9413-C8C62A1F7BDC}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Doctors.Contracts", "Doctors\Doctors.Contracts\Doctors.Contracts.csproj", "{BA9EC22B-05DF-47A2-917A-D61313913AD9}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -102,6 +107,14 @@ Global
 		{661AB8DB-9419-4FD2-B383-524C8E0A5379}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{661AB8DB-9419-4FD2-B383-524C8E0A5379}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{661AB8DB-9419-4FD2-B383-524C8E0A5379}.Release|Any CPU.Build.0 = Release|Any CPU
+		{093A4650-53E4-471F-9413-C8C62A1F7BDC}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{093A4650-53E4-471F-9413-C8C62A1F7BDC}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{093A4650-53E4-471F-9413-C8C62A1F7BDC}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{093A4650-53E4-471F-9413-C8C62A1F7BDC}.Release|Any CPU.Build.0 = Release|Any CPU
+		{BA9EC22B-05DF-47A2-917A-D61313913AD9}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{BA9EC22B-05DF-47A2-917A-D61313913AD9}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{BA9EC22B-05DF-47A2-917A-D61313913AD9}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{BA9EC22B-05DF-47A2-917A-D61313913AD9}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -119,6 +132,8 @@ Global
 		{B3DC5887-2E4A-4F26-A6A4-6FCBD0761C8A} = {3F1D7D5D-B370-4420-8910-41991B52E15A}
 		{8067FAC7-6576-4482-ADB7-66CE028005EC} = {3F1D7D5D-B370-4420-8910-41991B52E15A}
 		{661AB8DB-9419-4FD2-B383-524C8E0A5379} = {3F1D7D5D-B370-4420-8910-41991B52E15A}
+		{093A4650-53E4-471F-9413-C8C62A1F7BDC} = {7AD5B254-8555-4DDA-8F1C-34B6DDE7FF16}
+		{BA9EC22B-05DF-47A2-917A-D61313913AD9} = {5B6B416C-C0BA-4AAD-A5BF-9010D0BC585D}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {91AC8CE2-8495-4A43-B7C6-B9595ECA7EE1}

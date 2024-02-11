@@ -8,6 +8,7 @@ services:
       dockerfile: Doctors/Doctors.API/Dockerfile
     depends_on: 
      - sqlServer
+     - rabbitMQ
 
   clinics.api:
     image: ${DOCKER_REGISTRY-}clinicsapi
@@ -25,3 +26,10 @@ services:
      - ACCEPT_EULA=Y
     ports:
      - 1435:1433
+
+  rabbitMQ:
+    image: rabbitmq:3-management
+    container_name: rabbitMq
+    ports:
+    - 5672:5672
+    - 15672:15672

@@ -1,5 +1,7 @@
-﻿using Doctors.Domain.DoctorAggregate;
+﻿using Doctors.Contracts;
+using Doctors.Domain.DoctorAggregate;
 using MediatR;
+using NServiceBus;
 using Shared.Domain;
 using Shared.Services;
 
@@ -14,11 +16,13 @@ public class RegisterDoctorCommandHandler : IRequestHandler<RegisterDoctorComman
 {
     private readonly IDoctorsRepository _doctorsRepository;
     private readonly IUnitOfWork _unitOfWork;
+    private readonly IMessageSession _messageSession;
 
-    public RegisterDoctorCommandHandler(IDoctorsRepository doctorsRepository, IUnitOfWork unitOfWork)
+    public RegisterDoctorCommandHandler(IDoctorsRepository doctorsRepository, IUnitOfWork unitOfWork, IMessageSession messageSession)
     {
         _doctorsRepository = doctorsRepository;
         _unitOfWork = unitOfWork;
+        _messageSession = messageSession;
     }
 
     public async Task Handle(RegisterDoctorCommand request, CancellationToken cancellationToken)
@@ -28,5 +32,8 @@ public class RegisterDoctorCommandHandler : IRequestHandler<RegisterDoctorComman
         await _doctorsRepository.AddDoctorAsync(doctor, cancellationToken);
 
         await _unitOfWork.SaveChangesAsync(cancellationToken);
+
+        //todo outbox
+        await _messageSession.Publish(new DoctorRegisteredEvent(doctor.Id, doctor.Name.FirstName, doctor.Name.LastName), cancellationToken: cancellationToken);
     }
 }

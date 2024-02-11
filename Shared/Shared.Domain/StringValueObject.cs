@@ -12,4 +12,6 @@ public abstract record StringValueObject(string Value, int MaxLength, bool IsReq
         if (IsRequired && Value.IsNullOrEmptyOrWhitespace())
             throw new DomainException($"{GetType().Name} is required");
     }
+
+    public static implicit operator string(StringValueObject valueObject) => valueObject.Value;
 }
