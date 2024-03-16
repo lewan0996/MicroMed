@@ -5,7 +5,8 @@
       "commandVersion": "1.0",
       "serviceActions": {
         "clinics.api": "StartDebugging",
-        "doctors.api": "StartDebugging"
+        "doctors.api": "StartDebugging",
+        "timetable.api": "StartDebugging"
       }
     }
   }

@@ -1,9 +1,7 @@
-using Doctors.Contracts;
 using Doctors.Infrastructure;
 using Doctors.Services;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
-using NServiceBus;
 using Shared.API;
 using Shared.Services;
 
@@ -22,18 +20,7 @@ builder.Services
     .AddScoped<IUnitOfWork>(services => services.GetRequiredService<DoctorsDbContext>())
     .AddGlobalExceptionHandler();
 
-builder.Host.UseNServiceBus(context =>
-{
-    var endpointConfiguration = new EndpointConfiguration("Doctors");
-    endpointConfiguration.SendOnly();
-    endpointConfiguration.Conventions().DefiningEventsAs(t => t.Assembly == typeof(DoctorRegisteredEvent).Assembly);
-
-    var transport = endpointConfiguration.UseTransport<RabbitMQTransport>();
-    transport.UseConventionalRoutingTopology(QueueType.Quorum);
-    transport.ConnectionString(builder.Configuration.GetConnectionString("RabbitMQ"));
-
-    return endpointConfiguration;
-});
+builder.ConfigureNServiceBusEndpoint("Doctors");
 
 var app = builder.Build();
 

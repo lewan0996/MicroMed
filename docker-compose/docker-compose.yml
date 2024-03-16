@@ -17,6 +17,15 @@ services:
       dockerfile: Clinics/Clinics.API/Dockerfile
     depends_on:
     - sqlServer
+
+  timetable.api:
+    image: ${DOCKER_REGISTRY-}timetableapi
+    build:
+      context: ..
+      dockerfile: Timetable/Timetable.API/Dockerfile
+    depends_on:
+    - sqlServer
+    - rabbitMQ
  
   sqlServer:
     image: mcr.microsoft.com/mssql/server:2022-latest
