@@ -1,6 +1,6 @@
 ﻿using Shared.Domain;
 
-namespace Doctors.Domain.DoctorAggregate;
+namespace Timetable.Domain.DoctorAggregate;
 
 public class Doctor : Entity, IAggregateRoot
 {

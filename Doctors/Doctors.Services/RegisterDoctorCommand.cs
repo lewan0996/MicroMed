@@ -34,6 +34,6 @@ public class RegisterDoctorCommandHandler : IRequestHandler<RegisterDoctorComman
         await _unitOfWork.SaveChangesAsync(cancellationToken);
 
         //todo outbox
-        await _messageSession.Publish(new DoctorRegisteredEvent(doctor.Id, doctor.Name.FirstName, doctor.Name.LastName), cancellationToken: cancellationToken);
+        await _messageSession.Publish(new DoctorRegisteredEvent(doctor.Id, doctor.Name.FirstName, doctor.Name.LastName, doctor.Specialty.Id), cancellationToken: cancellationToken);
     }
 }

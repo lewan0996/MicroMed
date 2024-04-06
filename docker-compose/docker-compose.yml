@@ -17,6 +17,7 @@ services:
       dockerfile: Clinics/Clinics.API/Dockerfile
     depends_on:
     - sqlServer
+    - rabbitMQ
 
   timetable.api:
     image: ${DOCKER_REGISTRY-}timetableapi

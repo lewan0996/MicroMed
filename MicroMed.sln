@@ -7,8 +7,6 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Doctors", "Doctors", "{5B6B
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Patients", "Patients", "{CD4C8CA1-B31E-4ACC-96BD-C1CF9EF7782B}"
 EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Appointments", "Appointments", "{B96F65B7-C5CE-4853-8AE3-312F8FB99711}"
-EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Clinics", "Clinics", "{3F1D7D5D-B370-4420-8910-41991B52E15A}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Offer", "Offer", "{A31B3133-6579-41B5-AEB7-D1BB5C97BDA1}"
@@ -49,11 +47,13 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Timetable.Domain", "Timetab
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Doctors.Contracts", "Doctors\Doctors.Contracts\Doctors.Contracts.csproj", "{BA9EC22B-05DF-47A2-917A-D61313913AD9}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Timetable.Services", "Timetable\Timetable.Services\Timetable.Services.csproj", "{69985A99-9EF7-4C70-B2D2-42C8E02517AE}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Timetable.Services", "Timetable\Timetable.Services\Timetable.Services.csproj", "{69985A99-9EF7-4C70-B2D2-42C8E02517AE}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Timetable.Infrastructure", "Timetable\Timetable.Infrastructure\Timetable.Infrastructure.csproj", "{C13C5F9D-A870-4C3D-861E-428CCF796814}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Timetable.Infrastructure", "Timetable\Timetable.Infrastructure\Timetable.Infrastructure.csproj", "{C13C5F9D-A870-4C3D-861E-428CCF796814}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Timetable.API", "Timetable\Timetable.API\Timetable.API.csproj", "{8B500CC3-3F91-400A-AC1C-E3D3A8B0574C}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Timetable.API", "Timetable\Timetable.API\Timetable.API.csproj", "{8B500CC3-3F91-400A-AC1C-E3D3A8B0574C}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Clinics.Contracts", "Clinics\Clinics.Contracts\Clinics.Contracts.csproj", "{3DB647F3-140C-4450-83CE-60DCCDB26442}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -133,6 +133,10 @@ Global
 		{8B500CC3-3F91-400A-AC1C-E3D3A8B0574C}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{8B500CC3-3F91-400A-AC1C-E3D3A8B0574C}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{8B500CC3-3F91-400A-AC1C-E3D3A8B0574C}.Release|Any CPU.Build.0 = Release|Any CPU
+		{3DB647F3-140C-4450-83CE-60DCCDB26442}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{3DB647F3-140C-4450-83CE-60DCCDB26442}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{3DB647F3-140C-4450-83CE-60DCCDB26442}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{3DB647F3-140C-4450-83CE-60DCCDB26442}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -155,6 +159,7 @@ Global
 		{69985A99-9EF7-4C70-B2D2-42C8E02517AE} = {7AD5B254-8555-4DDA-8F1C-34B6DDE7FF16}
 		{C13C5F9D-A870-4C3D-861E-428CCF796814} = {7AD5B254-8555-4DDA-8F1C-34B6DDE7FF16}
 		{8B500CC3-3F91-400A-AC1C-E3D3A8B0574C} = {7AD5B254-8555-4DDA-8F1C-34B6DDE7FF16}
+		{3DB647F3-140C-4450-83CE-60DCCDB26442} = {3F1D7D5D-B370-4420-8910-41991B52E15A}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {91AC8CE2-8495-4A43-B7C6-B9595ECA7EE1}

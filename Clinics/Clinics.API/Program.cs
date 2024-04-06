@@ -23,6 +23,8 @@ builder.Services
     .AddScoped<IUnitOfWork>(services => services.GetRequiredService<ClinicsDbContext>())
     .AddGlobalExceptionHandler();
 
+builder.ConfigureNServiceBusEndpoint("Clinics");
+
 var app = builder.Build();
 
 if (app.Environment.IsDevelopment())

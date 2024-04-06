@@ -1,5 +1,6 @@
 ﻿using Doctors.Domain.DoctorAggregate;
 using Microsoft.EntityFrameworkCore;
+using Shared.Domain;
 using Shared.Infrastructure;
 using Shared.Services;
 
