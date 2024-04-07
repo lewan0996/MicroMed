@@ -1,31 +1,29 @@
-﻿using Microsoft.AspNetCore.Diagnostics;
-using Microsoft.AspNetCore.Http;
+﻿using Grpc.Core;
+using Microsoft.AspNetCore.Diagnostics;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.Extensions.DependencyInjection;
-using Shared.Domain.Exceptions;
 
-namespace Shared.API;
+namespace MicroMed.Gateway;
 
 public class GlobalExceptionHandler : IExceptionHandler
 {
     public async ValueTask<bool> TryHandleAsync(HttpContext httpContext, Exception exception, CancellationToken cancellationToken)
     {
-        if (exception is not DomainException and not ObjectNotFoundException) 
+        if (exception is not RpcException rpcException) 
             return false;
 
-        var problemDetails = exception switch
+        var problemDetails = rpcException.StatusCode switch
         {
-            DomainException ex => new ProblemDetails
+            StatusCode.InvalidArgument => new ProblemDetails
             {
                 Status = StatusCodes.Status400BadRequest,
                 Title = "Bad request",
-                Detail = ex.Message
+                Detail = rpcException.Status.Detail
             },
-            ObjectNotFoundException ex => new ProblemDetails
+            StatusCode.NotFound => new ProblemDetails
             {
                 Status = StatusCodes.Status404NotFound,
-                Title = "Bad request",
-                Detail = ex.Message
+                Title = "Not found",
+                Detail = rpcException.Status.Detail
             },
             _ => throw new ArgumentOutOfRangeException(nameof(exception))
         };

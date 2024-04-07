@@ -15,45 +15,51 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Timetable", "Timetable", "{
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Drugs", "Drugs", "{555BEA52-D048-4C1B-8A30-076101FBA352}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Doctors.Domain", "Doctors\Doctors.Domain\Doctors.Domain.csproj", "{168F1F43-054A-4756-B5E8-59E20DD83808}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Doctors.Domain", "Services\Doctors\Doctors.Domain\Doctors.Domain.csproj", "{168F1F43-054A-4756-B5E8-59E20DD83808}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Doctors.Services", "Doctors\Doctors.Services\Doctors.Services.csproj", "{1CC608FE-8B6E-4834-960C-F04DCD883D21}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Doctors.Services", "Services\Doctors\Doctors.Services\Doctors.Services.csproj", "{1CC608FE-8B6E-4834-960C-F04DCD883D21}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Doctors.Infrastructure", "Doctors\Doctors.Infrastructure\Doctors.Infrastructure.csproj", "{4D145F84-83B7-4F9C-A39A-0079DBB7C64E}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Doctors.Infrastructure", "Services\Doctors\Doctors.Infrastructure\Doctors.Infrastructure.csproj", "{4D145F84-83B7-4F9C-A39A-0079DBB7C64E}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Shared", "Shared", "{CAFD1A98-36A4-4DF3-B39A-2F82ADED93E7}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Shared.Domain", "Shared\Shared.Domain\Shared.Domain.csproj", "{E1A3A14E-6508-4C8D-ACE1-9B43AA230CCC}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Shared.Domain", "Services\Shared\Shared.Domain\Shared.Domain.csproj", "{E1A3A14E-6508-4C8D-ACE1-9B43AA230CCC}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Shared.Services", "Shared\Shared.Services\Shared.Services.csproj", "{50A59804-7438-475C-A057-0BE39DFE2B01}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Shared.Services", "Services\Shared\Shared.Services\Shared.Services.csproj", "{50A59804-7438-475C-A057-0BE39DFE2B01}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Shared.Infrastructure", "Shared\Shared.Infrastructure\Shared.Infrastructure.csproj", "{17F1C08B-0EA1-400F-B59D-D2B7A10D803C}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Shared.Infrastructure", "Services\Shared\Shared.Infrastructure\Shared.Infrastructure.csproj", "{17F1C08B-0EA1-400F-B59D-D2B7A10D803C}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Doctors.API", "Doctors\Doctors.API\Doctors.API.csproj", "{3DAB5C3F-1086-4FF2-B84B-1C3B755904BA}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Doctors.API", "Services\Doctors\Doctors.API\Doctors.API.csproj", "{3DAB5C3F-1086-4FF2-B84B-1C3B755904BA}"
 EndProject
 Project("{E53339B2-1760-4266-BCC7-CA923CBCF16C}") = "docker-compose", "docker-compose\docker-compose.dcproj", "{E455AF9E-6D51-4579-9296-B1992616637B}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Shared.API", "Shared\Shared.API\Shared.API.csproj", "{BA7D9855-DE22-4129-9FD9-15DDCFD1D399}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Shared.API", "Services\Shared\Shared.API\Shared.API.csproj", "{BA7D9855-DE22-4129-9FD9-15DDCFD1D399}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Clinics.Domain", "Clinics\Clinics.Domain\Clinics.Domain.csproj", "{6C4412FD-CAC4-4853-A266-665902EF4DAF}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Clinics.Domain", "Services\Clinics\Clinics.Domain\Clinics.Domain.csproj", "{6C4412FD-CAC4-4853-A266-665902EF4DAF}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Clinics.Services", "Clinics\Clinics.Services\Clinics.Services.csproj", "{B3DC5887-2E4A-4F26-A6A4-6FCBD0761C8A}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Clinics.Services", "Services\Clinics\Clinics.Services\Clinics.Services.csproj", "{B3DC5887-2E4A-4F26-A6A4-6FCBD0761C8A}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Clinics.Infrastructure", "Clinics\Clinics.Infrastructure\Clinics.Infrastructure.csproj", "{8067FAC7-6576-4482-ADB7-66CE028005EC}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Clinics.Infrastructure", "Services\Clinics\Clinics.Infrastructure\Clinics.Infrastructure.csproj", "{8067FAC7-6576-4482-ADB7-66CE028005EC}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Clinics.API", "Clinics\Clinics.API\Clinics.API.csproj", "{661AB8DB-9419-4FD2-B383-524C8E0A5379}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Clinics.API", "Services\Clinics\Clinics.API\Clinics.API.csproj", "{661AB8DB-9419-4FD2-B383-524C8E0A5379}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Timetable.Domain", "Timetable\Timetable.Domain\Timetable.Domain.csproj", "{093A4650-53E4-471F-9413-C8C62A1F7BDC}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Timetable.Domain", "Services\Timetable\Timetable.Domain\Timetable.Domain.csproj", "{093A4650-53E4-471F-9413-C8C62A1F7BDC}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Doctors.Contracts", "Doctors\Doctors.Contracts\Doctors.Contracts.csproj", "{BA9EC22B-05DF-47A2-917A-D61313913AD9}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Doctors.Contracts", "Services\Doctors\Doctors.Contracts\Doctors.Contracts.csproj", "{BA9EC22B-05DF-47A2-917A-D61313913AD9}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Timetable.Services", "Timetable\Timetable.Services\Timetable.Services.csproj", "{69985A99-9EF7-4C70-B2D2-42C8E02517AE}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Timetable.Services", "Services\Timetable\Timetable.Services\Timetable.Services.csproj", "{69985A99-9EF7-4C70-B2D2-42C8E02517AE}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Timetable.Infrastructure", "Timetable\Timetable.Infrastructure\Timetable.Infrastructure.csproj", "{C13C5F9D-A870-4C3D-861E-428CCF796814}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Timetable.Infrastructure", "Services\Timetable\Timetable.Infrastructure\Timetable.Infrastructure.csproj", "{C13C5F9D-A870-4C3D-861E-428CCF796814}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Timetable.API", "Timetable\Timetable.API\Timetable.API.csproj", "{8B500CC3-3F91-400A-AC1C-E3D3A8B0574C}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Timetable.API", "Services\Timetable\Timetable.API\Timetable.API.csproj", "{8B500CC3-3F91-400A-AC1C-E3D3A8B0574C}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Clinics.Contracts", "Clinics\Clinics.Contracts\Clinics.Contracts.csproj", "{3DB647F3-140C-4450-83CE-60DCCDB26442}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Clinics.Contracts", "Services\Clinics\Clinics.Contracts\Clinics.Contracts.csproj", "{3DB647F3-140C-4450-83CE-60DCCDB26442}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Services", "Services", "{D3539483-88FC-4AF1-AC01-22C00DB646F9}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Gateway", "Gateway", "{4AE98041-E880-49E9-B368-6FFC7B93CE70}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MicroMed.Gateway", "Gateway\MicroMed.Gateway\MicroMed.Gateway.csproj", "{75B61574-D414-4DFF-A08A-8B680FC8587C}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -137,14 +143,25 @@ Global
 		{3DB647F3-140C-4450-83CE-60DCCDB26442}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{3DB647F3-140C-4450-83CE-60DCCDB26442}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{3DB647F3-140C-4450-83CE-60DCCDB26442}.Release|Any CPU.Build.0 = Release|Any CPU
+		{75B61574-D414-4DFF-A08A-8B680FC8587C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{75B61574-D414-4DFF-A08A-8B680FC8587C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{75B61574-D414-4DFF-A08A-8B680FC8587C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{75B61574-D414-4DFF-A08A-8B680FC8587C}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
 	EndGlobalSection
 	GlobalSection(NestedProjects) = preSolution
+		{5B6B416C-C0BA-4AAD-A5BF-9010D0BC585D} = {D3539483-88FC-4AF1-AC01-22C00DB646F9}
+		{CD4C8CA1-B31E-4ACC-96BD-C1CF9EF7782B} = {D3539483-88FC-4AF1-AC01-22C00DB646F9}
+		{3F1D7D5D-B370-4420-8910-41991B52E15A} = {D3539483-88FC-4AF1-AC01-22C00DB646F9}
+		{A31B3133-6579-41B5-AEB7-D1BB5C97BDA1} = {D3539483-88FC-4AF1-AC01-22C00DB646F9}
+		{7AD5B254-8555-4DDA-8F1C-34B6DDE7FF16} = {D3539483-88FC-4AF1-AC01-22C00DB646F9}
+		{555BEA52-D048-4C1B-8A30-076101FBA352} = {D3539483-88FC-4AF1-AC01-22C00DB646F9}
 		{168F1F43-054A-4756-B5E8-59E20DD83808} = {5B6B416C-C0BA-4AAD-A5BF-9010D0BC585D}
 		{1CC608FE-8B6E-4834-960C-F04DCD883D21} = {5B6B416C-C0BA-4AAD-A5BF-9010D0BC585D}
 		{4D145F84-83B7-4F9C-A39A-0079DBB7C64E} = {5B6B416C-C0BA-4AAD-A5BF-9010D0BC585D}
+		{CAFD1A98-36A4-4DF3-B39A-2F82ADED93E7} = {D3539483-88FC-4AF1-AC01-22C00DB646F9}
 		{E1A3A14E-6508-4C8D-ACE1-9B43AA230CCC} = {CAFD1A98-36A4-4DF3-B39A-2F82ADED93E7}
 		{50A59804-7438-475C-A057-0BE39DFE2B01} = {CAFD1A98-36A4-4DF3-B39A-2F82ADED93E7}
 		{17F1C08B-0EA1-400F-B59D-D2B7A10D803C} = {CAFD1A98-36A4-4DF3-B39A-2F82ADED93E7}
@@ -160,6 +177,7 @@ Global
 		{C13C5F9D-A870-4C3D-861E-428CCF796814} = {7AD5B254-8555-4DDA-8F1C-34B6DDE7FF16}
 		{8B500CC3-3F91-400A-AC1C-E3D3A8B0574C} = {7AD5B254-8555-4DDA-8F1C-34B6DDE7FF16}
 		{3DB647F3-140C-4450-83CE-60DCCDB26442} = {3F1D7D5D-B370-4420-8910-41991B52E15A}
+		{75B61574-D414-4DFF-A08A-8B680FC8587C} = {4AE98041-E880-49E9-B368-6FFC7B93CE70}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {91AC8CE2-8495-4A43-B7C6-B9595ECA7EE1}

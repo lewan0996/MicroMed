@@ -4,7 +4,7 @@ services:
   doctors.api:
     image: ${DOCKER_REGISTRY-}doctorsapi
     build:
-      context: ..
+      context: ../Services
       dockerfile: Doctors/Doctors.API/Dockerfile
     depends_on: 
      - sqlServer
@@ -13,7 +13,7 @@ services:
   clinics.api:
     image: ${DOCKER_REGISTRY-}clinicsapi
     build:
-      context: ..
+      context: ../Services
       dockerfile: Clinics/Clinics.API/Dockerfile
     depends_on:
     - sqlServer
@@ -22,7 +22,7 @@ services:
   timetable.api:
     image: ${DOCKER_REGISTRY-}timetableapi
     build:
-      context: ..
+      context: ../Services
       dockerfile: Timetable/Timetable.API/Dockerfile
     depends_on:
     - sqlServer
@@ -43,3 +43,13 @@ services:
     ports:
     - 5672:5672
     - 15672:15672
+
+  micromed.gateway:
+    image: ${DOCKER_REGISTRY-}micromedgateway
+    build:
+      context: ..
+      dockerfile: Gateway/MicroMed.Gateway/Dockerfile
+    depends_on:
+    - doctors.api
+    - clinics.api
+    - timetable.api

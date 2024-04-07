@@ -1,0 +1,18 @@
+syntax = "proto3";
+
+option csharp_namespace = "MicroMed.Gateway";
+
+package Doctors;
+
+service DoctorsService {
+	rpc RegisterDoctor (RegisterDoctorRequest) returns (RegisterDoctorResponse);
+}
+
+message RegisterDoctorRequest {
+	string firstName = 1;
+	string lastName = 2;
+	int32 specialtyId = 3;
+}
+
+message RegisterDoctorResponse {
+}

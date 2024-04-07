@@ -11,7 +11,8 @@
     <DockerComposeProjectPath>..\..\docker-compose.dcproj</DockerComposeProjectPath>
   </PropertyGroup>
 
-  <ItemGroup>
+	<ItemGroup>
+    <PackageReference Include="Grpc.AspNetCore" Version="2.62.0" />
     <PackageReference Include="Microsoft.AspNetCore.OpenApi" Version="8.0.0" />
     <PackageReference Include="Microsoft.VisualStudio.Azure.Containers.Tools.Targets" Version="1.19.5" />
     <PackageReference Include="Swashbuckle.AspNetCore" Version="6.4.0" />
@@ -21,6 +22,10 @@
     <ProjectReference Include="..\..\Shared\Shared.API\Shared.API.csproj" />
     <ProjectReference Include="..\Doctors.Infrastructure\Doctors.Infrastructure.csproj" />
     <ProjectReference Include="..\Doctors.Services\Doctors.Services.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Protobuf Include="Protos\Doctors.proto" GrpcServices="Server" />
   </ItemGroup>
 
 </Project>

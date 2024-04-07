@@ -1,6 +1,6 @@
+using Doctors.API.Services;
 using Doctors.Infrastructure;
 using Doctors.Services;
-using MediatR;
 using Microsoft.EntityFrameworkCore;
 using Shared.API;
 using Shared.Services;
@@ -8,8 +8,6 @@ using Shared.Services;
 var builder = WebApplication.CreateBuilder(args);
 
 builder.Services
-    .AddEndpointsApiExplorer()
-    .AddSwaggerGen()
     .AddMediatR(x => x.RegisterServicesFromAssemblyContaining<RegisterDoctorCommand>())
     .AddDbContext<DoctorsDbContext>(options =>
     {
@@ -18,7 +16,7 @@ builder.Services
     })
     .AddScoped<IDoctorsRepository, DoctorsRepository>()
     .AddScoped<IUnitOfWork>(services => services.GetRequiredService<DoctorsDbContext>())
-    .AddGlobalExceptionHandler();
+    .AddGrpcWithExceptionInterceptor();
 
 builder.ConfigureNServiceBusEndpoint("Doctors");
 
@@ -26,9 +24,6 @@ var app = builder.Build();
 
 if (app.Environment.IsDevelopment())
 {
-    app.UseSwagger();
-    app.UseSwaggerUI();
-
     await EnsureDbCreated();
 
     async Task EnsureDbCreated()
@@ -41,17 +36,8 @@ if (app.Environment.IsDevelopment())
     }
 }
 
-app.UseExceptionHandler();
-
 app.UseHttpsRedirection();
 
-app.MapPost("Doctors",
-    async (RegisterDoctorDto dto, IMediator mediator) =>
-    {
-        await mediator.Send(new RegisterDoctorCommand(dto.FirstName, dto.LastName, dto.SpecialtyId));
-        return TypedResults.Created();
-    }).ProducesProblem(StatusCodes.Status400BadRequest);
+app.MapGrpcService<DoctorsService>();
 
 app.Run();
-
-public record RegisterDoctorDto(string FirstName, string LastName, int SpecialtyId);

@@ -21,7 +21,7 @@ builder.Services
     .AddScoped<IDoctorsRepository, DoctorsRepository>()
     .AddScoped<IAppointmentRepository, AppointmentRepository>()
     .AddScoped<IUnitOfWork>(services => services.GetRequiredService<TimetableDbContext>())
-    .AddGlobalExceptionHandler();
+    .AddGrpcWithExceptionInterceptor();
 
 builder.ConfigureNServiceBusEndpoint("Timetable");
 
@@ -43,8 +43,6 @@ if (app.Environment.IsDevelopment())
         await dbContext.Database.EnsureCreatedAsync();
     }
 }
-
-app.UseExceptionHandler();
 
 app.UseHttpsRedirection();
 

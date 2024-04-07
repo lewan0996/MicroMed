@@ -1,0 +1,40 @@
+syntax = "proto3";
+
+option csharp_namespace = "Clinics.API";
+
+package Clinics;
+
+service ClinicsService {
+	rpc AddClinic (AddClinicRequest) returns (AddClinicResponse);
+	rpc AddSurgery (AddSurgeryRequest) returns (AddSurgeryResponse);
+	rpc AddSurgeryEquipment (AddSurgeryEquipmentRequest) returns (AddSurgeryEquipmentResponse);
+}
+
+message AddClinicRequest {
+	string name = 1;
+	string city = 2; 
+	string street = 3;
+	string StreetNumber = 4;
+	string AdditionalInfo = 5;
+}
+
+message AddClinicResponse {
+	int32 id = 1;
+}
+
+message AddSurgeryRequest {
+	int32 clinicId = 1;
+	string number = 2; 
+	string floor = 3;
+	repeated int32 equipmentIds = 4;
+}
+
+message AddSurgeryResponse {
+}
+
+message AddSurgeryEquipmentRequest {
+	string name = 1;
+}
+
+message AddSurgeryEquipmentResponse {
+}
