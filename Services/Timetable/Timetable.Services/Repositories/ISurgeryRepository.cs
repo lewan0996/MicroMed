@@ -4,5 +4,7 @@ namespace Timetable.Services.Repositories;
 
 public interface ISurgeryRepository
 {
-    Task AddSurgeryAsync(Surgery surgery, CancellationToken cancellationToken);
+    Task AddAsync(Surgery surgery, CancellationToken cancellationToken);
+    Task<Surgery> GetAsync(Guid id, CancellationToken cancellationToken);
+    Task RemoveAsync(Guid id, CancellationToken cancellationToken);
 }

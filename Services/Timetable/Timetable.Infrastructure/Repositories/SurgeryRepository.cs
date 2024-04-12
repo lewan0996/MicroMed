@@ -12,6 +12,6 @@ public class SurgeryRepository : ISurgeryRepository
         _dbContext = dbContext;
     }
 
-    public async Task AddSurgeryAsync(Surgery surgery, CancellationToken cancellationToken)
+    public async Task AddAsync(Surgery surgery, CancellationToken cancellationToken)
         => await _dbContext.Surgeries.AddAsync(surgery, cancellationToken);
 }

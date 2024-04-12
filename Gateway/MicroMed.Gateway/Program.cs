@@ -1,3 +1,4 @@
+using Clinics.API;
 using Grpc.Net.Client;
 using MicroMed.Gateway;
 
@@ -35,6 +36,19 @@ app.MapPost("Clinics",
         })
     .ProducesProblem(StatusCodes.Status400BadRequest);
 
+app.MapPut("Clinics",
+        async (UpdateClinicRequest request, CancellationToken cancellationToken) =>
+        {
+            using var channel = GrpcChannel.ForAddress(serviceUrls.Clinics, grpcOptions);
+            var client = new ClinicsService.ClinicsServiceClient(channel);
+
+            await client.UpdateClinicAsync(request, cancellationToken: cancellationToken);
+
+            return TypedResults.Ok();
+        })
+    .ProducesProblem(StatusCodes.Status400BadRequest)
+    .ProducesProblem(StatusCodes.Status404NotFound);
+
 app.MapPost("Surgeries",
         async (AddSurgeryRequest request, CancellationToken cancellationToken) =>
         {
@@ -46,6 +60,31 @@ app.MapPost("Surgeries",
             return TypedResults.Created();
         })
     .ProducesProblem(StatusCodes.Status400BadRequest)
+    .ProducesProblem(StatusCodes.Status404NotFound);
+
+app.MapPut("Surgeries",
+        async (UpdateSurgeryRequest request, CancellationToken cancellationToken) =>
+        {
+            using var channel = GrpcChannel.ForAddress(serviceUrls.Clinics, grpcOptions);
+            var client = new ClinicsService.ClinicsServiceClient(channel);
+
+            await client.UpdateSurgeryAsync(request, cancellationToken: cancellationToken);
+
+            return TypedResults.Ok();
+        })
+    .ProducesProblem(StatusCodes.Status400BadRequest)
+    .ProducesProblem(StatusCodes.Status404NotFound);
+
+app.MapDelete("Surgeries",
+        async (RemoveSurgeryRequest request, CancellationToken cancellationToken) =>
+        {
+            using var channel = GrpcChannel.ForAddress(serviceUrls.Clinics, grpcOptions);
+            var client = new ClinicsService.ClinicsServiceClient(channel);
+
+            await client.RemoveSurgeryAsync(request, cancellationToken: cancellationToken);
+
+            return TypedResults.Ok();
+        })
     .ProducesProblem(StatusCodes.Status404NotFound);
 
 app.MapPost("SurgeryEquipment",

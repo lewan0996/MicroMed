@@ -1,12 +1,15 @@
 syntax = "proto3";
 
-option csharp_namespace = "MicroMed.Gateway";
+option csharp_namespace = "Clinics.API";
 
 package Clinics;
 
 service ClinicsService {
 	rpc AddClinic (AddClinicRequest) returns (AddClinicResponse);
+	rpc UpdateClinic (UpdateClinicRequest) returns (UpdateClinicResponse);
 	rpc AddSurgery (AddSurgeryRequest) returns (AddSurgeryResponse);
+	rpc UpdateSurgery (UpdateSurgeryRequest) returns (UpdateSurgeryResponse);
+	rpc RemoveSurgery (RemoveSurgeryRequest) returns (RemoveSurgeryResponse);
 	rpc AddSurgeryEquipment (AddSurgeryEquipmentRequest) returns (AddSurgeryEquipmentResponse);
 }
 
@@ -22,6 +25,18 @@ message AddClinicResponse {
 	string id = 1;
 }
 
+message UpdateClinicRequest {
+	string clinicId = 1;
+	string name = 2;
+	string city = 3; 
+	string street = 4;
+	string StreetNumber = 5;
+	string AdditionalInfo = 6;
+}
+
+message UpdateClinicResponse {
+}
+
 message AddSurgeryRequest {
 	string clinicId = 1;
 	string number = 2; 
@@ -30,6 +45,25 @@ message AddSurgeryRequest {
 }
 
 message AddSurgeryResponse {
+}
+
+message UpdateSurgeryRequest {
+	string clinicId = 1;
+	string surgeryId = 2;
+	string number = 3; 
+	string floor = 4;
+	repeated string equipmentIds = 5;
+}
+
+message UpdateSurgeryResponse {
+}
+
+message RemoveSurgeryRequest {
+	string clinicId = 1;
+	string surgeryId = 2;
+}
+
+message RemoveSurgeryResponse {
 }
 
 message AddSurgeryEquipmentRequest {

@@ -5,11 +5,11 @@ using MassTransit;
 using MediatR;
 using Shared.Services;
 
-namespace Clinics.Services;
+namespace Clinics.Services.Commands;
 
 public record AddSurgeryCommand(Guid ClinicId, SurgeryNumber Number, SurgeryFloor Floor, IReadOnlyList<Guid> EquipmentIds) : IRequest
 {
-    public AddSurgeryCommand(Guid clinicId, string number, string floor, IReadOnlyList<Guid> equipmentIds) 
+    public AddSurgeryCommand(Guid clinicId, string number, string floor, IReadOnlyList<Guid> equipmentIds)
         : this(clinicId, new SurgeryNumber(number), new SurgeryFloor(floor), equipmentIds) { }
 }
 
@@ -35,7 +35,7 @@ public class AddSurgeryCommandHandler : IRequestHandler<AddSurgeryCommand>
 
         var equipment = await _equipmentRepository.GetEquipmentAsync(request.EquipmentIds, cancellationToken);
 
-        var surgery = new Surgery(request.Number, request.Floor, equipment);
+        var surgery = new Surgery(new SurgeryInfo(request.Number, request.Floor), equipment);
 
         clinic.AddSurgery(surgery);
 

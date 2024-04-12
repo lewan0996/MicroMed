@@ -1,7 +1,7 @@
 using Clinics.API.Services;
 using Clinics.Infrastructure;
 using Clinics.Infrastructure.Repositories;
-using Clinics.Services;
+using Clinics.Services.Commands;
 using Clinics.Services.Repositories;
 using Microsoft.EntityFrameworkCore;
 using Shared.API;

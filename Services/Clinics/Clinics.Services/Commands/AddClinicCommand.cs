@@ -3,7 +3,7 @@ using Clinics.Services.Repositories;
 using MediatR;
 using Shared.Services;
 
-namespace Clinics.Services;
+namespace Clinics.Services.Commands;
 
 public record AddClinicCommand(ClinicName Name, Address Address) : IRequest<Guid>
 {

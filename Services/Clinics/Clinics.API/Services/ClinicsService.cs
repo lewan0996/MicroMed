@@ -1,4 +1,4 @@
-﻿using Clinics.Services;
+﻿using Clinics.Services.Commands;
 using Grpc.Core;
 using MediatR;
 

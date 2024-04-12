@@ -1,12 +1,13 @@
-﻿using Shared.Domain;
+﻿using Clinics.Domain.EquipmentAggregate;
+using Shared.Domain;
 using Shared.Domain.Exceptions;
 
 namespace Clinics.Domain.ClinicAggregate;
 
 public class Clinic : Entity, IAggregateRoot
 {
-    public ClinicName Name { get; }
-    public Address Address { get; }
+    public ClinicName Name { get; private set; }
+    public Address Address { get; private set; }
 
     private List<Surgery> _surgeries;
     public IReadOnlyCollection<Surgery> Surgeries => _surgeries;
@@ -22,6 +23,12 @@ public class Clinic : Entity, IAggregateRoot
         _surgeries = new List<Surgery>();
     }
 
+    public void Update(ClinicName name, Address address)
+    {
+        Name = name;
+        Address = address;
+    }
+
     public void AddSurgery(Surgery surgery)
     {
         if (Surgeries.Any(x => x.SurgeryInfo == surgery.SurgeryInfo))
@@ -31,5 +38,31 @@ public class Clinic : Entity, IAggregateRoot
         }
 
         _surgeries.Add(surgery);
+    }
+
+    public void UpdateSurgery(Guid surgeryId, SurgeryInfo surgeryInfo, IEnumerable<Equipment> equipment)
+    {
+        var surgery = GetSurgery(surgeryId);
+
+        surgery.Update(surgeryInfo, equipment);
+    }
+
+    public void RemoveSurgery(Guid surgeryId)
+    {
+        var surgery = GetSurgery(surgeryId);
+
+        _surgeries.Remove(surgery);
+    }
+
+    private Surgery GetSurgery(Guid surgeryId)
+    {
+        var surgery = Surgeries.SingleOrDefault(x => x.Id == surgeryId);
+
+        if (surgery == null)
+        {
+            throw new ObjectNotFoundException("Surgery of given id does not exist in the clinic");
+        }
+
+        return surgery;
     }
 }
