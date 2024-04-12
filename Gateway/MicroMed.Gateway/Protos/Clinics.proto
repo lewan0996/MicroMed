@@ -19,14 +19,14 @@ message AddClinicRequest {
 }
 
 message AddClinicResponse {
-	int32 id = 1;
+	string id = 1;
 }
 
 message AddSurgeryRequest {
-	int32 clinicId = 1;
+	string clinicId = 1;
 	string number = 2; 
 	string floor = 3;
-	repeated int32 equipmentIds = 4;
+	repeated string equipmentIds = 4;
 }
 
 message AddSurgeryResponse {

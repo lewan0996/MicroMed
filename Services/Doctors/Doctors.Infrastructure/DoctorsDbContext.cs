@@ -16,6 +16,9 @@ public class DoctorsDbContext : DbContext, IUnitOfWork
     {
         var doctorsBuilder = modelBuilder.Entity<Doctor>();
 
+        doctorsBuilder.Property(x => x.Id)
+            .ValueGeneratedNever();
+        
         doctorsBuilder.ToTable("Doctors");
         doctorsBuilder.ComplexProperty(x => x.Name, x =>
         {

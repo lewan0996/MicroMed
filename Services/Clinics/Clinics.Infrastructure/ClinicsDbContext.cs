@@ -19,7 +19,12 @@ public class ClinicsDbContext : DbContext, IUnitOfWork
 
         clinicsBuilder.ToTable("Clinics");
 
-        clinicsBuilder.Property(x=>x.Name).HasConversion(x=>x.Value, value => new ClinicName(value)).HasColumnName("Name");
+        clinicsBuilder.Property(x => x.Id)
+            .ValueGeneratedNever();
+
+        clinicsBuilder.Property(x => x.Name).HasConversion(x => x.Value, value => new ClinicName(value))
+            .HasColumnName("Name");
+
         clinicsBuilder.ComplexProperty(x => x.Address, x =>
             {
                 x.HasStringValueObject(y => y.City);
@@ -31,6 +36,9 @@ public class ClinicsDbContext : DbContext, IUnitOfWork
 
         var surgeryBuilder = modelBuilder.Entity<Surgery>();
 
+        surgeryBuilder.Property(x => x.Id)
+            .ValueGeneratedNever();
+
         surgeryBuilder.ToTable("Surgeries")
             .ComplexProperty(x => x.SurgeryInfo, x =>
             {
@@ -41,6 +49,9 @@ public class ClinicsDbContext : DbContext, IUnitOfWork
             .HasMany(x => x.AvailableEquipment).WithMany().UsingEntity(x => x.ToTable("SurgeryEquipment"));
 
         var equipmentBuilder = modelBuilder.Entity<Equipment>();
+
+        equipmentBuilder.Property(x => x.Id)
+            .ValueGeneratedNever();
 
         equipmentBuilder.ToTable("Equipment").HasStringValueObject(x => x.Name);
 

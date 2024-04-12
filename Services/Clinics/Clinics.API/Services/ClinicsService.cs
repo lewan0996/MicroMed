@@ -20,13 +20,13 @@ public class ClinicsService : API.ClinicsService.ClinicsServiceBase
                 new AddClinicCommand(request.Name, request.City, request.Street, request.StreetNumber,
                     request.AdditionalInfo), context.CancellationToken);
 
-        return new AddClinicResponse { Id = result };
+        return new AddClinicResponse { Id = result.ToString() };
     }
 
     public override async Task<AddSurgeryResponse> AddSurgery(AddSurgeryRequest request, ServerCallContext context)
     {
         await _mediator.Send(
-            new AddSurgeryCommand(request.ClinicId, request.Number, request.Floor, request.EquipmentIds),
+            new AddSurgeryCommand(Guid.Parse(request.ClinicId), request.Number, request.Floor, request.EquipmentIds.Select(Guid.Parse).ToArray()),
             context.CancellationToken);
 
         return new AddSurgeryResponse();

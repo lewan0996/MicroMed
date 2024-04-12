@@ -7,9 +7,9 @@ using Shared.Services;
 
 namespace Clinics.Services;
 
-public record AddSurgeryCommand(int ClinicId, SurgeryNumber Number, SurgeryFloor Floor, IReadOnlyList<int> EquipmentIds) : IRequest
+public record AddSurgeryCommand(Guid ClinicId, SurgeryNumber Number, SurgeryFloor Floor, IReadOnlyList<Guid> EquipmentIds) : IRequest
 {
-    public AddSurgeryCommand(int clinicId, string number, string floor, IReadOnlyList<int> equipmentIds) 
+    public AddSurgeryCommand(Guid clinicId, string number, string floor, IReadOnlyList<Guid> equipmentIds) 
         : this(clinicId, new SurgeryNumber(number), new SurgeryFloor(floor), equipmentIds) { }
 }
 
@@ -43,6 +43,6 @@ public class AddSurgeryCommandHandler : IRequestHandler<AddSurgeryCommand>
 
         await _unitOfWork.SaveChangesAsync(cancellationToken);
 
-        SurgeryAddedEvent GetEvent() => new(surgery.SurgeryInfo.Floor.Value, surgery.SurgeryInfo.Number.Value);
+        SurgeryAddedEvent GetEvent() => new(surgery.Id, surgery.SurgeryInfo.Floor.Value, surgery.SurgeryInfo.Number.Value);
     }
 }

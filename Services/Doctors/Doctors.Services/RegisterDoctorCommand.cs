@@ -31,7 +31,6 @@ public class RegisterDoctorCommandHandler : IRequestHandler<RegisterDoctorComman
 
         await _doctorsRepository.AddDoctorAsync(doctor, cancellationToken);
 
-        //todo outbox
         await _publishEndpoint.Publish(new DoctorRegisteredEvent(doctor.Id, doctor.Name.FirstName, doctor.Name.LastName, doctor.Specialty.Id), cancellationToken: cancellationToken);
 
         await _unitOfWork.SaveChangesAsync(cancellationToken);

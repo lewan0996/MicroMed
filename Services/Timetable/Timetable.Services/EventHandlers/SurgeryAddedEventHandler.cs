@@ -21,7 +21,7 @@ public class SurgeryAddedEventHandler : IConsumer<SurgeryAddedEvent>
     {
         var message = context.Message;
 
-        var surgery = new Surgery(message.Floor, message.Number);
+        var surgery = new Surgery(message.Id, message.Floor, message.Number);
 
         await _surgeryRepository.AddSurgeryAsync(surgery, context.CancellationToken);
 

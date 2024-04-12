@@ -7,7 +7,7 @@ public class Doctor : Entity, IAggregateRoot
     public Name Name { get; init; }
     public Specialty Specialty { get; init; }
 
-    public Doctor(Name name, Specialty specialty) => (Name, Specialty) = (name, specialty);
+    public Doctor(Guid id, Name name, Specialty specialty) : base(id) => (Name, Specialty) = (name, specialty);
 
     protected Doctor() { }
 }

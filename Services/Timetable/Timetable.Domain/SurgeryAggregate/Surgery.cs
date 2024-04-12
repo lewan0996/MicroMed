@@ -7,7 +7,7 @@ public class Surgery : Entity
     public string Floor { get; }
     public string Number { get; }
 
-    public Surgery(string floor, string number)
+    public Surgery(Guid id, string floor, string number) : base(id)
     {
         Floor = floor;
         Number = number;

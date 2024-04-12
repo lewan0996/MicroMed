@@ -1,3 +1,3 @@
 ﻿namespace Clinics.Contracts;
 
-public record SurgeryAddedEvent(string Floor, string Number);
+public record SurgeryAddedEvent(Guid Id, string Floor, string Number);

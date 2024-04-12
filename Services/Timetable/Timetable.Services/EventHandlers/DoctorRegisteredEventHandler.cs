@@ -22,7 +22,7 @@ public class DoctorRegisteredEventHandler : IConsumer<DoctorRegisteredEvent>
     {
         var message = context.Message;
 
-        var doctor = new Doctor(new Name(message.FirstName, message.LastName), Specialty.Get(message.SpecialtyId));
+        var doctor = new Doctor(message.Id, new Name(message.FirstName, message.LastName), Specialty.Get(message.SpecialtyId));
 
         await _doctorsRepository.AddDoctorAsync(doctor, context.CancellationToken);
 
