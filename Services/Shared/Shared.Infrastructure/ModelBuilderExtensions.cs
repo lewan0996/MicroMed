@@ -1,4 +1,5 @@
 ﻿using System.Linq.Expressions;
+using MassTransit;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using Shared.Domain;
@@ -36,5 +37,14 @@ public static class ModelBuilderExtensions
     private static string GetExpressionMemberName<TEntity, TStringValueObject>(Expression<Func<TEntity, TStringValueObject>> expression)
     {
         return ((MemberExpression)expression.Body).Member.Name;
+    }
+
+    public static ModelBuilder AddMassTransitOutbox(this ModelBuilder builder)
+    {
+        builder.AddInboxStateEntity();
+        builder.AddOutboxMessageEntity();
+        builder.AddOutboxStateEntity();
+
+        return builder;
     }
 }

@@ -43,5 +43,7 @@ public class ClinicsDbContext : DbContext, IUnitOfWork
         var equipmentBuilder = modelBuilder.Entity<Equipment>();
 
         equipmentBuilder.ToTable("Equipment").HasStringValueObject(x => x.Name);
+
+        modelBuilder.AddMassTransitOutbox();
     }
 }

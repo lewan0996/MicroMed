@@ -24,5 +24,7 @@ public class DoctorsDbContext : DbContext, IUnitOfWork
         });
         
         doctorsBuilder.Property(x => x.Specialty).HasConversion(x => x.Name, x => Specialty.Get(x));
+
+        modelBuilder.AddMassTransitOutbox();
     }
 }

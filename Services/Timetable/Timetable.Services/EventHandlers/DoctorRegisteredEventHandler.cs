@@ -18,8 +18,6 @@ public class DoctorRegisteredEventHandler : IConsumer<DoctorRegisteredEvent>
         _unitOfWork = unitOfWork;
     }
 
-    public DoctorRegisteredEventHandler() { }
-
     public async Task Consume(ConsumeContext<DoctorRegisteredEvent> context)
     {
         var message = context.Message;

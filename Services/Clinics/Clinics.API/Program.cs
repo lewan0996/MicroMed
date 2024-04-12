@@ -19,7 +19,7 @@ builder.Services
     .AddScoped<IClinicRepository, ClinicRepository>()
     .AddScoped<IEquipmentRepository, EquipmentRepository>()
     .AddScoped<IUnitOfWork>(services => services.GetRequiredService<ClinicsDbContext>())
-    .AddMassTransit(builder.Configuration)
+    .AddMassTransit<ClinicsDbContext>(builder.Configuration)
     .AddGrpcWithExceptionInterceptor();
 
 var app = builder.Build();

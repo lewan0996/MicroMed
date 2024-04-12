@@ -1,5 +1,6 @@
 ﻿using System.Reflection;
 using MassTransit;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 
@@ -7,8 +8,8 @@ namespace Shared.API;
 
 public static class ServiceCollectionExtensions
 {
-    public static IServiceCollection AddMassTransit(this IServiceCollection services,
-        ConfigurationManager configuration) =>
+    public static IServiceCollection AddMassTransit<TOutboxDbContext>(this IServiceCollection services,
+        ConfigurationManager configuration) where TOutboxDbContext: DbContext =>
         services.AddMassTransit(x =>
         {
             x.AddConsumers(Assembly.GetEntryAssembly()!.GetReferencedAssemblies().Select(Assembly.Load).ToArray());
@@ -24,6 +25,12 @@ public static class ServiceCollectionExtensions
                 });
 
                 cfg.ConfigureEndpoints(context);
+            });
+
+            x.AddEntityFrameworkOutbox<TOutboxDbContext>(cfg =>
+            {
+                cfg.UseSqlServer();
+                cfg.UseBusOutbox();
             });
         });
 }

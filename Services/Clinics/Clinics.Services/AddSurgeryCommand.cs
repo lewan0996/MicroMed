@@ -39,9 +39,9 @@ public class AddSurgeryCommandHandler : IRequestHandler<AddSurgeryCommand>
 
         clinic.AddSurgery(surgery);
 
-        await _unitOfWork.SaveChangesAsync(cancellationToken);
-
         await _publishEndpoint.Publish(GetEvent(), cancellationToken: cancellationToken);
+
+        await _unitOfWork.SaveChangesAsync(cancellationToken);
 
         SurgeryAddedEvent GetEvent() => new(surgery.SurgeryInfo.Floor.Value, surgery.SurgeryInfo.Number.Value);
     }

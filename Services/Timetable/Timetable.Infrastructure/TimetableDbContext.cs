@@ -43,5 +43,7 @@ public class TimetableDbContext : DbContext, IUnitOfWork
             x.Property(y => y.DurationMinutes);
             x.Property(y => y.DateTime);
         });
+
+        modelBuilder.AddMassTransitOutbox();
     }
 }
