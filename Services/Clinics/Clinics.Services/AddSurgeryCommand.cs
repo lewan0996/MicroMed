@@ -1,8 +1,8 @@
 ﻿using Clinics.Contracts;
 using Clinics.Domain.ClinicAggregate;
 using Clinics.Services.Repositories;
+using MassTransit;
 using MediatR;
-using NServiceBus;
 using Shared.Services;
 
 namespace Clinics.Services;
@@ -18,14 +18,15 @@ public class AddSurgeryCommandHandler : IRequestHandler<AddSurgeryCommand>
     private readonly IClinicRepository _clinicRepository;
     private readonly IEquipmentRepository _equipmentRepository;
     private readonly IUnitOfWork _unitOfWork;
-    private readonly IMessageSession _messageSession;
+    private readonly IPublishEndpoint _publishEndpoint;
 
-    public AddSurgeryCommandHandler(IClinicRepository clinicRepository, IEquipmentRepository equipmentRepository, IUnitOfWork unitOfWork, IMessageSession messageSession)
+    public AddSurgeryCommandHandler(IClinicRepository clinicRepository, IEquipmentRepository equipmentRepository,
+        IUnitOfWork unitOfWork, IPublishEndpoint publishEndpoint)
     {
         _clinicRepository = clinicRepository;
         _equipmentRepository = equipmentRepository;
         _unitOfWork = unitOfWork;
-        _messageSession = messageSession;
+        _publishEndpoint = publishEndpoint;
     }
 
     public async Task Handle(AddSurgeryCommand request, CancellationToken cancellationToken)
@@ -40,7 +41,7 @@ public class AddSurgeryCommandHandler : IRequestHandler<AddSurgeryCommand>
 
         await _unitOfWork.SaveChangesAsync(cancellationToken);
 
-        await _messageSession.Publish(GetEvent(), cancellationToken: cancellationToken);
+        await _publishEndpoint.Publish(GetEvent(), cancellationToken: cancellationToken);
 
         SurgeryAddedEvent GetEvent() => new(surgery.SurgeryInfo.Floor.Value, surgery.SurgeryInfo.Number.Value);
     }

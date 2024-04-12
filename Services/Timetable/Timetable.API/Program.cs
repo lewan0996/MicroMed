@@ -21,9 +21,8 @@ builder.Services
     .AddScoped<IDoctorsRepository, DoctorsRepository>()
     .AddScoped<IAppointmentRepository, AppointmentRepository>()
     .AddScoped<IUnitOfWork>(services => services.GetRequiredService<TimetableDbContext>())
+    .AddMassTransit(builder.Configuration)
     .AddGrpcWithExceptionInterceptor();
-
-builder.ConfigureNServiceBusEndpoint("Timetable");
 
 var app = builder.Build();
 

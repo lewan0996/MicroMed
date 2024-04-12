@@ -1,6 +1,5 @@
 using Grpc.Net.Client;
 using MicroMed.Gateway;
-using Shared.API;
 
 var builder = WebApplication.CreateBuilder(args);
 

@@ -16,9 +16,8 @@ builder.Services
     })
     .AddScoped<IDoctorsRepository, DoctorsRepository>()
     .AddScoped<IUnitOfWork>(services => services.GetRequiredService<DoctorsDbContext>())
+    .AddMassTransit(builder.Configuration)
     .AddGrpcWithExceptionInterceptor();
-
-builder.ConfigureNServiceBusEndpoint("Doctors");
 
 var app = builder.Build();
 

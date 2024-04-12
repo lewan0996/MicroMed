@@ -1,12 +1,12 @@
 ﻿using Clinics.Contracts;
-using NServiceBus;
+using MassTransit;
 using Shared.Services;
 using Timetable.Domain.SurgeryAggregate;
 using Timetable.Services.Repositories;
 
 namespace Timetable.Services.EventHandlers;
 
-public class SurgeryAddedEventHandler : IHandleMessages<SurgeryAddedEvent>
+public class SurgeryAddedEventHandler : IConsumer<SurgeryAddedEvent>
 {
     private readonly ISurgeryRepository _surgeryRepository;
     private readonly IUnitOfWork _unitOfWork;
@@ -17,8 +17,10 @@ public class SurgeryAddedEventHandler : IHandleMessages<SurgeryAddedEvent>
         _unitOfWork = unitOfWork;
     }
 
-    public async Task Handle(SurgeryAddedEvent message, IMessageHandlerContext context)
+    public async Task Consume(ConsumeContext<SurgeryAddedEvent> context)
     {
+        var message = context.Message;
+
         var surgery = new Surgery(message.Floor, message.Number);
 
         await _surgeryRepository.AddSurgeryAsync(surgery, context.CancellationToken);
