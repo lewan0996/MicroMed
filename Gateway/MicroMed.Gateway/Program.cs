@@ -1,6 +1,7 @@
 using Clinics.API;
 using Grpc.Net.Client;
 using MicroMed.Gateway;
+using MicroMed.Gateway.Dtos;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -30,19 +31,19 @@ app.MapPost("Clinics",
             using var channel = GrpcChannel.ForAddress(serviceUrls.Clinics, grpcOptions);
             var client = new ClinicsService.ClinicsServiceClient(channel);
 
-            var clinicId = await client.AddClinicAsync(request, cancellationToken: cancellationToken);
+            var response = await client.AddClinicAsync(request, cancellationToken: cancellationToken);
 
-            return TypedResults.Created($"Clinics/{clinicId}");
+            return TypedResults.Created($"Clinics/{response.Id}");
         })
     .ProducesProblem(StatusCodes.Status400BadRequest);
 
-app.MapPut("Clinics",
-        async (UpdateClinicRequest request, CancellationToken cancellationToken) =>
+app.MapPut("Clinics/{id:int}",
+        async (int id, UpdateClinicDto request, CancellationToken cancellationToken) =>
         {
             using var channel = GrpcChannel.ForAddress(serviceUrls.Clinics, grpcOptions);
             var client = new ClinicsService.ClinicsServiceClient(channel);
 
-            await client.UpdateClinicAsync(request, cancellationToken: cancellationToken);
+            await client.UpdateClinicAsync(request.ToRpcRequest(id), cancellationToken: cancellationToken);
 
             return TypedResults.Ok();
         })
@@ -55,27 +56,27 @@ app.MapPost("Surgeries",
             using var channel = GrpcChannel.ForAddress(serviceUrls.Clinics, grpcOptions);
             var client = new ClinicsService.ClinicsServiceClient(channel);
 
-            var surgeryId = await client.AddSurgeryAsync(request, cancellationToken: cancellationToken);
+            var response = await client.AddSurgeryAsync(request, cancellationToken: cancellationToken);
 
-            return TypedResults.Created($"Clinics/{request.ClinicId}/Surgeries/{surgeryId.Id}");
+            return TypedResults.Created($"Clinics/{request.ClinicId}/Surgeries/{response.Id}");
         })
     .ProducesProblem(StatusCodes.Status400BadRequest)
     .ProducesProblem(StatusCodes.Status404NotFound);
 
-app.MapPut("Surgeries",
-        async (UpdateSurgeryRequest request, CancellationToken cancellationToken) =>
+app.MapPut("Clinics/{clinicId:int}/Surgeries/{surgeryId:int}",
+        async (int clinicId, int surgeryId, UpdateSurgeryDto request, CancellationToken cancellationToken) =>
         {
             using var channel = GrpcChannel.ForAddress(serviceUrls.Clinics, grpcOptions);
             var client = new ClinicsService.ClinicsServiceClient(channel);
 
-            await client.UpdateSurgeryAsync(request, cancellationToken: cancellationToken);
+            await client.UpdateSurgeryAsync(request.ToRpcRequest(clinicId, surgeryId), cancellationToken: cancellationToken);
 
             return TypedResults.Ok();
         })
     .ProducesProblem(StatusCodes.Status400BadRequest)
     .ProducesProblem(StatusCodes.Status404NotFound);
 
-app.MapDelete("Clinics/{clinicId}/Surgeries/{surgeryId}",
+app.MapDelete("Clinics/{clinicId:int}/Surgeries/{surgeryId:int}",
         async (int clinicId, int surgeryId, CancellationToken cancellationToken) =>
         {
             using var channel = GrpcChannel.ForAddress(serviceUrls.Clinics, grpcOptions);
@@ -94,9 +95,9 @@ app.MapPost("SurgeryEquipment",
             using var channel = GrpcChannel.ForAddress(serviceUrls.Clinics, grpcOptions);
             var client = new ClinicsService.ClinicsServiceClient(channel);
 
-            await client.AddSurgeryEquipmentAsync(request, cancellationToken: cancellationToken);
+            var response = await client.AddSurgeryEquipmentAsync(request, cancellationToken: cancellationToken);
 
-            return TypedResults.Created();
+            return TypedResults.Created($"SurgeryEquipment/{response.Id}");
         })
     .ProducesProblem(StatusCodes.Status400BadRequest);
 
@@ -106,14 +107,16 @@ app.MapPost("Doctors",
         using var channel = GrpcChannel.ForAddress(serviceUrls.Doctors, grpcOptions);
         var client = new DoctorsService.DoctorsServiceClient(channel);
 
-        var doctorId = await client.RegisterDoctorAsync(request, cancellationToken: cancellationToken);
+        var response = await client.RegisterDoctorAsync(request, cancellationToken: cancellationToken);
 
-        return TypedResults.Created($"Doctors/{doctorId.Id}"); //todo fix proto responses and requests
+        return TypedResults.Created($"Doctors/{response.Id}");
     }).ProducesProblem(StatusCodes.Status400BadRequest);
 
 app.UseExceptionHandler();
 
 app.Run();
+
+return;
 
 GrpcChannelOptions CreateGrpcOptions()
 {
@@ -132,8 +135,8 @@ GrpcChannelOptions CreateGrpcOptions()
     return grpcChannelOptions;
 }
 
-class ServiceUrls
+internal class ServiceUrls
 {
-    public string Clinics { get; set; }
-    public string Doctors { get; set; }
+    public string Clinics { get; set; } = null!;
+    public string Doctors { get; set; } = null!;
 }
