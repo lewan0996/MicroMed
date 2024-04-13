@@ -5,12 +5,12 @@ using Shared.Services;
 
 namespace Clinics.Services.Commands;
 
-public record AddSurgeryEquipmentCommand(EquipmentName Name) : IRequest
+public record AddSurgeryEquipmentCommand(EquipmentName Name) : IRequest<int>
 {
     public AddSurgeryEquipmentCommand(string name) : this(new EquipmentName(name)) { }
 }
 
-public class AddSurgeryEquipmentCommandHandler : IRequestHandler<AddSurgeryEquipmentCommand>
+public class AddSurgeryEquipmentCommandHandler : IRequestHandler<AddSurgeryEquipmentCommand, int>
 {
     private readonly IEquipmentRepository _equipmentRepository;
     private readonly IUnitOfWork _unitOfWork;
@@ -21,12 +21,14 @@ public class AddSurgeryEquipmentCommandHandler : IRequestHandler<AddSurgeryEquip
         _unitOfWork = unitOfWork;
     }
 
-    public async Task Handle(AddSurgeryEquipmentCommand request, CancellationToken cancellationToken)
+    public async Task<int> Handle(AddSurgeryEquipmentCommand request, CancellationToken cancellationToken)
     {
         var equipment = new Equipment(request.Name);
 
         await _equipmentRepository.AddAsync(equipment, cancellationToken);
 
         await _unitOfWork.SaveChangesAsync(cancellationToken);
+
+        return equipment.Id;
     }
 }

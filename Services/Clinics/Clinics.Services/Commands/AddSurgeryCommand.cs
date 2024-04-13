@@ -7,13 +7,13 @@ using Shared.Services;
 
 namespace Clinics.Services.Commands;
 
-public record AddSurgeryCommand(Guid ClinicId, SurgeryNumber Number, SurgeryFloor Floor, IReadOnlyList<Guid> EquipmentIds) : IRequest
+public record AddSurgeryCommand(int ClinicId, SurgeryNumber Number, SurgeryFloor Floor, IReadOnlyList<int> EquipmentIds) : IRequest<int>
 {
-    public AddSurgeryCommand(Guid clinicId, string number, string floor, IReadOnlyList<Guid> equipmentIds)
+    public AddSurgeryCommand(int clinicId, string number, string floor, IReadOnlyList<int> equipmentIds) 
         : this(clinicId, new SurgeryNumber(number), new SurgeryFloor(floor), equipmentIds) { }
 }
 
-public class AddSurgeryCommandHandler : IRequestHandler<AddSurgeryCommand>
+public class AddSurgeryCommandHandler : IRequestHandler<AddSurgeryCommand, int>
 {
     private readonly IClinicRepository _clinicRepository;
     private readonly IEquipmentRepository _equipmentRepository;
@@ -29,7 +29,7 @@ public class AddSurgeryCommandHandler : IRequestHandler<AddSurgeryCommand>
         _publishEndpoint = publishEndpoint;
     }
 
-    public async Task Handle(AddSurgeryCommand request, CancellationToken cancellationToken)
+    public async Task<int> Handle(AddSurgeryCommand request, CancellationToken cancellationToken)
     {
         var clinic = await _clinicRepository.GetAsync(request.ClinicId, cancellationToken);
 
@@ -42,6 +42,8 @@ public class AddSurgeryCommandHandler : IRequestHandler<AddSurgeryCommand>
         await _publishEndpoint.Publish(GetEvent(), cancellationToken: cancellationToken);
 
         await _unitOfWork.SaveChangesAsync(cancellationToken);
+
+        return surgery.Id;
 
         SurgeryAddedEvent GetEvent() => new(surgery.Id, surgery.SurgeryInfo.Floor.Value, surgery.SurgeryInfo.Number.Value);
     }

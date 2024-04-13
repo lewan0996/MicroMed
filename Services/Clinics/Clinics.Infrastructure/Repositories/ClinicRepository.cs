@@ -14,8 +14,9 @@ public class ClinicRepository : IClinicRepository
         _dbContext = dbContext;
     }
 
-    public Task<Clinic> GetAsync(Guid id, CancellationToken cancellationToken) 
-        => (_dbContext.Clinics.SingleOrDefaultAsync(x => x.Id == id, cancellationToken) ?? throw new ObjectNotFoundException($"Clinic of id {id} not found"))!;
+    public Task<Clinic> GetAsync(int id, CancellationToken cancellationToken) 
+        => (_dbContext.Clinics
+            .SingleOrDefaultAsync(x => x.Id == id, cancellationToken) ?? throw new ObjectNotFoundException($"Clinic of id {id} not found"))!;
 
     public async Task AddAsync(Clinic clinic, CancellationToken cancellationToken)
         => await _dbContext.Clinics.AddAsync(clinic, cancellationToken);

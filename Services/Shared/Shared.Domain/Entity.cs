@@ -1,22 +1,28 @@
 ﻿namespace Shared.Domain;
 
-public abstract class Entity
+public abstract class Entity : Entity<int>
 {
-    public Guid Id { get; protected set; }
+    protected Entity(int id) : base(id) { }
+
+    protected Entity() { }
+}
+
+public abstract class Entity<TId> where TId : notnull
+{
+    public TId Id { get; } = default!;
 
     protected Entity()
     {
-        Id = Guid.NewGuid();
     }
 
-    protected Entity(Guid id)
+    protected Entity(TId id)
     {
         Id = id;
     }
 
     public override bool Equals(object? obj)
     {
-        if (obj is not Entity other)
+        if (obj is not Entity<TId> other)
             return false;
 
         if (ReferenceEquals(this, other))
@@ -33,10 +39,10 @@ public abstract class Entity
 
     private bool IsTransient()
     {
-        return Id.Equals(default);
+        return Id.Equals(default(TId));
     }
 
-    public static bool operator ==(Entity? a, Entity? b)
+    public static bool operator ==(Entity<TId>? a, Entity<TId>? b)
     {
         if (a is null && b is null)
             return true;
@@ -47,7 +53,7 @@ public abstract class Entity
         return a.Equals(b);
     }
 
-    public static bool operator !=(Entity? a, Entity? b)
+    public static bool operator !=(Entity<TId>? a, Entity<TId>? b)
     {
         return !(a == b);
     }

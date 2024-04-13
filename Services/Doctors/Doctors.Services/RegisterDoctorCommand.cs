@@ -7,12 +7,12 @@ using Shared.Services;
 
 namespace Doctors.Services;
 
-public record RegisterDoctorCommand(Name Name, Specialty Specialty) : IRequest
+public record RegisterDoctorCommand(Name Name, Specialty Specialty) : IRequest<int>
 {
     public RegisterDoctorCommand(string firstName, string lastName, int specialtyId) : this(new Name(firstName, lastName), Specialty.Get(specialtyId)) { }
 }
 
-public class RegisterDoctorCommandHandler : IRequestHandler<RegisterDoctorCommand>
+public class RegisterDoctorCommandHandler : IRequestHandler<RegisterDoctorCommand, int>
 {
     private readonly IDoctorsRepository _doctorsRepository;
     private readonly IUnitOfWork _unitOfWork;
@@ -25,7 +25,7 @@ public class RegisterDoctorCommandHandler : IRequestHandler<RegisterDoctorComman
         _publishEndpoint = publishEndpoint;
     }
 
-    public async Task Handle(RegisterDoctorCommand request, CancellationToken cancellationToken)
+    public async Task<int> Handle(RegisterDoctorCommand request, CancellationToken cancellationToken)
     {
         var doctor = new Doctor(request.Name, request.Specialty);
 
@@ -34,5 +34,7 @@ public class RegisterDoctorCommandHandler : IRequestHandler<RegisterDoctorComman
         await _publishEndpoint.Publish(new DoctorRegisteredEvent(doctor.Id, doctor.Name.FirstName, doctor.Name.LastName, doctor.Specialty.Id), cancellationToken: cancellationToken);
 
         await _unitOfWork.SaveChangesAsync(cancellationToken);
+
+        return doctor.Id;
     }
 }

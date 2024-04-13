@@ -16,10 +16,10 @@ public class DoctorsDbContext : DbContext, IUnitOfWork
     {
         var doctorsBuilder = modelBuilder.Entity<Doctor>();
 
-        doctorsBuilder.Property(x => x.Id)
-            .ValueGeneratedNever();
-        
         doctorsBuilder.ToTable("Doctors");
+
+        doctorsBuilder.Property(x => x.Id).UseHiLo("doctoridseq");
+
         doctorsBuilder.ComplexProperty(x => x.Name, x =>
         {
             x.HasStringValueObject(y => y.FirstName);

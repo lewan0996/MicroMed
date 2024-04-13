@@ -19,11 +19,9 @@ public class ClinicsDbContext : DbContext, IUnitOfWork
 
         clinicsBuilder.ToTable("Clinics");
 
-        clinicsBuilder.Property(x => x.Id)
-            .ValueGeneratedNever();
+        clinicsBuilder.Property(x => x.Id).UseHiLo("clinicidseq");
 
-        clinicsBuilder.Property(x => x.Name).HasConversion(x => x.Value, value => new ClinicName(value))
-            .HasColumnName("Name");
+        clinicsBuilder.HasStringValueObject(x => x.Name);
 
         clinicsBuilder.ComplexProperty(x => x.Address, x =>
             {
@@ -34,10 +32,9 @@ public class ClinicsDbContext : DbContext, IUnitOfWork
             })
             .HasMany(x => x.Surgeries).WithOne();
 
-        var surgeryBuilder = modelBuilder.Entity<Surgery>();
+        clinicsBuilder.Navigation(x => x.Surgeries).AutoInclude();
 
-        surgeryBuilder.Property(x => x.Id)
-            .ValueGeneratedNever();
+        var surgeryBuilder = modelBuilder.Entity<Surgery>();
 
         surgeryBuilder.ToTable("Surgeries")
             .ComplexProperty(x => x.SurgeryInfo, x =>
@@ -48,12 +45,15 @@ public class ClinicsDbContext : DbContext, IUnitOfWork
             })
             .HasMany(x => x.AvailableEquipment).WithMany().UsingEntity(x => x.ToTable("SurgeryEquipment"));
 
+        surgeryBuilder.Property(x => x.Id).UseHiLo("surgeryidseq");
+
         var equipmentBuilder = modelBuilder.Entity<Equipment>();
 
-        equipmentBuilder.Property(x => x.Id)
-            .ValueGeneratedNever();
+        equipmentBuilder.ToTable("Equipment");
 
-        equipmentBuilder.ToTable("Equipment").HasStringValueObject(x => x.Name);
+        equipmentBuilder.Property(x => x.Id).UseHiLo("equipmentidseq");
+
+        equipmentBuilder.HasStringValueObject(x => x.Name);
 
         modelBuilder.AddMassTransitOutbox();
     }

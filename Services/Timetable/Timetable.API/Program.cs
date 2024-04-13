@@ -10,6 +10,7 @@ var builder = WebApplication.CreateBuilder(args);
 
 builder.Services
     .AddEndpointsApiExplorer()
+    .AddSwaggerGen()
     .AddMediatR(x => x.RegisterServicesFromAssemblyContaining<DoctorRegisteredEventHandler>())
     .AddDbContext<TimetableDbContext>(options =>
     {
@@ -27,6 +28,9 @@ var app = builder.Build();
 
 if (app.Environment.IsDevelopment())
 {
+    app.UseSwagger();
+    app.UseSwaggerUI();
+
     await EnsureDbCreated();
 
     async Task EnsureDbCreated()

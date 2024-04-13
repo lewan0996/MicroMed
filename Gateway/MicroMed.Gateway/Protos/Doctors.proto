@@ -15,4 +15,5 @@ message RegisterDoctorRequest {
 }
 
 message RegisterDoctorResponse {
+	int32 id = 1;
 }

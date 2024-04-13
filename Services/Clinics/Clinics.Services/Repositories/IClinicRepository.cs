@@ -4,6 +4,6 @@ namespace Clinics.Services.Repositories;
 
 public interface IClinicRepository
 {
-    Task<Clinic> GetAsync(Guid id, CancellationToken cancellationToken);
+    Task<Clinic> GetAsync(int id, CancellationToken cancellationToken);
     Task AddAsync(Clinic clinic, CancellationToken cancellationToken);
 }

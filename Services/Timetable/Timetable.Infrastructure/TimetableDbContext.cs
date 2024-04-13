@@ -20,9 +20,10 @@ public class TimetableDbContext : DbContext, IUnitOfWork
     {
         var doctorsBuilder = modelBuilder.Entity<Doctor>();
 
+        doctorsBuilder.ToTable("Doctors");
+
         doctorsBuilder.Property(x => x.Id).ValueGeneratedNever();
 
-        doctorsBuilder.ToTable("Doctors");
         doctorsBuilder.ComplexProperty(x => x.Name, x =>
         {
             x.HasStringValueObject(y => y.FirstName);
@@ -33,16 +34,16 @@ public class TimetableDbContext : DbContext, IUnitOfWork
 
         var surgeryBuilder = modelBuilder.Entity<Surgery>();
 
+        surgeryBuilder.ToTable("Surgeries");
+
         surgeryBuilder.Property(x => x.Id).ValueGeneratedNever();
 
-        surgeryBuilder.ToTable("Surgeries");
         surgeryBuilder.Property(x => x.Floor);
         surgeryBuilder.Property(x => x.Number);
 
         var appointmentBuilder = modelBuilder.Entity<Appointment>();
 
-        appointmentBuilder.Property(x => x.Id).ValueGeneratedNever();
-
+        appointmentBuilder.HasKey(x => x.Id);
         appointmentBuilder.HasOne(x => x.Doctor).WithMany();
         appointmentBuilder.HasOne(x => x.Surgery).WithMany();
         appointmentBuilder.ComplexProperty(x => x.Date, x =>
@@ -52,5 +53,6 @@ public class TimetableDbContext : DbContext, IUnitOfWork
         });
 
         modelBuilder.AddMassTransitOutbox();
+        //todo base entitybuilder
     }
 }

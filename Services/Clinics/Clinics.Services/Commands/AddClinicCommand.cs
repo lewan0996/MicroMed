@@ -5,7 +5,7 @@ using Shared.Services;
 
 namespace Clinics.Services.Commands;
 
-public record AddClinicCommand(ClinicName Name, Address Address) : IRequest<Guid>
+public record AddClinicCommand(ClinicName Name, Address Address) : IRequest<int>
 {
     public AddClinicCommand(string name, string city, string street, string streetNumber, string additionalInfo)
         : this(
@@ -20,7 +20,7 @@ public record AddClinicCommand(ClinicName Name, Address Address) : IRequest<Guid
     { }
 }
 
-public class AddClinicCommandHandler : IRequestHandler<AddClinicCommand, Guid>
+public class AddClinicCommandHandler : IRequestHandler<AddClinicCommand, int>
 {
     private readonly IClinicRepository _clinicRepository;
     private readonly IUnitOfWork _unitOfWork;
@@ -31,7 +31,7 @@ public class AddClinicCommandHandler : IRequestHandler<AddClinicCommand, Guid>
         _unitOfWork = unitOfWork;
     }
 
-    public async Task<Guid> Handle(AddClinicCommand request, CancellationToken cancellationToken)
+    public async Task<int> Handle(AddClinicCommand request, CancellationToken cancellationToken)
     {
         var clinic = new Clinic(request.Name, request.Address);
 

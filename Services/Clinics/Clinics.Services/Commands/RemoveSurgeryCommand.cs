@@ -6,7 +6,7 @@ using Shared.Services;
 
 namespace Clinics.Services.Commands;
 
-public record RemoveSurgeryCommand(Guid ClinicId, Guid SurgeryId) : IRequest;
+public record RemoveSurgeryCommand(int ClinicId, int SurgeryId) : IRequest;
 
 public class RemoveSurgeryCommandHandler : IRequestHandler<RemoveSurgeryCommand>
 {

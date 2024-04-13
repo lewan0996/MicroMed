@@ -22,11 +22,11 @@ message AddClinicRequest {
 }
 
 message AddClinicResponse {
-	string id = 1;
+	int32 id = 1;
 }
 
 message UpdateClinicRequest {
-	string clinicId = 1;
+	int32 clinicId = 1;
 	string name = 2;
 	string city = 3; 
 	string street = 4;
@@ -38,29 +38,30 @@ message UpdateClinicResponse {
 }
 
 message AddSurgeryRequest {
-	string clinicId = 1;
+	int32 clinicId = 1;
 	string number = 2; 
 	string floor = 3;
-	repeated string equipmentIds = 4;
+	repeated int32 equipmentIds = 4;
 }
 
 message AddSurgeryResponse {
+	int32 id = 1;
 }
 
 message UpdateSurgeryRequest {
-	string clinicId = 1;
-	string surgeryId = 2;
+	int32 clinicId = 1;
+	int32 surgeryId = 2;
 	string number = 3; 
 	string floor = 4;
-	repeated string equipmentIds = 5;
+	repeated int32 equipmentIds = 5;
 }
 
 message UpdateSurgeryResponse {
 }
 
 message RemoveSurgeryRequest {
-	string clinicId = 1;
-	string surgeryId = 2;
+	int32 clinicId = 1;
+	int32 surgeryId = 2;
 }
 
 message RemoveSurgeryResponse {
@@ -71,4 +72,5 @@ message AddSurgeryEquipmentRequest {
 }
 
 message AddSurgeryEquipmentResponse {
+	int32 id = 1;
 }

@@ -16,7 +16,7 @@ public class EquipmentRepository : IEquipmentRepository
 
     public async Task AddAsync(Equipment equipment, CancellationToken cancellationToken) => await _dbContext.AddAsync(equipment, cancellationToken);
 
-    public async Task<IReadOnlyList<Equipment>> GetEquipmentAsync(IEnumerable<Guid> ids, CancellationToken cancellationToken)
+    public async Task<IReadOnlyList<Equipment>> GetEquipmentAsync(IEnumerable<int> ids, CancellationToken cancellationToken)
     {
         var result = await _dbContext.Equipment.Where(x => ids.Contains(x.Id)).ToListAsync(cancellationToken);
 

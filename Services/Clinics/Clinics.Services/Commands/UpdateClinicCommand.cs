@@ -5,9 +5,9 @@ using Shared.Services;
 
 namespace Clinics.Services.Commands;
 
-public record UpdateClinicCommand(Guid ClinicId, ClinicName Name, Address Address) : IRequest
+public record UpdateClinicCommand(int ClinicId, ClinicName Name, Address Address) : IRequest
 {
-    public UpdateClinicCommand(Guid clinicId, string name, string city, string street, string streetNumber, string additionalInfo)
+    public UpdateClinicCommand(int clinicId, string name, string city, string street, string streetNumber, string additionalInfo)
         : this(
             clinicId,
             new ClinicName(name),

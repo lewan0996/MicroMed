@@ -40,21 +40,21 @@ public class Clinic : Entity, IAggregateRoot
         _surgeries.Add(surgery);
     }
 
-    public void UpdateSurgery(Guid surgeryId, SurgeryInfo surgeryInfo, IEnumerable<Equipment> equipment)
+    public void UpdateSurgery(int surgeryId, SurgeryInfo surgeryInfo, IEnumerable<Equipment> equipment)
     {
         var surgery = GetSurgery(surgeryId);
 
         surgery.Update(surgeryInfo, equipment);
     }
 
-    public void RemoveSurgery(Guid surgeryId)
+    public void RemoveSurgery(int surgeryId)
     {
         var surgery = GetSurgery(surgeryId);
 
         _surgeries.Remove(surgery);
     }
 
-    private Surgery GetSurgery(Guid surgeryId)
+    private Surgery GetSurgery(int surgeryId)
     {
         var surgery = Surgeries.SingleOrDefault(x => x.Id == surgeryId);
 
