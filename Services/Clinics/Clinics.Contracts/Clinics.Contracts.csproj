@@ -6,4 +6,18 @@
     <Nullable>enable</Nullable>
   </PropertyGroup>
 
+  <ItemGroup>
+    <None Remove="Protos\Clinics.proto" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Grpc.AspNetCore" Version="2.62.0" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Protobuf Include="Protos\Clinics.proto">
+      <GrpcServices>Server</GrpcServices>
+    </Protobuf>
+  </ItemGroup>
+
 </Project>

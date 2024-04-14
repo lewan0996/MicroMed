@@ -1,6 +1,6 @@
 syntax = "proto3";
 
-option csharp_namespace = "MicroMed.Gateway";
+option csharp_namespace = "Doctors.Contracts";
 
 package Doctors;
 

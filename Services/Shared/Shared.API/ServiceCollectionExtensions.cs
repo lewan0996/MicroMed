@@ -41,4 +41,11 @@ public static class ServiceCollectionExtensions
             x.RegisterServicesFromAssemblies(Assembly.GetEntryAssembly()!.GetReferencedAssemblies().Select(Assembly.Load).ToArray());
             x.AddOpenBehavior(typeof(TransactionBehavior<,>));
         });
+
+    public static IServiceCollection AddSqlConnectionProvider(this IServiceCollection services,
+        ConfigurationManager configuration)
+        => services.AddScoped(_ =>
+        {
+            return new SqlConnectionProvider(configuration.GetConnectionString("SqlServer")!);
+        });
 }

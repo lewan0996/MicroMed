@@ -1,16 +1,32 @@
 syntax = "proto3";
 
-option csharp_namespace = "Clinics.API";
+option csharp_namespace = "Clinics.Contracts";
 
 package Clinics;
 
 service ClinicsService {
+	rpc GetClinics (GetClinicsRequest) returns (GetClinicsResponse);
 	rpc AddClinic (AddClinicRequest) returns (AddClinicResponse);
 	rpc UpdateClinic (UpdateClinicRequest) returns (UpdateClinicResponse);
 	rpc AddSurgery (AddSurgeryRequest) returns (AddSurgeryResponse);
 	rpc UpdateSurgery (UpdateSurgeryRequest) returns (UpdateSurgeryResponse);
 	rpc RemoveSurgery (RemoveSurgeryRequest) returns (RemoveSurgeryResponse);
 	rpc AddSurgeryEquipment (AddSurgeryEquipmentRequest) returns (AddSurgeryEquipmentResponse);
+}
+
+message GetClinicsRequest { }
+
+message GetClinicsResponse{
+	repeated ClinicDto Clinics = 1;
+
+	message ClinicDto{
+		int32 id = 1;
+		string name = 2;
+		string city = 3; 
+		string street = 4;
+		string StreetNumber = 5;
+		string AdditionalInfo = 6;
+	}
 }
 
 message AddClinicRequest {

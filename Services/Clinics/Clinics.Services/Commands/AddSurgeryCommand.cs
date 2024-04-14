@@ -1,4 +1,4 @@
-﻿using Clinics.Contracts;
+﻿using Clinics.Contracts.Events;
 using Clinics.Domain.ClinicAggregate;
 using Clinics.Services.Repositories;
 using MassTransit;

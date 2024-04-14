@@ -1,3 +1,3 @@
-﻿namespace Clinics.Contracts;
+﻿namespace Clinics.Contracts.Events;
 
 public record SurgeryRemovedEvent(int Id);

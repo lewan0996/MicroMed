@@ -1,4 +1,5 @@
-using Clinics.API;
+using Clinics.Contracts;
+using Doctors.Contracts;
 using Grpc.Net.Client;
 using MicroMed.Gateway;
 using MicroMed.Gateway.Dtos;
@@ -24,6 +25,16 @@ var serviceUrls = new ServiceUrls();
 builder.Configuration.Bind("Services", serviceUrls);
 
 var grpcOptions = CreateGrpcOptions();
+
+app.MapGet("Clinics", async (CancellationToken cancellationToken) =>
+{
+    using var channel = GrpcChannel.ForAddress(serviceUrls.Clinics, grpcOptions);
+    var client = new ClinicsService.ClinicsServiceClient(channel);
+
+    var response = await client.GetClinicsAsync(new GetClinicsRequest(), cancellationToken: cancellationToken);
+
+    return TypedResults.Ok(response.Clinics);
+});
 
 app.MapPost("Clinics",
         async (AddClinicRequest request, CancellationToken cancellationToken) =>

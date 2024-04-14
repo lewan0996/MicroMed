@@ -6,7 +6,7 @@ public record Address(
     City City,
     Street Street,
     StreetNumber Number,
-    AddressAdditionalInformation AdditionalInformation) : ValueObject
+    AddressAdditionalInformation AdditionalInfo) : ValueObject
 {
     protected override void Validate() { }
 }

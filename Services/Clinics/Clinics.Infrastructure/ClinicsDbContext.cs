@@ -23,9 +23,9 @@ public class ClinicsDbContext(DbContextOptions<ClinicsDbContext> options) : DbCo
         clinicsBuilder.ComplexProperty(x => x.Address, x =>
             {
                 x.HasStringValueObject(y => y.City);
-                x.HasStringValueObject(y => y.Street, "StreetNumber");
-                x.HasStringValueObject(y => y.Number);
-                x.HasStringValueObject(y => y.AdditionalInformation);
+                x.HasStringValueObject(y => y.Street);
+                x.HasStringValueObject(y => y.Number, "StreetNumber");
+                x.HasStringValueObject(y => y.AdditionalInfo);
             })
             .HasMany(x => x.Surgeries).WithOne();
 

@@ -1,4 +1,4 @@
-﻿using Clinics.Contracts;
+﻿using Clinics.Contracts.Events;
 using MassTransit;
 using Shared.Services;
 using Timetable.Domain.SurgeryAggregate;

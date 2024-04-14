@@ -1,4 +1,4 @@
-﻿using Clinics.Contracts;
+﻿using Clinics.Contracts.Events;
 using Clinics.Services.Repositories;
 using MassTransit;
 using MediatR;

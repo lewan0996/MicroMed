@@ -1,4 +1,4 @@
-<Project Sdk="Microsoft.NET.Sdk.Web">
+﻿<Project Sdk="Microsoft.NET.Sdk.Web">
 
   <PropertyGroup>
     <TargetFramework>net8.0</TargetFramework>
@@ -9,10 +9,6 @@
     <DockerfileContext>..\..</DockerfileContext>
     <DockerComposeProjectPath>..\..\Doctors\docker-compose.dcproj</DockerComposeProjectPath>
   </PropertyGroup>
-
-	<ItemGroup>
-        <Protobuf Include="Protos\Clinics.proto" GrpcServices="Server" />
-	</ItemGroup>
 
   <ItemGroup>
     <PackageReference Include="Grpc.AspNetCore" Version="2.62.0" />

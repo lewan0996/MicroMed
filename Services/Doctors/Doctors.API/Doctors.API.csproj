@@ -24,8 +24,4 @@
     <ProjectReference Include="..\Doctors.Services\Doctors.Services.csproj" />
   </ItemGroup>
 
-  <ItemGroup>
-    <Protobuf Include="Protos\Doctors.proto" GrpcServices="Server" />
-  </ItemGroup>
-
 </Project>

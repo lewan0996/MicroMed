@@ -1,4 +1,4 @@
-﻿using Clinics.API;
+﻿using Clinics.Contracts;
 
 namespace MicroMed.Gateway.Dtos;
 
