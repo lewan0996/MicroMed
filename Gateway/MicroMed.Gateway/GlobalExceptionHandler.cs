@@ -25,7 +25,12 @@ public class GlobalExceptionHandler : IExceptionHandler
                 Title = "Not found",
                 Detail = rpcException.Status.Detail
             },
-            _ => throw new ArgumentOutOfRangeException(nameof(exception))
+            _ => new ProblemDetails
+            {
+                Status = StatusCodes.Status500InternalServerError,
+                Title = "Internal Server Error",
+                Detail = rpcException.Status.Detail
+            }
         };
 
         httpContext.Response.StatusCode = problemDetails.Status!.Value;

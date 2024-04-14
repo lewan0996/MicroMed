@@ -9,39 +9,32 @@ namespace Clinics.Services.Commands;
 
 public record AddSurgeryCommand(int ClinicId, SurgeryNumber Number, SurgeryFloor Floor, IReadOnlyList<int> EquipmentIds) : IRequest<int>
 {
-    public AddSurgeryCommand(int clinicId, string number, string floor, IReadOnlyList<int> equipmentIds) 
+    public AddSurgeryCommand(int clinicId, string number, string floor, IReadOnlyList<int> equipmentIds)
         : this(clinicId, new SurgeryNumber(number), new SurgeryFloor(floor), equipmentIds) { }
 }
 
-public class AddSurgeryCommandHandler : IRequestHandler<AddSurgeryCommand, int>
+public class AddSurgeryCommandHandler(
+    IClinicRepository clinicRepository,
+    IEquipmentRepository equipmentRepository,
+    IUnitOfWork unitOfWork,
+    IPublishEndpoint publishEndpoint)
+    : IRequestHandler<AddSurgeryCommand, int>
 {
-    private readonly IClinicRepository _clinicRepository;
-    private readonly IEquipmentRepository _equipmentRepository;
-    private readonly IUnitOfWork _unitOfWork;
-    private readonly IPublishEndpoint _publishEndpoint;
-
-    public AddSurgeryCommandHandler(IClinicRepository clinicRepository, IEquipmentRepository equipmentRepository,
-        IUnitOfWork unitOfWork, IPublishEndpoint publishEndpoint)
-    {
-        _clinicRepository = clinicRepository;
-        _equipmentRepository = equipmentRepository;
-        _unitOfWork = unitOfWork;
-        _publishEndpoint = publishEndpoint;
-    }
-
     public async Task<int> Handle(AddSurgeryCommand request, CancellationToken cancellationToken)
     {
-        var clinic = await _clinicRepository.GetAsync(request.ClinicId, cancellationToken);
+        var clinic = await clinicRepository.GetAsync(request.ClinicId, cancellationToken);
 
-        var equipment = await _equipmentRepository.GetEquipmentAsync(request.EquipmentIds, cancellationToken);
+        var equipment = await equipmentRepository.GetEquipmentAsync(request.EquipmentIds, cancellationToken);
 
         var surgery = new Surgery(new SurgeryInfo(request.Number, request.Floor), equipment);
 
         clinic.AddSurgery(surgery);
 
-        await _publishEndpoint.Publish(GetEvent(), cancellationToken: cancellationToken);
+        await unitOfWork.SaveChangesAsync(cancellationToken);
 
-        await _unitOfWork.SaveChangesAsync(cancellationToken);
+        await publishEndpoint.Publish(GetEvent(), cancellationToken: cancellationToken);
+
+        await unitOfWork.SaveChangesAsync(cancellationToken);
 
         return surgery.Id;
 

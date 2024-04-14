@@ -2,16 +2,13 @@
 using Clinics.Domain.EquipmentAggregate;
 using Microsoft.EntityFrameworkCore;
 using Shared.Infrastructure;
-using Shared.Services;
 
 namespace Clinics.Infrastructure;
 
-public class ClinicsDbContext : DbContext, IUnitOfWork
+public class ClinicsDbContext(DbContextOptions<ClinicsDbContext> options) : DbContextBase(options)
 {
     public DbSet<Clinic> Clinics { get; set; }
     public DbSet<Equipment> Equipment { get; set; }
-
-    public ClinicsDbContext(DbContextOptions<ClinicsDbContext> options) : base(options) { }
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {

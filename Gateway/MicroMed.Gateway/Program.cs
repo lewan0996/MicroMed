@@ -50,15 +50,15 @@ app.MapPut("Clinics/{id:int}",
     .ProducesProblem(StatusCodes.Status400BadRequest)
     .ProducesProblem(StatusCodes.Status404NotFound);
 
-app.MapPost("Surgeries",
-        async (AddSurgeryRequest request, CancellationToken cancellationToken) =>
+app.MapPost("Clinics/{clinicId:int}/Surgeries",
+        async (int clinicId, AddSurgeryDto request, CancellationToken cancellationToken) =>
         {
             using var channel = GrpcChannel.ForAddress(serviceUrls.Clinics, grpcOptions);
             var client = new ClinicsService.ClinicsServiceClient(channel);
 
-            var response = await client.AddSurgeryAsync(request, cancellationToken: cancellationToken);
+            var response = await client.AddSurgeryAsync(request.ToRpcRequest(clinicId), cancellationToken: cancellationToken);
 
-            return TypedResults.Created($"Clinics/{request.ClinicId}/Surgeries/{response.Id}");
+            return TypedResults.Created($"Clinics/{clinicId}/Surgeries/{response.Id}");
         })
     .ProducesProblem(StatusCodes.Status400BadRequest)
     .ProducesProblem(StatusCodes.Status404NotFound);

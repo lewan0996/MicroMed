@@ -8,7 +8,7 @@ using Shared.Services;
 var builder = WebApplication.CreateBuilder(args);
 
 builder.Services
-    .AddMediatR(x => x.RegisterServicesFromAssemblyContaining<RegisterDoctorCommand>())
+    .AddMediatRWithTransactionBehavior()
     .AddDbContext<DoctorsDbContext>(options =>
     {
         options.UseSqlServer(builder.Configuration.GetConnectionString("SqlServer"));

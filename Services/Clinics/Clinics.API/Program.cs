@@ -1,7 +1,6 @@
 using Clinics.API.Services;
 using Clinics.Infrastructure;
 using Clinics.Infrastructure.Repositories;
-using Clinics.Services.Commands;
 using Clinics.Services.Repositories;
 using Microsoft.EntityFrameworkCore;
 using Shared.API;
@@ -10,7 +9,7 @@ using Shared.Services;
 var builder = WebApplication.CreateBuilder(args);
 
 builder.Services
-    .AddMediatR(x => x.RegisterServicesFromAssemblyContaining<AddClinicCommand>())
+    .AddMediatRWithTransactionBehavior()
     .AddDbContext<ClinicsDbContext>(options =>
     {
         options.UseSqlServer(builder.Configuration.GetConnectionString("SqlServer"));

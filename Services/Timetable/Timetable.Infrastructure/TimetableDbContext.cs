@@ -1,20 +1,17 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Shared.Domain;
 using Shared.Infrastructure;
-using Shared.Services;
 using Timetable.Domain.AppointmentAggregate;
 using Timetable.Domain.DoctorAggregate;
 using Timetable.Domain.SurgeryAggregate;
 
 namespace Timetable.Infrastructure;
 
-public class TimetableDbContext : DbContext, IUnitOfWork
+public class TimetableDbContext(DbContextOptions<TimetableDbContext> options) : DbContextBase(options)
 {
     public DbSet<Doctor> Doctors { get; set; } = null!;
     public DbSet<Surgery> Surgeries { get; set; } = null!;
     public DbSet<Appointment> Appointments { get; set; } = null!;
-
-    public TimetableDbContext(DbContextOptions<TimetableDbContext> options): base(options) { }
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {

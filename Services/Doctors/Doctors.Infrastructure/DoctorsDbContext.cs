@@ -2,15 +2,12 @@
 using Microsoft.EntityFrameworkCore;
 using Shared.Domain;
 using Shared.Infrastructure;
-using Shared.Services;
 
 namespace Doctors.Infrastructure;
 
-public class DoctorsDbContext : DbContext, IUnitOfWork
+public class DoctorsDbContext(DbContextOptions<DoctorsDbContext> options) : DbContextBase(options)
 {
     public DbSet<Doctor> Doctors { get; set; } = null!;
-
-    public DoctorsDbContext(DbContextOptions<DoctorsDbContext> options) : base(options) { }
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {

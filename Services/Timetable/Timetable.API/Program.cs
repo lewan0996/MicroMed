@@ -3,7 +3,6 @@ using Shared.API;
 using Shared.Services;
 using Timetable.Infrastructure;
 using Timetable.Infrastructure.Repositories;
-using Timetable.Services.EventHandlers;
 using Timetable.Services.Repositories;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -11,7 +10,7 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services
     .AddEndpointsApiExplorer()
     .AddSwaggerGen()
-    .AddMediatR(x => x.RegisterServicesFromAssemblyContaining<DoctorRegisteredEventHandler>())
+    .AddMediatRWithTransactionBehavior()
     .AddDbContext<TimetableDbContext>(options =>
     {
         options.UseSqlServer(builder.Configuration.GetConnectionString("SqlServer"));
