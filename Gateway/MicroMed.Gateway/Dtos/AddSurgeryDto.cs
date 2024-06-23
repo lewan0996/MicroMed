@@ -1,6 +1,6 @@
 ﻿using Clinics.Contracts;
 
-namespace MicroMed.Gateway.Dtos;
+namespace MicroMed.BFF.Admin.Dtos;
 
 public class AddSurgeryDto
 {

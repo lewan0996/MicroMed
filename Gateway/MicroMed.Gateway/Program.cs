@@ -1,15 +1,38 @@
 using Clinics.Contracts;
 using Doctors.Contracts;
 using Grpc.Net.Client;
-using MicroMed.Gateway;
-using MicroMed.Gateway.Dtos;
+using MicroMed.BFF.Admin;
+using MicroMed.BFF.Admin.Dtos;
+using System.IdentityModel.Tokens.Jwt;
 
 var builder = WebApplication.CreateBuilder(args);
+
+JwtSecurityTokenHandler.DefaultMapInboundClaims = false; //todo check
 
 builder.Services
     .AddEndpointsApiExplorer()
     .AddSwaggerGen()
-    .AddGlobalExceptionHandler();
+    .AddGlobalExceptionHandler()
+    .AddAuthorization()
+    .AddAuthentication(options =>
+    {
+        options.DefaultScheme = "Cookies";
+        options.DefaultChallengeScheme = "oidc";
+        options.DefaultSignOutScheme = "oidc";
+    })
+    .AddCookie("Cookies")
+    .AddOpenIdConnect("oidc", options => //todo configure
+    {
+        options.Authority = "https://localhost:5001";
+        options.ClientId = "bff";
+        options.ClientSecret = "secret";
+        options.ResponseType = "code";
+        options.Scope.Add("api1");
+        options.SaveTokens = true;
+        options.GetClaimsFromUserInfoEndpoint = true;
+    });
+
+builder.Services.AddBff();
 
 var app = builder.Build();
 
@@ -19,7 +42,21 @@ if (app.Environment.IsDevelopment())
     app.UseSwaggerUI();
 }
 
+app.UseDefaultFiles();
+app.UseStaticFiles();
+
+app.UseRouting();
+app.UseAuthentication();
+
+app.UseBff();
+
+app.UseAuthorization();
+
 app.UseHttpsRedirection();
+
+app.MapBffManagementEndpoints();
+
+app.MapBffManagementUserEndpoint(); //todo check
 
 var serviceUrls = new ServiceUrls();
 builder.Configuration.Bind("Services", serviceUrls);

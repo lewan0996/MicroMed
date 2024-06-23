@@ -2,13 +2,13 @@
 using Microsoft.AspNetCore.Diagnostics;
 using Microsoft.AspNetCore.Mvc;
 
-namespace MicroMed.Gateway;
+namespace MicroMed.BFF.Admin;
 
 public class GlobalExceptionHandler : IExceptionHandler
 {
     public async ValueTask<bool> TryHandleAsync(HttpContext httpContext, Exception exception, CancellationToken cancellationToken)
     {
-        if (exception is not RpcException rpcException) 
+        if (exception is not RpcException rpcException)
             return false;
 
         var problemDetails = rpcException.StatusCode switch

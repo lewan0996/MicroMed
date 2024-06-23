@@ -45,10 +45,10 @@ services:
     - 15672:15672
 
   micromed.gateway:
-    image: ${DOCKER_REGISTRY-}micromedgateway
+    image: ${DOCKER_REGISTRY-}bffadmin
     build:
       context: ..
-      dockerfile: Gateway/MicroMed.Gateway/Dockerfile
+      dockerfile: Gateway/MicroMed.BFF.Admin/Dockerfile
     depends_on:
     - doctors.api
     - clinics.api

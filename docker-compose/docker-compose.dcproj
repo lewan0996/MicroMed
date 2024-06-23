@@ -7,7 +7,7 @@
     <ProjectGuid>e455af9e-6d51-4579-9296-b1992616637b</ProjectGuid>
     <DockerLaunchAction>LaunchBrowser</DockerLaunchAction>
     <DockerServiceUrl>{Scheme}://localhost:{ServicePort}/swagger</DockerServiceUrl>
-    <DockerServiceName>micromed.gateway</DockerServiceName>
+    <DockerServiceName>micromed.BFF.Admin</DockerServiceName>
   </PropertyGroup>
   <ItemGroup>
     <None Include="docker-compose.override.yml">

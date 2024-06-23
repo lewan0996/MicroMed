@@ -7,7 +7,7 @@
         "clinics.api": "StartDebugging",
         "doctors.api": "StartDebugging",
         "timetable.api": "StartDebugging",
-        "micromed.gateway": "StartDebugging"
+        "bff.admin": "StartDebugging"
       }
     }
   }
