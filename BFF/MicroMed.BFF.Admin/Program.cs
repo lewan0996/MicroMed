@@ -3,11 +3,8 @@ using Doctors.Contracts;
 using Grpc.Net.Client;
 using MicroMed.BFF.Admin;
 using MicroMed.BFF.Admin.Dtos;
-using System.IdentityModel.Tokens.Jwt;
 
 var builder = WebApplication.CreateBuilder(args);
-
-JwtSecurityTokenHandler.DefaultMapInboundClaims = false; //todo check
 
 builder.Services
     .AddEndpointsApiExplorer()
@@ -21,15 +18,19 @@ builder.Services
         options.DefaultSignOutScheme = "oidc";
     })
     .AddCookie("Cookies")
-    .AddOpenIdConnect("oidc", options => //todo configure
+    .AddOpenIdConnect("oidc", options =>
     {
-        options.Authority = "https://localhost:5001";
-        options.ClientId = "bff";
-        options.ClientSecret = "secret";
+        var config = builder.Configuration.GetSection("Auth").Get<AuthConfig>()!;
+
+        options.Authority = config.Authority;
+        options.ClientId = "AdminPortal";
+        options.ClientSecret = config.secret;
         options.ResponseType = "code";
-        options.Scope.Add("api1");
+        options.Scope.Add("admin");
         options.SaveTokens = true;
         options.GetClaimsFromUserInfoEndpoint = true;
+
+        options.RequireHttpsMetadata = false;        
     });
 
 builder.Services.AddBff();
@@ -38,28 +39,22 @@ var app = builder.Build();
 
 if (app.Environment.IsDevelopment())
 {
-    app.UseSwagger();
-    app.UseSwaggerUI();
+    app
+        .UseSwagger()
+        .UseSwaggerUI();
 }
 
-app.UseDefaultFiles();
-app.UseStaticFiles();
-
-app.UseRouting();
-app.UseAuthentication();
-
-app.UseBff();
-
-app.UseAuthorization();
-
-app.UseHttpsRedirection();
+app
+    .UseDefaultFiles()
+    .UseStaticFiles()
+    .UseRouting()
+    .UseAuthentication()
+    .UseBff()
+    .UseAuthorization();
 
 app.MapBffManagementEndpoints();
 
-app.MapBffManagementUserEndpoint(); //todo check
-
-var serviceUrls = new ServiceUrls();
-builder.Configuration.Bind("Services", serviceUrls);
+var serviceUrls = builder.Configuration.GetSection("Services").Get<ServiceUrls>()!;
 
 var grpcOptions = CreateGrpcOptions();
 
@@ -183,8 +178,6 @@ GrpcChannelOptions CreateGrpcOptions()
     return grpcChannelOptions;
 }
 
-internal class ServiceUrls
-{
-    public string Clinics { get; set; } = null!;
-    public string Doctors { get; set; } = null!;
-}
+internal record ServiceUrls(string Clinics, string Doctors);
+
+internal record AuthConfig(string Authority, string secret);
