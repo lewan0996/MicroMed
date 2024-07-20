@@ -28,14 +28,14 @@ services:
   #   - sqlServer
   #   - rabbitMQ
  
-  # sqlServer:
-  #   image: mcr.microsoft.com/mssql/server:2022-latest
-  #   container_name: sqlServer
-  #   environment:
-  #    - MSSQL_SA_PASSWORD=P@ssword1
-  #    - ACCEPT_EULA=Y
-  #   ports:
-  #    - 1435:1433
+  sqlServer:
+    image: mcr.microsoft.com/mssql/server:2022-latest
+    container_name: sqlServer
+    environment:
+     - MSSQL_SA_PASSWORD=P@ssword1
+     - ACCEPT_EULA=Y
+    ports:
+     - 1435:1433
 
   # rabbitMQ:
   #   image: rabbitmq:3-management
@@ -60,4 +60,6 @@ services:
     build:
       context: ..
       dockerfile: Auth/MicroMed.IdentityServer/Dockerfile
+    depends_on:
+    - sqlServer
 
