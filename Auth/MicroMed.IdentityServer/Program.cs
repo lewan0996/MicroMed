@@ -49,24 +49,26 @@ if (app.Environment.IsDevelopment())
 
         await dbContext.Database.EnsureCreatedAsync();
 
-        await InsertAdminRoleAsync();
+        await InsertRoleAsync("admin");
+        await InsertRoleAsync("doctor");
+        await InsertRoleAsync("patient");
 
-        await InsertAdminUserAsync();
+        await InsertAdminUserAsync();        
 
-        async Task InsertAdminRoleAsync()
+        async Task InsertRoleAsync(string roleName)
         {
             var roleMgr = scope.ServiceProvider.GetRequiredService<RoleManager<IdentityRole>>();
 
-            var adminRole = await roleMgr.FindByNameAsync("admin");
+            var role = await roleMgr.FindByNameAsync(roleName);
 
-            if (adminRole == null)
+            if (role == null)
             {
-                adminRole = new IdentityRole
+                role = new IdentityRole
                 {
-                    Name = "admin"
+                    Name = roleName
                 };
 
-                var result = await roleMgr.CreateAsync(adminRole);
+                var result = await roleMgr.CreateAsync(role);
 
                 ValidateResult(result);
             }
@@ -124,6 +126,8 @@ app
     .RequireAuthorization();
 
 app.UseCookiePolicy(new CookiePolicyOptions { MinimumSameSitePolicy = SameSiteMode.Strict }); // to work with http
+
+app.UseMiddleware<FixAntiForgeryIssueMiddleware>("/account/login");
 
 app.Run();
 
