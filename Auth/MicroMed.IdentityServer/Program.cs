@@ -49,7 +49,9 @@ if (app.Environment.IsDevelopment())
 
         await dbContext.Database.EnsureCreatedAsync();
 
-        await InsertRoleAsync("admin");
+        var adminConfig = builder.Configuration.GetSection("Admin").Get<AdminConfiguration>()!;
+
+        await InsertRoleAsync(adminConfig.UserName);
         await InsertRoleAsync("doctor");
         await InsertRoleAsync("patient");
 
@@ -78,18 +80,18 @@ if (app.Environment.IsDevelopment())
         {
             var userMgr = scope.ServiceProvider.GetRequiredService<UserManager<IdentityUser>>();
 
-            var adminUser = await userMgr.FindByNameAsync("admin");
+            var adminUser = await userMgr.FindByNameAsync(adminConfig.UserName);
 
             if (adminUser == null)
             {
                 adminUser = new IdentityUser
                 {
-                    UserName = "admin",
+                    UserName = adminConfig.UserName,
                     Email = "admin@micromed.com",
                     EmailConfirmed = true
                 };
 
-                var result = await userMgr.CreateAsync(adminUser, "Pass123$"); //todo configure admin password
+                var result = await userMgr.CreateAsync(adminUser, adminConfig.Password);
 
                 ValidateResult(result);
 
@@ -164,3 +166,5 @@ internal static class Config
 }
 
 internal record ClientConfiguration(string Name, string Scope, string BaseUrl, string Secret);
+
+internal record AdminConfiguration(string UserName, string Password);
