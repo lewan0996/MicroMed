@@ -1,32 +1,32 @@
 version: '3.4'
 
 services:
-  doctors.api:
-    image: ${DOCKER_REGISTRY-}doctorsapi
-    build:
-      context: ../Services
-      dockerfile: Doctors/Doctors.API/Dockerfile
-    depends_on: 
-     - sqlServer
-     - rabbitMQ
+  # doctors.api:
+  #   image: ${DOCKER_REGISTRY-}doctorsapi
+  #   build:
+  #     context: ../Services
+  #     dockerfile: Doctors/Doctors.API/Dockerfile
+  #   depends_on: 
+  #    - sqlServer
+  #    - rabbitMQ
 
-  clinics.api:
-    image: ${DOCKER_REGISTRY-}clinicsapi
-    build:
-      context: ../Services
-      dockerfile: Clinics/Clinics.API/Dockerfile
-    depends_on:
-    - sqlServer
-    - rabbitMQ
+  # clinics.api:
+  #   image: ${DOCKER_REGISTRY-}clinicsapi
+  #   build:
+  #     context: ../Services
+  #     dockerfile: Clinics/Clinics.API/Dockerfile
+  #   depends_on:
+  #   - sqlServer
+  #   - rabbitMQ
 
-  timetable.api:
-    image: ${DOCKER_REGISTRY-}timetableapi
-    build:
-      context: ../Services
-      dockerfile: Timetable/Timetable.API/Dockerfile
-    depends_on:
-    - sqlServer
-    - rabbitMQ
+  # timetable.api:
+  #   image: ${DOCKER_REGISTRY-}timetableapi
+  #   build:
+  #     context: ../Services
+  #     dockerfile: Timetable/Timetable.API/Dockerfile
+  #   depends_on:
+  #   - sqlServer
+  #   - rabbitMQ
  
   sqlServer:
     image: mcr.microsoft.com/mssql/server:2022-latest
@@ -37,19 +37,29 @@ services:
     ports:
      - 1435:1433
 
-  rabbitMQ:
-    image: rabbitmq:3-management
-    container_name: rabbitMq
-    ports:
-    - 5672:5672
-    - 15672:15672
+  # rabbitMQ:
+  #   image: rabbitmq:3-management
+  #   container_name: rabbitMq
+  #   ports:
+  #   - 5672:5672
+  #   - 15672:15672
 
-  micromed.gateway:
-    image: ${DOCKER_REGISTRY-}micromedgateway
+  micromed.bff.admin:
+    image: ${DOCKER_REGISTRY-}bffadmin
     build:
       context: ..
-      dockerfile: Gateway/MicroMed.Gateway/Dockerfile
+      dockerfile: BFF/MicroMed.BFF.Admin/Dockerfile
     depends_on:
-    - doctors.api
-    - clinics.api
-    - timetable.api
+    # - doctors.api
+    # - clinics.api
+    # - timetable.api
+    - micromed.identityserver 
+
+  micromed.identityserver:
+    image: ${DOCKER_REGISTRY-}micromedidentityserver
+    build:
+      context: ..
+      dockerfile: Auth/MicroMed.IdentityServer/Dockerfile
+    depends_on:
+    - sqlServer
+
