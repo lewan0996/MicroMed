@@ -1,8 +1,11 @@
 using Clinics.Contracts;
 using Doctors.Contracts;
 using Grpc.Net.Client;
+using IdentityModel;
 using MicroMed.BFF.Admin;
+using MicroMed.BFF.Admin.Components;
 using MicroMed.BFF.Admin.Dtos;
+using Microsoft.AspNetCore.Authentication.Cookies;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -13,11 +16,11 @@ builder.Services
     .AddAuthorization()
     .AddAuthentication(options =>
     {
-        options.DefaultScheme = "Cookies";
+        options.DefaultScheme = CookieAuthenticationDefaults.AuthenticationScheme;
         options.DefaultChallengeScheme = "oidc";
         options.DefaultSignOutScheme = "oidc";
     })
-    .AddCookie("Cookies")
+    .AddCookie(CookieAuthenticationDefaults.AuthenticationScheme)
     .AddOpenIdConnect("oidc", options =>
     {
         var config = builder.Configuration.GetSection("Auth").Get<AuthConfig>()!;
@@ -29,9 +32,16 @@ builder.Services
         options.Scope.Add("admin");
         options.SaveTokens = true;
         options.GetClaimsFromUserInfoEndpoint = true;
+        options.TokenValidationParameters.NameClaimType = JwtClaimTypes.Name;
 
         options.RequireHttpsMetadata = false;        
     });
+
+builder.Services
+    .AddRazorComponents()
+    .AddInteractiveServerComponents();
+
+builder.Services.AddCascadingAuthenticationState();
 
 builder.Services.AddBff();
 
@@ -43,6 +53,10 @@ if (app.Environment.IsDevelopment())
         .UseSwagger()
         .UseSwaggerUI();
 }
+else
+{
+    app.UseExceptionHandler("/Error", createScopeForErrors: true);
+}
 
 app
     .UseDefaultFiles()
@@ -50,9 +64,12 @@ app
     .UseRouting()
     .UseAuthentication()
     .UseBff()
-    .UseAuthorization();
+    .UseAuthorization()
+    .UseAntiforgery();
 
 app.MapBffManagementEndpoints();
+app.MapRazorComponents<App>()
+    .AddInteractiveServerRenderMode();
 
 var serviceUrls = builder.Configuration.GetSection("Services").Get<ServiceUrls>()!;
 

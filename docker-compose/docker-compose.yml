@@ -10,14 +10,14 @@ services:
   #    - sqlServer
   #    - rabbitMQ
 
-  # clinics.api:
-  #   image: ${DOCKER_REGISTRY-}clinicsapi
-  #   build:
-  #     context: ../Services
-  #     dockerfile: Clinics/Clinics.API/Dockerfile
-  #   depends_on:
-  #   - sqlServer
-  #   - rabbitMQ
+  clinics.api:
+    image: ${DOCKER_REGISTRY-}clinicsapi
+    build:
+      context: ../Services
+      dockerfile: Clinics/Clinics.API/Dockerfile
+    depends_on:
+    - sqlServer
+    #- rabbitMQ
 
   # timetable.api:
   #   image: ${DOCKER_REGISTRY-}timetableapi
@@ -51,7 +51,7 @@ services:
       dockerfile: BFF/MicroMed.BFF.Admin/Dockerfile
     depends_on:
     # - doctors.api
-    # - clinics.api
+    - clinics.api
     # - timetable.api
     - micromed.identityserver 
 

@@ -40,7 +40,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="wwwroot\" />
+    <None Include="wwwroot\bootstrap\bootstrap.min.css.map" />
   </ItemGroup>
     
 </Project>

@@ -1,0 +1,85 @@
+﻿@page "/"
+@using Clinics.Contracts
+@using Grpc.Net.Client
+@using Microsoft.AspNetCore.Authorization
+@using static Clinics.Contracts.GetClinicsResponse.Types
+@inject AuthenticationStateProvider AuthenticationStateProvider
+@inject IConfiguration Configuration
+
+@attribute [Authorize]
+
+<PageTitle>Home</PageTitle>
+
+<AuthorizeView>
+    Hello @context.User.Identity?.Name!
+
+    @if(_clinics == null)
+    {
+        <p><em>Loading...</em></p>
+    }
+    else
+    {
+        <table class="table">
+            <thead>
+                <tr>
+                    <th>Name</th>
+                    <th>City</th>
+                    <th>Street</th>
+                    <th>StreetNumber</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var clinic in _clinics)
+                {
+                    <tr>
+                        <td>@clinic.Name</td>
+                        <td>@clinic.City</td>
+                        <td>@clinic.Street</td>
+                        <td>@clinic.StreetNumber</td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    }
+</AuthorizeView>
+
+@code{
+    private ClinicDto[]? _clinics;
+
+    private async Task<ClinicDto[]> GetClinicsAsync()
+    {
+        var serviceUrls = Configuration.GetSection("Services").Get<ServiceUrls>()!;
+
+        var grpcOptions = CreateGrpcOptions();
+
+        using var channel = GrpcChannel.ForAddress(serviceUrls.Clinics, grpcOptions);
+        var client = new ClinicsService.ClinicsServiceClient(channel);
+
+        var response = await client.GetClinicsAsync(new GetClinicsRequest());
+
+        return response.Clinics.ToArray();
+
+        GrpcChannelOptions CreateGrpcOptions()
+        {
+            var unsafeHttpClientHandler = new HttpClientHandler
+                {
+                    ServerCertificateCustomValidationCallback = HttpClientHandler.DangerousAcceptAnyServerCertificateValidator
+                };
+
+            var grpcChannelOptions = new GrpcChannelOptions();
+
+            //if (app.Environment.IsDevelopment())
+            //{
+            grpcChannelOptions.HttpHandler = unsafeHttpClientHandler;
+            //}
+
+            return grpcChannelOptions;
+        }
+    }
+
+    protected override async Task OnInitializedAsync()
+    {
+        if (_clinics == null)
+            _clinics = await GetClinicsAsync();
+    }
+}
