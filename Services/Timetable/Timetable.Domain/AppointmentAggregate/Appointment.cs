@@ -9,7 +9,7 @@ public class Appointment : Entity
 {
     public Doctor Doctor { get; }
     public Surgery Surgery { get; }
-    public AppointmentDate Date { get; set; }
+    public AppointmentDate Date { get; }
 
     public Appointment(Doctor doctor, Surgery surgery, AppointmentDate date)
     {
