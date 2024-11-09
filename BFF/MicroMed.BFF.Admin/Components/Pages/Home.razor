@@ -5,6 +5,7 @@
 @using static Clinics.Contracts.GetClinicsResponse.Types
 @inject AuthenticationStateProvider AuthenticationStateProvider
 @inject IConfiguration Configuration
+@inject ClinicsClient ClinicsClient
 
 @attribute [Authorize]
 
@@ -13,7 +14,7 @@
 <AuthorizeView>
     Hello @context.User.Identity?.Name!
 
-    @if(_clinics == null)
+    @if (_clinics == null)
     {
         <p><em>Loading...</em></p>
     }
@@ -43,39 +44,10 @@
     }
 </AuthorizeView>
 
-@code{
+@code {
     private ClinicDto[]? _clinics;
 
-    private async Task<ClinicDto[]> GetClinicsAsync()
-    {
-        var serviceUrls = Configuration.GetSection("Services").Get<ServiceUrls>()!;
-
-        var grpcOptions = CreateGrpcOptions();
-
-        using var channel = GrpcChannel.ForAddress(serviceUrls.Clinics, grpcOptions);
-        var client = new ClinicsService.ClinicsServiceClient(channel);
-
-        var response = await client.GetClinicsAsync(new GetClinicsRequest());
-
-        return response.Clinics.ToArray();
-
-        GrpcChannelOptions CreateGrpcOptions()
-        {
-            var unsafeHttpClientHandler = new HttpClientHandler
-                {
-                    ServerCertificateCustomValidationCallback = HttpClientHandler.DangerousAcceptAnyServerCertificateValidator
-                };
-
-            var grpcChannelOptions = new GrpcChannelOptions();
-
-            //if (app.Environment.IsDevelopment())
-            //{
-            grpcChannelOptions.HttpHandler = unsafeHttpClientHandler;
-            //}
-
-            return grpcChannelOptions;
-        }
-    }
+    private Task<ClinicDto[]> GetClinicsAsync() => ClinicsClient.GetClinicsAsync(CancellationToken.None);
 
     protected override async Task OnInitializedAsync()
     {

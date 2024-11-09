@@ -45,6 +45,10 @@ builder.Services.AddCascadingAuthenticationState();
 
 builder.Services.AddBff();
 
+var serviceUrls = builder.Configuration.GetSection("Services").Get<ServiceUrls>()!;
+
+builder.Services.AddSingleton(services => new ClinicsClient(builder.Environment.IsDevelopment(), serviceUrls.Clinics));
+
 var app = builder.Build();
 
 if (app.Environment.IsDevelopment())
@@ -71,18 +75,15 @@ app.MapBffManagementEndpoints();
 app.MapRazorComponents<App>()
     .AddInteractiveServerRenderMode();
 
-var serviceUrls = builder.Configuration.GetSection("Services").Get<ServiceUrls>()!;
+
 
 var grpcOptions = CreateGrpcOptions();
 
-app.MapGet("Clinics", async (CancellationToken cancellationToken) =>
+app.MapGet("Clinics", async (ClinicsClient clinicsClient, CancellationToken cancellationToken) =>
 {
-    using var channel = GrpcChannel.ForAddress(serviceUrls.Clinics, grpcOptions);
-    var client = new ClinicsService.ClinicsServiceClient(channel);
+    var response = await clinicsClient.GetClinicsAsync(cancellationToken);
 
-    var response = await client.GetClinicsAsync(new GetClinicsRequest(), cancellationToken: cancellationToken);
-
-    return TypedResults.Ok(response.Clinics);
+    return TypedResults.Ok(response);
 });
 
 app.MapPost("Clinics",
