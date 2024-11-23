@@ -1,18 +1,30 @@
-﻿<div class="top-row ps-3 navbar navbar-dark">
-    <div class="container-fluid">
-        <a class="navbar-brand" href="">MicroMed Admin Portal</a>
-    </div>
+﻿@using Syncfusion.Blazor.Navigations
+@using Syncfusion.Blazor.Buttons
+
+@rendermode InteractiveServer
+
+@inject NavigationManager Navigation
+
+<div class="control-container">
+    <SfAppBar ColorMode="AppBarColor.Primary">
+        <SfButton CssClass="e-inherit" IconCss="e-icons e-menu"></SfButton>
+        <span class="regular">MicroMed Admin Portal</span>
+        <SfButton CssClass="e-inherit" Content="Clinics" OnClick="@(() => Navigation.NavigateTo("clinics"))" />
+        <SfButton CssClass="e-inherit" Content="Equipment" />
+        <SfButton CssClass="e-inherit" Content="Doctors" />
+        <SfButton CssClass="e-inherit" Content="Schedule" />
+    </SfAppBar>
 </div>
 
-<input type="checkbox" title="Navigation menu" class="navbar-toggler" />
+<style>
+    .control-container .e-btn.e-inherit {
+        margin: 0 3px;
+    }
 
-<div class="nav-scrollable" onclick="document.querySelector('.navbar-toggler').click()">
-    <nav class="flex-column">
-        <div class="nav-item px-3">
-            <NavLink class="nav-link" href="" Match="NavLinkMatch.All">
-                <span class="bi bi-house-door-fill-nav-menu" aria-hidden="true"></span> Home
-            </NavLink>
-        </div>        
-    </nav>
-</div>
-
+    .control-container .e-appbar {
+        flex-flow: row wrap;
+        flex-wrap: wrap;
+        height: auto;
+        gap: 8px;
+    }
+</style>

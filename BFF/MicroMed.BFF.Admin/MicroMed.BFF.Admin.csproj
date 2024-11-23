@@ -33,6 +33,8 @@
     <PackageReference Include="Microsoft.AspNetCore.OpenApi" Version="8.0.6" />
     <PackageReference Include="Microsoft.VisualStudio.Azure.Containers.Tools.Targets" Version="1.20.1" />
     <PackageReference Include="Swashbuckle.AspNetCore" Version="6.6.2" />
+    <PackageReference Include="Syncfusion.Blazor.Navigations" Version="27.2.3" />
+    <PackageReference Include="Syncfusion.Blazor.Themes" Version="27.2.3" />
   </ItemGroup>
 
   <ItemGroup>

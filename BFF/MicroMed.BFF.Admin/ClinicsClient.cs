@@ -23,12 +23,12 @@ public class ClinicsClient
         return [.. response.Clinics];
     }
 
-    private AsyncUnaryCall<TResult> CallClient<TResult>(Func<ClinicsService.ClinicsServiceClient, AsyncUnaryCall<TResult>> task)
+    private async Task<TResult> CallClient<TResult>(Func<ClinicsService.ClinicsServiceClient, AsyncUnaryCall<TResult>> task)
     {
         using var channel = GrpcChannel.ForAddress(_clinicsServiceUrl, _grpcChannelOptions);
         var client = new ClinicsService.ClinicsServiceClient(channel);
 
-        return task(client);
+        return await task(client);
     }
 
     private GrpcChannelOptions CreateGrpcOptions(bool isDevelopment)

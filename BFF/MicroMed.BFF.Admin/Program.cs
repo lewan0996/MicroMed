@@ -6,6 +6,7 @@ using MicroMed.BFF.Admin;
 using MicroMed.BFF.Admin.Components;
 using MicroMed.BFF.Admin.Dtos;
 using Microsoft.AspNetCore.Authentication.Cookies;
+using Syncfusion.Blazor;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -43,6 +44,10 @@ builder.Services
 
 builder.Services.AddCascadingAuthenticationState();
 
+Syncfusion.Licensing.SyncfusionLicenseProvider.RegisterLicense(builder.Configuration["Syncfusion:LicenseKey"]);
+
+builder.Services.AddSyncfusionBlazor();
+
 builder.Services.AddBff();
 
 var serviceUrls = builder.Configuration.GetSection("Services").Get<ServiceUrls>()!;
@@ -79,99 +84,99 @@ app.MapRazorComponents<App>()
 
 var grpcOptions = CreateGrpcOptions();
 
-app.MapGet("Clinics", async (ClinicsClient clinicsClient, CancellationToken cancellationToken) =>
-{
-    var response = await clinicsClient.GetClinicsAsync(cancellationToken);
+//app.MapGet("Clinics", async (ClinicsClient clinicsClient, CancellationToken cancellationToken) =>
+//{
+//    var response = await clinicsClient.GetClinicsAsync(cancellationToken);
 
-    return TypedResults.Ok(response);
-});
+//    return TypedResults.Ok(response);
+//});
 
-app.MapPost("Clinics",
-        async (AddClinicRequest request, CancellationToken cancellationToken) =>
-        {
-            using var channel = GrpcChannel.ForAddress(serviceUrls.Clinics, grpcOptions);
-            var client = new ClinicsService.ClinicsServiceClient(channel);
+//app.MapPost("Clinics",
+//        async (AddClinicRequest request, CancellationToken cancellationToken) =>
+//        {
+//            using var channel = GrpcChannel.ForAddress(serviceUrls.Clinics, grpcOptions);
+//            var client = new ClinicsService.ClinicsServiceClient(channel);
 
-            var response = await client.AddClinicAsync(request, cancellationToken: cancellationToken);
+//            var response = await client.AddClinicAsync(request, cancellationToken: cancellationToken);
 
-            return TypedResults.Created($"Clinics/{response.Id}");
-        })
-    .ProducesProblem(StatusCodes.Status400BadRequest);
+//            return TypedResults.Created($"Clinics/{response.Id}");
+//        })
+//    .ProducesProblem(StatusCodes.Status400BadRequest);
 
-app.MapPut("Clinics/{id:int}",
-        async (int id, UpdateClinicDto request, CancellationToken cancellationToken) =>
-        {
-            using var channel = GrpcChannel.ForAddress(serviceUrls.Clinics, grpcOptions);
-            var client = new ClinicsService.ClinicsServiceClient(channel);
+//app.MapPut("Clinics/{id:int}",
+//        async (int id, UpdateClinicDto request, CancellationToken cancellationToken) =>
+//        {
+//            using var channel = GrpcChannel.ForAddress(serviceUrls.Clinics, grpcOptions);
+//            var client = new ClinicsService.ClinicsServiceClient(channel);
 
-            await client.UpdateClinicAsync(request.ToRpcRequest(id), cancellationToken: cancellationToken);
+//            await client.UpdateClinicAsync(request.ToRpcRequest(id), cancellationToken: cancellationToken);
 
-            return TypedResults.Ok();
-        })
-    .ProducesProblem(StatusCodes.Status400BadRequest)
-    .ProducesProblem(StatusCodes.Status404NotFound);
+//            return TypedResults.Ok();
+//        })
+//    .ProducesProblem(StatusCodes.Status400BadRequest)
+//    .ProducesProblem(StatusCodes.Status404NotFound);
 
-app.MapPost("Clinics/{clinicId:int}/Surgeries",
-        async (int clinicId, AddSurgeryDto request, CancellationToken cancellationToken) =>
-        {
-            using var channel = GrpcChannel.ForAddress(serviceUrls.Clinics, grpcOptions);
-            var client = new ClinicsService.ClinicsServiceClient(channel);
+//app.MapPost("Clinics/{clinicId:int}/Surgeries",
+//        async (int clinicId, AddSurgeryDto request, CancellationToken cancellationToken) =>
+//        {
+//            using var channel = GrpcChannel.ForAddress(serviceUrls.Clinics, grpcOptions);
+//            var client = new ClinicsService.ClinicsServiceClient(channel);
 
-            var response = await client.AddSurgeryAsync(request.ToRpcRequest(clinicId), cancellationToken: cancellationToken);
+//            var response = await client.AddSurgeryAsync(request.ToRpcRequest(clinicId), cancellationToken: cancellationToken);
 
-            return TypedResults.Created($"Clinics/{clinicId}/Surgeries/{response.Id}");
-        })
-    .ProducesProblem(StatusCodes.Status400BadRequest)
-    .ProducesProblem(StatusCodes.Status404NotFound);
+//            return TypedResults.Created($"Clinics/{clinicId}/Surgeries/{response.Id}");
+//        })
+//    .ProducesProblem(StatusCodes.Status400BadRequest)
+//    .ProducesProblem(StatusCodes.Status404NotFound);
 
-app.MapPut("Clinics/{clinicId:int}/Surgeries/{surgeryId:int}",
-        async (int clinicId, int surgeryId, UpdateSurgeryDto request, CancellationToken cancellationToken) =>
-        {
-            using var channel = GrpcChannel.ForAddress(serviceUrls.Clinics, grpcOptions);
-            var client = new ClinicsService.ClinicsServiceClient(channel);
+//app.MapPut("Clinics/{clinicId:int}/Surgeries/{surgeryId:int}",
+//        async (int clinicId, int surgeryId, UpdateSurgeryDto request, CancellationToken cancellationToken) =>
+//        {
+//            using var channel = GrpcChannel.ForAddress(serviceUrls.Clinics, grpcOptions);
+//            var client = new ClinicsService.ClinicsServiceClient(channel);
 
-            await client.UpdateSurgeryAsync(request.ToRpcRequest(clinicId, surgeryId), cancellationToken: cancellationToken);
+//            await client.UpdateSurgeryAsync(request.ToRpcRequest(clinicId, surgeryId), cancellationToken: cancellationToken);
 
-            return TypedResults.Ok();
-        })
-    .ProducesProblem(StatusCodes.Status400BadRequest)
-    .ProducesProblem(StatusCodes.Status404NotFound);
+//            return TypedResults.Ok();
+//        })
+//    .ProducesProblem(StatusCodes.Status400BadRequest)
+//    .ProducesProblem(StatusCodes.Status404NotFound);
 
-app.MapDelete("Clinics/{clinicId:int}/Surgeries/{surgeryId:int}",
-        async (int clinicId, int surgeryId, CancellationToken cancellationToken) =>
-        {
-            using var channel = GrpcChannel.ForAddress(serviceUrls.Clinics, grpcOptions);
-            var client = new ClinicsService.ClinicsServiceClient(channel);
+//app.MapDelete("Clinics/{clinicId:int}/Surgeries/{surgeryId:int}",
+//        async (int clinicId, int surgeryId, CancellationToken cancellationToken) =>
+//        {
+//            using var channel = GrpcChannel.ForAddress(serviceUrls.Clinics, grpcOptions);
+//            var client = new ClinicsService.ClinicsServiceClient(channel);
 
-            await client.RemoveSurgeryAsync(new RemoveSurgeryRequest { SurgeryId = surgeryId, ClinicId = clinicId },
-                cancellationToken: cancellationToken);
+//            await client.RemoveSurgeryAsync(new RemoveSurgeryRequest { SurgeryId = surgeryId, ClinicId = clinicId },
+//                cancellationToken: cancellationToken);
 
-            return TypedResults.Ok();
-        })
-    .ProducesProblem(StatusCodes.Status404NotFound);
+//            return TypedResults.Ok();
+//        })
+//    .ProducesProblem(StatusCodes.Status404NotFound);
 
-app.MapPost("SurgeryEquipment",
-        async (AddSurgeryEquipmentRequest request, CancellationToken cancellationToken) =>
-        {
-            using var channel = GrpcChannel.ForAddress(serviceUrls.Clinics, grpcOptions);
-            var client = new ClinicsService.ClinicsServiceClient(channel);
+//app.MapPost("SurgeryEquipment",
+//        async (AddSurgeryEquipmentRequest request, CancellationToken cancellationToken) =>
+//        {
+//            using var channel = GrpcChannel.ForAddress(serviceUrls.Clinics, grpcOptions);
+//            var client = new ClinicsService.ClinicsServiceClient(channel);
 
-            var response = await client.AddSurgeryEquipmentAsync(request, cancellationToken: cancellationToken);
+//            var response = await client.AddSurgeryEquipmentAsync(request, cancellationToken: cancellationToken);
 
-            return TypedResults.Created($"SurgeryEquipment/{response.Id}");
-        })
-    .ProducesProblem(StatusCodes.Status400BadRequest);
+//            return TypedResults.Created($"SurgeryEquipment/{response.Id}");
+//        })
+//    .ProducesProblem(StatusCodes.Status400BadRequest);
 
-app.MapPost("Doctors",
-    async (RegisterDoctorRequest request, CancellationToken cancellationToken) =>
-    {
-        using var channel = GrpcChannel.ForAddress(serviceUrls.Doctors, grpcOptions);
-        var client = new DoctorsService.DoctorsServiceClient(channel);
+//app.MapPost("Doctors",
+//    async (RegisterDoctorRequest request, CancellationToken cancellationToken) =>
+//    {
+//        using var channel = GrpcChannel.ForAddress(serviceUrls.Doctors, grpcOptions);
+//        var client = new DoctorsService.DoctorsServiceClient(channel);
 
-        var response = await client.RegisterDoctorAsync(request, cancellationToken: cancellationToken);
+//        var response = await client.RegisterDoctorAsync(request, cancellationToken: cancellationToken);
 
-        return TypedResults.Created($"Doctors/{response.Id}");
-    }).ProducesProblem(StatusCodes.Status400BadRequest);
+//        return TypedResults.Created($"Doctors/{response.Id}");
+//    }).ProducesProblem(StatusCodes.Status400BadRequest);
 
 app.UseExceptionHandler();
 
