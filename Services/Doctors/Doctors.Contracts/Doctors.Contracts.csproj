@@ -1,23 +1,24 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
-  <PropertyGroup>
-    <TargetFramework>net8.0</TargetFramework>
-    <ImplicitUsings>enable</ImplicitUsings>
-    <Nullable>enable</Nullable>
-  </PropertyGroup>
+	<PropertyGroup>
+		<TargetFramework>net8.0</TargetFramework>
+		<ImplicitUsings>enable</ImplicitUsings>
+		<Nullable>enable</Nullable>
+	</PropertyGroup>
 
-  <ItemGroup>
-    <None Remove="Protos\Doctors.proto" />
-  </ItemGroup>
+	<ItemGroup>
+		<PackageReference Include="Google.Protobuf" Version="3.27.1" />
+		<PackageReference Include="Grpc.Net.Client" Version="2.63.0" />
+		<PackageReference Include="Grpc.Tools" Version="2.64.0">
+			<PrivateAssets>all</PrivateAssets>
+			<IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+		</PackageReference>
+	</ItemGroup>
 
-  <ItemGroup>
-    <PackageReference Include="Grpc.AspNetCore" Version="2.62.0" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <Protobuf Include="Protos\Doctors.proto">
-      <GrpcServices>Server</GrpcServices>
-    </Protobuf>
-  </ItemGroup>
+	<ItemGroup>
+		<Protobuf Include="Protos\Doctors.proto">
+			<GrpcServices>Server</GrpcServices>
+		</Protobuf>
+	</ItemGroup>
 
 </Project>

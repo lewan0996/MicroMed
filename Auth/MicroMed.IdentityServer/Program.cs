@@ -1,6 +1,6 @@
 using Duende.IdentityServer;
 using Duende.IdentityServer.Models;
-using IdentityModel;
+using Duende.IdentityModel;
 using MicroMed.IdentityServer;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;

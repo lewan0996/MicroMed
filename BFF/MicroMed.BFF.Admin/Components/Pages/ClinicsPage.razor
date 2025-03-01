@@ -20,32 +20,31 @@
     }
     else
     {
-        <table class="table">
-            <thead>
-                <tr>
-                    <th>Name</th>
-                    <th>City</th>
-                    <th>Street</th>
-                    <th>StreetNumber</th>
-                </tr>
-            </thead>
-            <tbody>
-                @foreach (var clinic in _clinics)
-                {
-                    <tr>
-                        <td>@clinic.Name</td>
-                        <td>@clinic.City</td>
-                        <td>@clinic.Street</td>
-                        <td>@clinic.StreetNumber</td>
-                    </tr>
-                }
-            </tbody>
-        </table>
+        <div class="col-lg-12 control-section">
+            <div class="content-wrapper">
+                <div class="row">
+                    <SfGrid DataSource="@Dups" AllowPaging="true">
+                        @* <GridEditSettings AllowAdding="true" AllowEditing="true" Mode="EditMode.Dialog"></GridEditSettings> *@
+                         <GridEvents TValue="Dupa" OnActionBegin="ActionBegin"></GridEvents>
+                        <GridColumns>
+                            @* <GridColumn Field="Id" HeaderText="Id" IsPrimaryKey="true" Visible="false"></GridColumn>
+                            <GridColumn Field="Name" HeaderText="Name" Width="120"></GridColumn>
+                            <GridColumn Field="City" HeaderText="City" Width="150"></GridColumn>
+                            <GridColumn Field="Street" HeaderText="Street" Width="130"></GridColumn>
+                            <GridColumn Field="StreetNumber" HeaderText="StreetNumber" Width="120"></GridColumn> *@
+                            <GridColumn Field="Qwe" HeaderText="StreetNumber" Width="120" IsPrimaryKey="true"></GridColumn>
+
+                        </GridColumns>
+                    </SfGrid>
+                </div>
+            </div>
+        </div>
     }
 </AuthorizeView>
 
 @code {
     private ClinicDto[]? _clinics;
+    private Dupa[] Dups;
 
     private Task<ClinicDto[]> GetClinicsAsync() => ClinicsClient.GetClinicsAsync(CancellationToken.None);
 
@@ -53,5 +52,17 @@
     {
         if (_clinics == null)
             _clinics = await GetClinicsAsync();
+
+            Dups = [new Dupa{Qwe="asd"}];
+    }
+
+    private void ActionBegin(ActionEventArgs<Dupa> arg)
+    {
+
+    }
+
+    private class Dupa
+    {
+        public string Qwe{ get; set; }
     }
 }

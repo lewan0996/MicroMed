@@ -37,12 +37,12 @@ services:
     ports:
      - 1435:1433
 
-  # rabbitMQ:
-  #   image: rabbitmq:3-management
-  #   container_name: rabbitMq
-  #   ports:
-  #   - 5672:5672
-  #   - 15672:15672
+  rabbitMQ:
+    image: rabbitmq:3-management
+    container_name: rabbitMq
+    ports:
+    - 5672:5672
+    - 15672:15672
 
   micromed.bff.admin:
     image: ${DOCKER_REGISTRY-}bffadmin

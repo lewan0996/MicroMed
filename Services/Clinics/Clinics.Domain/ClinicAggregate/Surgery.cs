@@ -24,7 +24,7 @@ public class Surgery : Entity
 
     private Surgery()
     {
-        _availableEquipment = new List<Equipment>();
+        _availableEquipment = [];
     }
 }
 

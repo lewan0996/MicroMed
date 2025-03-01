@@ -17,12 +17,12 @@ public static class ServiceCollectionExtensions
 
             x.UsingRabbitMq((context, cfg) =>
             {
-                var rabbitConfig = configuration.GetSection("rabbitMq");
+                var rabbitConfig = configuration.GetRequiredSection("rabbitMq");
 
                 cfg.Host(rabbitConfig["host"], rabbitConfig["virtualHost"], h =>
                 {
-                    h.Username(rabbitConfig["userName"]);
-                    h.Password(rabbitConfig["password"]);
+                    h.Username(rabbitConfig["userName"]!);
+                    h.Password(rabbitConfig["password"]!);
                 });
 
                 cfg.ConfigureEndpoints(context);
