@@ -47,6 +47,8 @@ builder.Services.AddCascadingAuthenticationState();
 Syncfusion.Licensing.SyncfusionLicenseProvider.RegisterLicense(builder.Configuration["Syncfusion:LicenseKey"]);
 
 builder.Services.AddSyncfusionBlazor();
+//builder.Services.AddServerSideBlazor();
+//builder.Services.AddRazorPages();
 
 builder.Services.AddBff();
 
