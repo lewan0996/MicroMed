@@ -14,4 +14,4 @@ public record Address(
 public record City(string Value) : StringValueObject(Value, 20);
 public record Street(string Value) : StringValueObject(Value, 50);
 public record StreetNumber(string Value) : StringValueObject(Value, 4);
-public record AddressAdditionalInformation(string Value) : StringValueObject(Value, 100);
+public record AddressAdditionalInformation(string Value) : StringValueObject(Value, 100, false);

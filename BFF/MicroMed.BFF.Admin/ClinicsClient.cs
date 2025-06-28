@@ -23,6 +23,11 @@ public class ClinicsClient
         return [.. response.Clinics];
     }
 
+    public async Task AddClinicAsync(AddClinicRequest request, CancellationToken cancellationToken = default)
+    {
+        await CallClient(client => client.AddClinicAsync(request, cancellationToken: cancellationToken));
+    }
+
     private async Task<TResult> CallClient<TResult>(Func<ClinicsService.ClinicsServiceClient, AsyncUnaryCall<TResult>> task)
     {
         using var channel = GrpcChannel.ForAddress(_clinicsServiceUrl, _grpcChannelOptions);
