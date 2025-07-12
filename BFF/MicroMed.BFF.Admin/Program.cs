@@ -1,8 +1,9 @@
-using IdentityModel;
 using MicroMed.BFF.Admin;
 using MicroMed.BFF.Admin.Components;
+using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Syncfusion.Blazor;
+using System.Security.Claims;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -17,21 +18,27 @@ builder.Services
         options.DefaultChallengeScheme = "oidc";
         options.DefaultSignOutScheme = "oidc";
     })
-    .AddCookie(CookieAuthenticationDefaults.AuthenticationScheme)
+    .AddCookie()
     .AddOpenIdConnect("oidc", options =>
     {
         var config = builder.Configuration.GetSection("Auth").Get<AuthConfig>()!;
 
+        options.SignInScheme = CookieAuthenticationDefaults.AuthenticationScheme;
+        options.SignOutScheme = CookieAuthenticationDefaults.AuthenticationScheme;
         options.Authority = config.Authority;
         options.ClientId = "AdminPortal";
         options.ClientSecret = config.Secret;
         options.ResponseType = "code";
+        options.ResponseMode = "query";
+        options.UsePkce = true;
         options.Scope.Add("admin");
         options.SaveTokens = true;
         options.GetClaimsFromUserInfoEndpoint = true;
-        options.TokenValidationParameters.NameClaimType = JwtClaimTypes.Name;
-
-        options.RequireHttpsMetadata = false;        
+        options.RequireHttpsMetadata = false;
+        options.TokenValidationParameters = new()
+        {
+            NameClaimType = "name"
+        };
     });
 
 builder.Services
@@ -43,10 +50,6 @@ builder.Services.AddCascadingAuthenticationState();
 Syncfusion.Licensing.SyncfusionLicenseProvider.RegisterLicense(builder.Configuration["Syncfusion:LicenseKey"]);
 
 builder.Services.AddSyncfusionBlazor();
-//builder.Services.AddServerSideBlazor();
-//builder.Services.AddRazorPages();
-
-builder.Services.AddBff();
 
 var serviceUrls = builder.Configuration.GetSection("Services").Get<ServiceUrls>()!;
 
@@ -70,15 +73,25 @@ app
     .UseStaticFiles()
     .UseRouting()
     .UseAuthentication()
-    .UseBff()
     .UseAuthorization()
     .UseAntiforgery();
 
-app.MapBffManagementEndpoints();
 app.MapRazorComponents<App>()
     .AddInteractiveServerRenderMode();
 
 app.UseExceptionHandler();
+
+app.MapGet("/check_session", (ClaimsPrincipal user) =>
+{
+    if (user.Identity?.IsAuthenticated != true)
+        return Results.Unauthorized();
+
+    return Results.Ok(user.Claims.ToDictionary(claim => claim.Type, claim => claim.Value));
+});
+
+app.MapGet("/login", () => Results.Challenge(new AuthenticationProperties { RedirectUri = "/" })); // ??
+
+app.MapGet("/logout", () => Results.SignOut());
 
 app.Run();
 

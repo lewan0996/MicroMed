@@ -1,3 +1,40 @@
 ﻿@page "/"
+@using Microsoft.AspNetCore.Components.Authorization
+@using Syncfusion.Blazor.Navigations
+@using Syncfusion.Blazor.Buttons
+@inject NavigationManager NavigationManager
 
-<div>Home</div>
+<div class="d-flex justify-content-center align-items-center" style="min-height: 60vh;">
+    <AuthorizeView Context="authContext">
+        <Authorized>
+            @{
+                var userName = authContext.User.Identity!.Name;
+                var userInitial = userName!.Substring(0, 1).ToUpper();
+            }
+            <SfCard CssClass="e-card-shadow" style="min-width: 350px; max-width: 420px;">
+                <CardHeader></CardHeader>
+                <div class="d-flex align-items-center mb-2">
+                    <span class="e-avatar e-avatar-circle e-avatar-lg e-bg-primary text-white me-3">
+                        @userInitial
+                    </span>
+                    <h2 class="fw-bold mb-0">Welcome, @userName!</h2>
+                </div>
+                <CardContent>
+                    <p class="mb-0">You are logged in to MicroMed Admin Portal.</p>
+                </CardContent>
+            </SfCard>
+        </Authorized>
+        <NotAuthorized>
+            <SfCard CssClass="e-card-shadow" style="min-width: 350px; max-width: 420px;">
+                <CardHeader></CardHeader>
+                <h2 class="fw-bold mb-2 text-center">Welcome to MicroMed Admin Portal</h2>
+                <CardContent>
+                    <p class="mb-4 text-center">Please log in to access the system.</p>
+                    <div class="d-flex justify-content-center">
+                        <SfButton CssClass="e-primary" Content="Login" @onclick='() => NavigationManager.NavigateTo("login", true)' />
+                    </div>
+                </CardContent>
+            </SfCard>
+        </NotAuthorized>
+    </AuthorizeView>
+</div>

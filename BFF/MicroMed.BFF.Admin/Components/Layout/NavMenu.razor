@@ -1,18 +1,33 @@
 ﻿@using Syncfusion.Blazor.Navigations
 @using Syncfusion.Blazor.Buttons
+@using Microsoft.AspNetCore.Components.Authorization
 
 @rendermode InteractiveServer
 
 @inject NavigationManager Navigation
+@inject NavigationManager NavigationManager
 
 <div class="control-container">
     <SfAppBar ColorMode="AppBarColor.Primary">
         <SfButton CssClass="e-inherit" IconCss="e-icons e-menu"></SfButton>
         <span class="regular">MicroMed Admin Portal</span>
-        <SfButton CssClass="e-inherit" Content="Clinics" OnClick="@(() => Navigation.NavigateTo("clinics"))" />
-        <SfButton CssClass="e-inherit" Content="Equipment" />
-        <SfButton CssClass="e-inherit" Content="Doctors" />
-        <SfButton CssClass="e-inherit" Content="Schedule" />
+        <AuthorizeView>
+            <Authorized>
+                <SfButton CssClass="e-inherit" Content="Clinics" OnClick="@(() => Navigation.NavigateTo("clinics"))" />
+                <SfButton CssClass="e-inherit" Content="Equipment" />
+                <SfButton CssClass="e-inherit" Content="Doctors" />
+                <SfButton CssClass="e-inherit" Content="Schedule" />
+            </Authorized>
+        </AuthorizeView>
+        <AppBarSpacer />
+        <AuthorizeView>
+            <Authorized>
+                <SfButton CssClass="e-inherit" Content="Log out" OnClick="@(() => Navigation.NavigateTo("logout", true))" />
+            </Authorized>
+            <NotAuthorized>
+                <SfButton CssClass="e-inherit" Content="Login" OnClick="@(() => Navigation.NavigateTo("login", true))" />
+            </NotAuthorized>
+        </AuthorizeView>
     </SfAppBar>
 </div>
 

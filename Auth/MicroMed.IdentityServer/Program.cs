@@ -153,6 +153,7 @@ internal static class Config
         {
             ClientId = clientConfig.Name,
             ClientSecrets = { new Secret(clientConfig.Secret.Sha256()) },
+            RequirePkce = true,
             AllowedGrantTypes = GrantTypes.Code,
             RedirectUris = { $"{clientConfig.BaseUrl}/signin-oidc" },
             PostLogoutRedirectUris = { $"{clientConfig.BaseUrl}signout-callback-oidc" },

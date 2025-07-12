@@ -21,8 +21,6 @@
 	</ItemGroup>
 
 	<ItemGroup>
-		<PackageReference Include="Duende.BFF" Version="2.2.0" />
-		<PackageReference Include="Duende.BFF.Yarp" Version="2.2.0" />
 		<PackageReference Include="Grpc.Tools" Version="2.67.0">
 			<PrivateAssets>all</PrivateAssets>
 			<IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
