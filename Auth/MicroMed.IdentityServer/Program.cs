@@ -20,10 +20,10 @@ builder.Services
 
 builder.Services
     .AddIdentityServer()
-            .AddInMemoryIdentityResources(Config.IdentityResources)
-            .AddInMemoryApiScopes(Config.ApiScopes)
-            .AddInMemoryClients(Config.BuildClients(builder.Configuration.GetSection("Clients").Get<ClientConfiguration[]>()!))
-            .AddAspNetIdentity<IdentityUser>();
+    .AddInMemoryIdentityResources(Config.IdentityResources)
+    .AddInMemoryApiScopes(Config.ApiScopes)
+    .AddInMemoryClients(Config.BuildClients(builder.Configuration.GetSection("Clients").Get<ClientConfiguration[]>()!))
+    .AddAspNetIdentity<IdentityUser>();
 
 builder.Services.AddDbContext<ApplicationDbContext>(options =>
 {
