@@ -16,7 +16,7 @@ builder.Services
         options.EnableSensitiveDataLogging();
     })
     .AddEndpointsApiExplorer()
-    .AddSwaggerGen()
+    .AddOpenApi()
     .AddScoped<IClinicRepository, ClinicRepository>()
     .AddScoped<IEquipmentRepository, EquipmentRepository>()
     .AddScoped<IUnitOfWork>(services => services.GetRequiredService<ClinicsDbContext>())
@@ -29,8 +29,7 @@ if (app.Environment.IsDevelopment())
 {
     await EnsureDbCreated();
 
-    app.UseSwagger();
-    app.UseSwaggerUI();
+    app.UseSwaggerUIWithOpenApi();
 
     async Task EnsureDbCreated()
     {

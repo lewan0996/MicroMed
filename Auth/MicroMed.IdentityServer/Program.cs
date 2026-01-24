@@ -5,6 +5,7 @@ using MicroMed.IdentityServer;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using System.Security.Claims;
+using Shared.API;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -12,7 +13,7 @@ builder.Services.AddRazorPages();
 
 builder.Services
     .AddEndpointsApiExplorer()
-    .AddSwaggerGen()
+    .AddOpenApi()
     .AddAuthorization()
     .AddIdentity<IdentityUser, IdentityRole>()
     .AddEntityFrameworkStores<ApplicationDbContext>()
@@ -35,11 +36,9 @@ var app = builder.Build();
 
 if (app.Environment.IsDevelopment())
 {
-    await EnsureDbCreated();    
+    await EnsureDbCreated();
 
-    app
-        .UseSwagger()
-        .UseSwaggerUI();
+    app.UseSwaggerUIWithOpenApi();
 
     async Task EnsureDbCreated()
     {
@@ -118,7 +117,9 @@ if (app.Environment.IsDevelopment())
 }
 
 app
-    .UseStaticFiles()
+    .MapStaticAssets();
+
+app
     .UseRouting()
     .UseIdentityServer()
     .UseAuthorization();
