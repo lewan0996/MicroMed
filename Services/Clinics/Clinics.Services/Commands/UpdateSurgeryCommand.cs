@@ -1,4 +1,5 @@
-﻿using Clinics.Contracts.Events;
+﻿using Clinics.Contracts.Dto;
+using Clinics.Contracts.Events;
 using Clinics.Domain.ClinicAggregate;
 using Clinics.Services.Repositories;
 using MassTransit;
@@ -11,6 +12,9 @@ public record UpdateSurgeryCommand(int ClinicId, int SurgeryId, SurgeryInfo Surg
 {
     public UpdateSurgeryCommand(int clinicId, int surgeryId, string number, string floor, IReadOnlyList<int> equipmentIds)
         : this(clinicId, surgeryId, new SurgeryInfo(new SurgeryNumber(number), new SurgeryFloor(floor)), equipmentIds) { }
+    
+    public UpdateSurgeryCommand(int clinicId, int surgeryId, UpdateSurgeryDto dto)
+        : this(clinicId, surgeryId, new SurgeryInfo(new SurgeryNumber(dto.Number), new SurgeryFloor(dto.Floor)), dto.EquipmentIds) { }
 }
 
 public class UpdateSurgeryCommandHandler : IRequestHandler<UpdateSurgeryCommand>

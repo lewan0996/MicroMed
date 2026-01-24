@@ -6,6 +6,7 @@ using Shared.Domain.Exceptions;
 
 namespace Shared.API;
 
+[Obsolete]
 public class GlobalGrpcExceptionHandlerInterceptor : Interceptor
 {
     public override async Task<TResponse> UnaryServerHandler<TRequest, TResponse>(TRequest request, ServerCallContext context,
@@ -30,10 +31,4 @@ public class GlobalGrpcExceptionHandlerInterceptor : Interceptor
             throw new RpcException(status, exception.Message);
         }
     }
-}
-
-public static class DependencyInjectionExtensions
-{
-    public static IGrpcServerBuilder AddGrpcWithExceptionInterceptor(this IServiceCollection services)
-        => services.AddGrpc(options => options.Interceptors.Add<GlobalGrpcExceptionHandlerInterceptor>());
 }

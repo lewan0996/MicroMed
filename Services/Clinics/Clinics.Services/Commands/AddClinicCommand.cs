@@ -1,4 +1,5 @@
-﻿using Clinics.Domain.ClinicAggregate;
+﻿using Clinics.Contracts.Dto;
+using Clinics.Domain.ClinicAggregate;
 using Clinics.Services.Repositories;
 using MediatR;
 using Shared.Services;
@@ -15,6 +16,18 @@ public record AddClinicCommand(ClinicName Name, Address Address) : IRequest<int>
                 new Street(street),
                 new StreetNumber(streetNumber),
                 new AddressAdditionalInformation(additionalInfo)
+                )
+            )
+    { }
+    
+    public AddClinicCommand(AddClinicDto dto)
+        : this(
+            new ClinicName(dto.Name),
+            new Address(
+                new City(dto.City),
+                new Street(dto.Street),
+                new StreetNumber(dto.StreetNumber),
+                new AddressAdditionalInformation(dto.AdditionalInfo ?? string.Empty)
                 )
             )
     { }

@@ -1,4 +1,5 @@
-﻿using Clinics.Domain.ClinicAggregate;
+﻿using Clinics.Contracts.Dto;
+using Clinics.Domain.ClinicAggregate;
 using Clinics.Services.Repositories;
 using MediatR;
 using Shared.Services;
@@ -16,6 +17,19 @@ public record UpdateClinicCommand(int ClinicId, ClinicName Name, Address Address
                 new Street(street),
                 new StreetNumber(streetNumber),
                 new AddressAdditionalInformation(additionalInfo)
+            )
+        )
+    { }
+    
+    public UpdateClinicCommand(int clinicId, UpdateClinicDto dto)
+        : this(
+            clinicId,
+            new ClinicName(dto.Name),
+            new Address(
+                new City(dto.City),
+                new Street(dto.Street),
+                new StreetNumber(dto.StreetNumber),
+                new AddressAdditionalInformation(dto.AdditionalInfo ?? string.Empty)
             )
         )
     { }

@@ -1,4 +1,5 @@
-﻿using Clinics.Domain.EquipmentAggregate;
+﻿using Clinics.Contracts.Dto;
+using Clinics.Domain.EquipmentAggregate;
 using Clinics.Services.Repositories;
 using MediatR;
 using Shared.Services;
@@ -8,6 +9,8 @@ namespace Clinics.Services.Commands;
 public record AddSurgeryEquipmentCommand(EquipmentName Name) : IRequest<int>
 {
     public AddSurgeryEquipmentCommand(string name) : this(new EquipmentName(name)) { }
+    
+    public AddSurgeryEquipmentCommand(AddSurgeryEquipmentDto dto) : this(new EquipmentName(dto.Name)) { }
 }
 
 public class AddSurgeryEquipmentCommandHandler : IRequestHandler<AddSurgeryEquipmentCommand, int>

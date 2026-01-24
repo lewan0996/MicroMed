@@ -1,4 +1,4 @@
-using Clinics.API.Services;
+using Clinics.API;
 using Clinics.Infrastructure;
 using Clinics.Infrastructure.Repositories;
 using Clinics.Services.Repositories;
@@ -15,18 +15,22 @@ builder.Services
         options.UseSqlServer(builder.Configuration.GetConnectionString("SqlServer"));
         options.EnableSensitiveDataLogging();
     })
+    .AddEndpointsApiExplorer()
+    .AddSwaggerGen()
     .AddScoped<IClinicRepository, ClinicRepository>()
     .AddScoped<IEquipmentRepository, EquipmentRepository>()
     .AddScoped<IUnitOfWork>(services => services.GetRequiredService<ClinicsDbContext>())
     .AddMassTransit<ClinicsDbContext>(builder.Configuration)
-    .AddSqlConnectionProvider(builder.Configuration)
-    .AddGrpcWithExceptionInterceptor();
+    .AddSqlConnectionProvider(builder.Configuration);
 
 var app = builder.Build();
 
 if (app.Environment.IsDevelopment())
 {
     await EnsureDbCreated();
+
+    app.UseSwagger();
+    app.UseSwaggerUI();
 
     async Task EnsureDbCreated()
     {
@@ -38,8 +42,6 @@ if (app.Environment.IsDevelopment())
     }
 }
 
-app.UseHttpsRedirection();
-
-app.MapGrpcService<ClinicsService>();
+app.MapEndpoints();
 
 app.Run();
