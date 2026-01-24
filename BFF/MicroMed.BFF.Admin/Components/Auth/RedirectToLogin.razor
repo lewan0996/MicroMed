@@ -1,0 +1,14 @@
+﻿@inject NavigationManager NavigationManager
+@inject AuthenticationStateProvider AuthenticationStateProvider
+
+@code {
+    protected override async Task OnInitializedAsync()
+    {
+        var session = await AuthenticationStateProvider.GetAuthenticationStateAsync();
+
+        if (session.User.Identity?.IsAuthenticated != true)
+        {            
+            NavigationManager.NavigateTo($"Login", forceLoad: true);
+        }       
+    }
+}

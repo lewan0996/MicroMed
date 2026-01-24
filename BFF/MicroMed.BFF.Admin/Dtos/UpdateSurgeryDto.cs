@@ -2,12 +2,8 @@
 
 namespace MicroMed.BFF.Admin.Dtos;
 
-public class UpdateSurgeryDto
+internal record UpdateSurgeryDto(string Number, string Floor, List<int> EquipmentIds)
 {
-    public string Number { get; set; }
-    public string Floor { get; set; }
-    public List<int> EquipmentIds { get; set; }
-
     public UpdateSurgeryRequest ToRpcRequest(int clinicId, int surgeryId)
     {
         var request = new UpdateSurgeryRequest

@@ -7,7 +7,7 @@ public class Surgery : Entity
 {
     public SurgeryInfo SurgeryInfo { get; private set; }
 
-    private List<Equipment> _availableEquipment { get; set; }
+    private List<Equipment> _availableEquipment;
     public IReadOnlyCollection<Equipment> AvailableEquipment => _availableEquipment;
 
     public Surgery(SurgeryInfo surgeryInfo, IEnumerable<Equipment> equipment)
@@ -24,7 +24,7 @@ public class Surgery : Entity
 
     private Surgery()
     {
-        _availableEquipment = new List<Equipment>();
+        _availableEquipment = [];
     }
 }
 

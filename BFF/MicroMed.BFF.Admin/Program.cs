@@ -1,8 +1,9 @@
-using Clinics.Contracts;
-using Doctors.Contracts;
-using Grpc.Net.Client;
 using MicroMed.BFF.Admin;
-using MicroMed.BFF.Admin.Dtos;
+using MicroMed.BFF.Admin.Components;
+using Microsoft.AspNetCore.Authentication;
+using Microsoft.AspNetCore.Authentication.Cookies;
+using Syncfusion.Blazor;
+using System.Security.Claims;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -13,27 +14,46 @@ builder.Services
     .AddAuthorization()
     .AddAuthentication(options =>
     {
-        options.DefaultScheme = "Cookies";
+        options.DefaultScheme = CookieAuthenticationDefaults.AuthenticationScheme;
         options.DefaultChallengeScheme = "oidc";
         options.DefaultSignOutScheme = "oidc";
     })
-    .AddCookie("Cookies")
+    .AddCookie()
     .AddOpenIdConnect("oidc", options =>
     {
         var config = builder.Configuration.GetSection("Auth").Get<AuthConfig>()!;
 
+        options.SignInScheme = CookieAuthenticationDefaults.AuthenticationScheme;
+        options.SignOutScheme = CookieAuthenticationDefaults.AuthenticationScheme;
         options.Authority = config.Authority;
         options.ClientId = "AdminPortal";
-        options.ClientSecret = config.secret;
+        options.ClientSecret = config.Secret;
         options.ResponseType = "code";
+        options.ResponseMode = "query";
+        options.UsePkce = true;
         options.Scope.Add("admin");
         options.SaveTokens = true;
         options.GetClaimsFromUserInfoEndpoint = true;
-
-        options.RequireHttpsMetadata = false;        
+        options.RequireHttpsMetadata = false;
+        options.TokenValidationParameters = new()
+        {
+            NameClaimType = "name"
+        };
     });
 
-builder.Services.AddBff();
+builder.Services
+    .AddRazorComponents()
+    .AddInteractiveServerComponents();
+
+builder.Services.AddCascadingAuthenticationState();
+
+Syncfusion.Licensing.SyncfusionLicenseProvider.RegisterLicense(builder.Configuration["Syncfusion:LicenseKey"]);
+
+builder.Services.AddSyncfusionBlazor();
+
+var serviceUrls = builder.Configuration.GetSection("Services").Get<ServiceUrls>()!;
+
+builder.Services.AddSingleton(services => new ClinicsClient(builder.Environment.IsDevelopment(), serviceUrls.Clinics));
 
 var app = builder.Build();
 
@@ -43,141 +63,40 @@ if (app.Environment.IsDevelopment())
         .UseSwagger()
         .UseSwaggerUI();
 }
+else
+{
+    app.UseExceptionHandler("/Error", createScopeForErrors: true);
+}
 
 app
     .UseDefaultFiles()
     .UseStaticFiles()
     .UseRouting()
     .UseAuthentication()
-    .UseBff()
-    .UseAuthorization();
+    .UseAuthorization()
+    .UseAntiforgery();
 
-app.MapBffManagementEndpoints();
-
-var serviceUrls = builder.Configuration.GetSection("Services").Get<ServiceUrls>()!;
-
-var grpcOptions = CreateGrpcOptions();
-
-app.MapGet("Clinics", async (CancellationToken cancellationToken) =>
-{
-    using var channel = GrpcChannel.ForAddress(serviceUrls.Clinics, grpcOptions);
-    var client = new ClinicsService.ClinicsServiceClient(channel);
-
-    var response = await client.GetClinicsAsync(new GetClinicsRequest(), cancellationToken: cancellationToken);
-
-    return TypedResults.Ok(response.Clinics);
-});
-
-app.MapPost("Clinics",
-        async (AddClinicRequest request, CancellationToken cancellationToken) =>
-        {
-            using var channel = GrpcChannel.ForAddress(serviceUrls.Clinics, grpcOptions);
-            var client = new ClinicsService.ClinicsServiceClient(channel);
-
-            var response = await client.AddClinicAsync(request, cancellationToken: cancellationToken);
-
-            return TypedResults.Created($"Clinics/{response.Id}");
-        })
-    .ProducesProblem(StatusCodes.Status400BadRequest);
-
-app.MapPut("Clinics/{id:int}",
-        async (int id, UpdateClinicDto request, CancellationToken cancellationToken) =>
-        {
-            using var channel = GrpcChannel.ForAddress(serviceUrls.Clinics, grpcOptions);
-            var client = new ClinicsService.ClinicsServiceClient(channel);
-
-            await client.UpdateClinicAsync(request.ToRpcRequest(id), cancellationToken: cancellationToken);
-
-            return TypedResults.Ok();
-        })
-    .ProducesProblem(StatusCodes.Status400BadRequest)
-    .ProducesProblem(StatusCodes.Status404NotFound);
-
-app.MapPost("Clinics/{clinicId:int}/Surgeries",
-        async (int clinicId, AddSurgeryDto request, CancellationToken cancellationToken) =>
-        {
-            using var channel = GrpcChannel.ForAddress(serviceUrls.Clinics, grpcOptions);
-            var client = new ClinicsService.ClinicsServiceClient(channel);
-
-            var response = await client.AddSurgeryAsync(request.ToRpcRequest(clinicId), cancellationToken: cancellationToken);
-
-            return TypedResults.Created($"Clinics/{clinicId}/Surgeries/{response.Id}");
-        })
-    .ProducesProblem(StatusCodes.Status400BadRequest)
-    .ProducesProblem(StatusCodes.Status404NotFound);
-
-app.MapPut("Clinics/{clinicId:int}/Surgeries/{surgeryId:int}",
-        async (int clinicId, int surgeryId, UpdateSurgeryDto request, CancellationToken cancellationToken) =>
-        {
-            using var channel = GrpcChannel.ForAddress(serviceUrls.Clinics, grpcOptions);
-            var client = new ClinicsService.ClinicsServiceClient(channel);
-
-            await client.UpdateSurgeryAsync(request.ToRpcRequest(clinicId, surgeryId), cancellationToken: cancellationToken);
-
-            return TypedResults.Ok();
-        })
-    .ProducesProblem(StatusCodes.Status400BadRequest)
-    .ProducesProblem(StatusCodes.Status404NotFound);
-
-app.MapDelete("Clinics/{clinicId:int}/Surgeries/{surgeryId:int}",
-        async (int clinicId, int surgeryId, CancellationToken cancellationToken) =>
-        {
-            using var channel = GrpcChannel.ForAddress(serviceUrls.Clinics, grpcOptions);
-            var client = new ClinicsService.ClinicsServiceClient(channel);
-
-            await client.RemoveSurgeryAsync(new RemoveSurgeryRequest { SurgeryId = surgeryId, ClinicId = clinicId },
-                cancellationToken: cancellationToken);
-
-            return TypedResults.Ok();
-        })
-    .ProducesProblem(StatusCodes.Status404NotFound);
-
-app.MapPost("SurgeryEquipment",
-        async (AddSurgeryEquipmentRequest request, CancellationToken cancellationToken) =>
-        {
-            using var channel = GrpcChannel.ForAddress(serviceUrls.Clinics, grpcOptions);
-            var client = new ClinicsService.ClinicsServiceClient(channel);
-
-            var response = await client.AddSurgeryEquipmentAsync(request, cancellationToken: cancellationToken);
-
-            return TypedResults.Created($"SurgeryEquipment/{response.Id}");
-        })
-    .ProducesProblem(StatusCodes.Status400BadRequest);
-
-app.MapPost("Doctors",
-    async (RegisterDoctorRequest request, CancellationToken cancellationToken) =>
-    {
-        using var channel = GrpcChannel.ForAddress(serviceUrls.Doctors, grpcOptions);
-        var client = new DoctorsService.DoctorsServiceClient(channel);
-
-        var response = await client.RegisterDoctorAsync(request, cancellationToken: cancellationToken);
-
-        return TypedResults.Created($"Doctors/{response.Id}");
-    }).ProducesProblem(StatusCodes.Status400BadRequest);
+app.MapRazorComponents<App>()
+    .AddInteractiveServerRenderMode();
 
 app.UseExceptionHandler();
+
+app.MapGet("/check_session", (ClaimsPrincipal user) =>
+{
+    if (user.Identity?.IsAuthenticated != true)
+        return Results.Unauthorized();
+
+    return Results.Ok(user.Claims.ToDictionary(claim => claim.Type, claim => claim.Value));
+});
+
+app.MapGet("/login", () => Results.Challenge(new AuthenticationProperties { RedirectUri = "/" })); // ??
+
+app.MapGet("/logout", () => Results.SignOut());
 
 app.Run();
 
 return;
 
-GrpcChannelOptions CreateGrpcOptions()
-{
-    var unsafeHttpClientHandler = new HttpClientHandler
-    {
-        ServerCertificateCustomValidationCallback = HttpClientHandler.DangerousAcceptAnyServerCertificateValidator
-    };
-
-    var grpcChannelOptions = new GrpcChannelOptions();
-
-    if (app.Environment.IsDevelopment())
-    {
-        grpcChannelOptions.HttpHandler = unsafeHttpClientHandler;
-    }
-
-    return grpcChannelOptions;
-}
-
 internal record ServiceUrls(string Clinics, string Doctors);
 
-internal record AuthConfig(string Authority, string secret);
+internal record AuthConfig(string Authority, string Secret);

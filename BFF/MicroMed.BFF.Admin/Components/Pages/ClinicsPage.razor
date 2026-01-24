@@ -1,0 +1,93 @@
+﻿@page "/clinics"
+@using Clinics.Contracts
+@using static Clinics.Contracts.GetClinicsResponse.Types
+@inject IConfiguration Configuration
+@inject ClinicsClient ClinicsClient
+@inject NavigationManager NavigationManager
+
+@attribute [Authorize]
+
+<PageTitle>Clinics</PageTitle>
+
+<AuthorizeView>
+    <SfCard CssClass="e-card-horizontal e-card-shadow m-4 p-4">
+        <CardHeader>
+            <div class="d-flex align-items-center mb-2">
+                <span class="e-avatar e-avatar-circle e-avatar-lg e-bg-primary text-white me-3">C</span>
+                <h2 class="fw-bold mb-0">Clinics</h2>
+            </div>
+        </CardHeader>
+        <CardContent>
+            @if (_clinics == null)
+            {
+                <div class="e-card-content"><p><em>Loading...</em></p></div>
+            }
+            else
+            {
+                <SfGrid DataSource="@_clinics" AllowPaging="true" Toolbar="@(new List<string>() { "Add" })" CssClass="e-grid e-gridhover" GridLines="GridLine.Both">
+                    <GridEditSettings AllowAdding="true" AllowEditing="true" Mode="EditMode.Dialog"></GridEditSettings>
+                    <GridEvents TValue="ClinicDto" OnActionBegin="ActionBegin" RowSelected="OnRowSelected"></GridEvents>
+                    <GridColumns>
+                        <GridColumn Field="Id" HeaderText="Id" IsPrimaryKey="true" Visible="false"></GridColumn>
+                        <GridColumn Field="Name" HeaderText="Name" Width="120"></GridColumn>
+                        <GridColumn Field="City" HeaderText="City" Width="150"></GridColumn>
+                        <GridColumn Field="Street" HeaderText="Street" Width="130"></GridColumn>
+                        <GridColumn Field="StreetNumber" HeaderText="StreetNumber" Width="120"></GridColumn>
+                        <GridColumn Field="AdditionalInfo" HeaderText="Additional Info" Width="150"></GridColumn>
+                    </GridColumns>
+                </SfGrid>
+            }
+        </CardContent>
+    </SfCard>
+</AuthorizeView>
+
+@code {
+    private ClinicDto[]? _clinics;
+    private bool _suppressRowSelectNavigation = false;
+
+    private Task<ClinicDto[]> GetClinicsAsync() => ClinicsClient.GetClinicsAsync(CancellationToken.None);
+
+    protected override async Task OnInitializedAsync()
+    {
+        if (_clinics == null)
+            _clinics = await GetClinicsAsync();
+    }
+
+    private async void ActionBegin(ActionEventArgs<ClinicDto> arg)
+    {
+        if (arg.RequestType == Syncfusion.Blazor.Grids.Action.Save && arg.Action == "Add")
+        {
+            var newClinic = arg.Data;
+            if (newClinic != null)
+            {
+                var request = new Clinics.Contracts.AddClinicRequest
+                {
+                    Name = newClinic.Name,
+                    City = newClinic.City,
+                    Street = newClinic.Street,
+                    StreetNumber = newClinic.StreetNumber,
+                    AdditionalInfo = newClinic.AdditionalInfo
+                };
+                await ClinicsClient.AddClinicAsync(request);
+                arg.Cancel = true;
+                _clinics = await GetClinicsAsync();
+                _suppressRowSelectNavigation = true; // Suppress navigation after add
+                StateHasChanged();
+            }
+        }
+    }
+
+    private void OnRowSelected(RowSelectEventArgs<ClinicDto> args)
+    {
+        if (_suppressRowSelectNavigation)
+        {
+            _suppressRowSelectNavigation = false;
+            return;
+        }
+
+        if (args != null && args.Data != null && args.Data.Id > 0)
+        {
+            NavigationManager.NavigateTo($"/clinics/{args.Data.Id}");
+        }
+    }
+}

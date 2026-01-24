@@ -1,6 +1,6 @@
 using Duende.IdentityServer;
 using Duende.IdentityServer.Models;
-using IdentityModel;
+using Duende.IdentityModel;
 using MicroMed.IdentityServer;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
@@ -20,10 +20,10 @@ builder.Services
 
 builder.Services
     .AddIdentityServer()
-            .AddInMemoryIdentityResources(Config.IdentityResources)
-            .AddInMemoryApiScopes(Config.ApiScopes)
-            .AddInMemoryClients(Config.BuildClients(builder.Configuration.GetSection("Clients").Get<ClientConfiguration[]>()!))
-            .AddAspNetIdentity<IdentityUser>();
+    .AddInMemoryIdentityResources(Config.IdentityResources)
+    .AddInMemoryApiScopes(Config.ApiScopes)
+    .AddInMemoryClients(Config.BuildClients(builder.Configuration.GetSection("Clients").Get<ClientConfiguration[]>()!))
+    .AddAspNetIdentity<IdentityUser>();
 
 builder.Services.AddDbContext<ApplicationDbContext>(options =>
 {
@@ -153,6 +153,7 @@ internal static class Config
         {
             ClientId = clientConfig.Name,
             ClientSecrets = { new Secret(clientConfig.Secret.Sha256()) },
+            RequirePkce = true,
             AllowedGrantTypes = GrantTypes.Code,
             RedirectUris = { $"{clientConfig.BaseUrl}/signin-oidc" },
             PostLogoutRedirectUris = { $"{clientConfig.BaseUrl}signout-callback-oidc" },

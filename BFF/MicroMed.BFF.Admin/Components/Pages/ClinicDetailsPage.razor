@@ -1,0 +1,71 @@
+@page "/clinics/{id:int}"  
+@using Clinics.Contracts  
+@using static Clinics.Contracts.GetClinicsResponse.Types  
+@using Microsoft.AspNetCore.Authorization  
+@using Microsoft.AspNetCore.Components
+@inject ClinicsClient ClinicsClient  
+@attribute [Authorize]  
+
+<PageTitle>Clinic Details</PageTitle>  
+
+<AuthorizeView>  
+    <SfCard CssClass="e-card-horizontal e-card-shadow m-4 p-4">  
+        @if (_clinic == null)  
+        {  
+            <div class="e-card-content"><p><em>Loading...</em></p></div>  
+        }  
+        else  
+        {  
+            <CardHeader>  
+                <div class="d-flex align-items-center mb-2">  
+                    <span class="e-avatar e-avatar-circle e-avatar-lg e-bg-primary text-white me-3">@(_clinic.Name?.FirstOrDefault() ?? 'C')</span>  
+                    <h2 class="fw-bold mb-0">@_clinic.Name</h2>  
+                </div>  
+            </CardHeader>  
+            <CardContent>  
+                <div class="row mb-2">  
+                    <div class="col"><strong>City:</strong> @_clinic.City</div>  
+                    <div class="col"><strong>Street:</strong> @_clinic.Street</div>  
+                </div>  
+                <div class="row mb-4">  
+                    <div class="col"><strong>Street Number:</strong> @_clinic.StreetNumber</div>  
+                    <div class="col"><strong>Additional Info:</strong> @_clinic.AdditionalInfo</div>  
+                </div>  
+                <SfCard CssClass="e-card-shadow mb-3">  
+                    <CardHeader>  
+                        <h3 class="fw-semibold mb-0">Surgeries</h3>  
+                    </CardHeader>  
+                    <CardContent>  
+                        <SfGrid DataSource="@_surgeries" AllowPaging="true" Toolbar="@(new List<string>() { "Add" })" CssClass="e-grid e-gridhover" GridLines="GridLine.Both">  
+                            <GridEditSettings AllowAdding="true" AllowEditing="true" Mode="EditMode.Dialog"></GridEditSettings>  
+                            <GridColumns>  
+                                <GridColumn Field="Id" HeaderText="Id" IsPrimaryKey="true" Visible="false"></GridColumn>  
+                                <GridColumn Field="Number" HeaderText="Number" Width="120"></GridColumn>  
+                                <GridColumn Field="Floor" HeaderText="Floor" Width="120"></GridColumn>  
+                            </GridColumns>  
+                        </SfGrid>  
+                    </CardContent>  
+                </SfCard>  
+            </CardContent>  
+        }  
+    </SfCard>  
+</AuthorizeView>  
+
+@code {  
+    [Parameter] public int id { get; set; }  
+    private ClinicDto? _clinic;  
+    private List<SurgeryDto> _surgeries = new();  
+
+    protected override async Task OnInitializedAsync()  
+    {  
+        var clinics = await ClinicsClient.GetClinicsAsync(CancellationToken.None);  
+        _clinic = clinics.FirstOrDefault(c => c.Id == id);  
+    }  
+
+    private class SurgeryDto  
+    {  
+        public int Id { get; set; }  
+        public string Number { get; set; } = string.Empty;  
+        public string Floor { get; set; } = string.Empty;  
+    }  
+}
