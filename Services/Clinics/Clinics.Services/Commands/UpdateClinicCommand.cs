@@ -21,15 +21,15 @@ public record UpdateClinicCommand(int ClinicId, ClinicName Name, Address Address
         )
     { }
     
-    public UpdateClinicCommand(int clinicId, UpdateClinicDto dto)
+    public UpdateClinicCommand(int clinicId, UpdateClinicRequest request)
         : this(
             clinicId,
-            new ClinicName(dto.Name),
+            new ClinicName(request.Name),
             new Address(
-                new City(dto.City),
-                new Street(dto.Street),
-                new StreetNumber(dto.StreetNumber),
-                new AddressAdditionalInformation(dto.AdditionalInfo ?? string.Empty)
+                new City(request.City),
+                new Street(request.Street),
+                new StreetNumber(request.StreetNumber),
+                new AddressAdditionalInformation(request.AdditionalInfo ?? string.Empty)
             )
         )
     { }

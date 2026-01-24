@@ -1,4 +1,3 @@
-using Doctors.Contracts;
 using Doctors.Contracts.Dto;
 using Doctors.Services;
 using MediatR;
@@ -12,7 +11,7 @@ public static class Endpoints
         app.MapPost("Doctors", async (IMediator mediator, RegisterDoctorDto dto, CancellationToken cancellationToken) =>
         {
             var result = await mediator.Send(new RegisterDoctorCommand(dto), cancellationToken);
-            return Results.Ok(new RegisterDoctorResponse { Id = result }); // todo: change to Created
+            return Results.Ok(new RegisterDoctorResponse(result)); // todo: change to Created
         });
     }
 }

@@ -20,14 +20,14 @@ public record AddClinicCommand(ClinicName Name, Address Address) : IRequest<int>
             )
     { }
     
-    public AddClinicCommand(AddClinicDto dto)
+    public AddClinicCommand(AddClinicRequest request)
         : this(
-            new ClinicName(dto.Name),
+            new ClinicName(request.Name),
             new Address(
-                new City(dto.City),
-                new Street(dto.Street),
-                new StreetNumber(dto.StreetNumber),
-                new AddressAdditionalInformation(dto.AdditionalInfo ?? string.Empty)
+                new City(request.City),
+                new Street(request.Street),
+                new StreetNumber(request.StreetNumber),
+                new AddressAdditionalInformation(request.AdditionalInfo ?? string.Empty)
                 )
             )
     { }

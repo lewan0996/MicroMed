@@ -44,8 +44,5 @@ public static class ServiceCollectionExtensions
 
     public static IServiceCollection AddSqlConnectionProvider(this IServiceCollection services,
         ConfigurationManager configuration)
-        => services.AddScoped(_ =>
-        {
-            return new SqlConnectionProvider(configuration.GetConnectionString("SqlServer")!);
-        });
+        => services.AddScoped(_ => new SqlConnectionProvider(configuration.GetConnectionString("SqlServer")!));
 }

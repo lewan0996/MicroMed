@@ -10,7 +10,7 @@ public record AddSurgeryEquipmentCommand(EquipmentName Name) : IRequest<int>
 {
     public AddSurgeryEquipmentCommand(string name) : this(new EquipmentName(name)) { }
     
-    public AddSurgeryEquipmentCommand(AddSurgeryEquipmentDto dto) : this(new EquipmentName(dto.Name)) { }
+    public AddSurgeryEquipmentCommand(AddSurgeryEquipmentRequest request) : this(new EquipmentName(request.Name)) { }
 }
 
 public class AddSurgeryEquipmentCommandHandler : IRequestHandler<AddSurgeryEquipmentCommand, int>

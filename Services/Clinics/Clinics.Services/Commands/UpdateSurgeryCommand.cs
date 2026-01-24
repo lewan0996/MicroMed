@@ -13,8 +13,8 @@ public record UpdateSurgeryCommand(int ClinicId, int SurgeryId, SurgeryInfo Surg
     public UpdateSurgeryCommand(int clinicId, int surgeryId, string number, string floor, IReadOnlyList<int> equipmentIds)
         : this(clinicId, surgeryId, new SurgeryInfo(new SurgeryNumber(number), new SurgeryFloor(floor)), equipmentIds) { }
     
-    public UpdateSurgeryCommand(int clinicId, int surgeryId, UpdateSurgeryDto dto)
-        : this(clinicId, surgeryId, new SurgeryInfo(new SurgeryNumber(dto.Number), new SurgeryFloor(dto.Floor)), dto.EquipmentIds) { }
+    public UpdateSurgeryCommand(int clinicId, int surgeryId, UpdateSurgeryRequest request)
+        : this(clinicId, surgeryId, new SurgeryInfo(new SurgeryNumber(request.Number), new SurgeryFloor(request.Floor)), request.EquipmentIds) { }
 }
 
 public class UpdateSurgeryCommandHandler : IRequestHandler<UpdateSurgeryCommand>

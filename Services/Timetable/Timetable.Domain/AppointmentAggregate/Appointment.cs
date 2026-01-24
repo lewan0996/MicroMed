@@ -2,6 +2,7 @@
 using Shared.Domain.Exceptions;
 using Timetable.Domain.DoctorAggregate;
 using Timetable.Domain.SurgeryAggregate;
+#pragma warning disable CS8618
 
 namespace Timetable.Domain.AppointmentAggregate;
 

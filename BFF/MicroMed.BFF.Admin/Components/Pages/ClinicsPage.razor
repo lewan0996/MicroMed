@@ -1,7 +1,5 @@
 ﻿@page "/clinics"
-@using Clinics.Contracts
-@using static Clinics.Contracts.GetClinicsResponse.Types
-@inject IConfiguration Configuration
+@using Clinics.Contracts.Dto
 @inject ClinicsClient ClinicsClient
 @inject NavigationManager NavigationManager
 
@@ -42,32 +40,31 @@
 </AuthorizeView>
 
 @code {
-    private ClinicDto[]? _clinics;
-    private bool _suppressRowSelectNavigation = false;
+    private List<ClinicDto>? _clinics;
+    private bool _suppressRowSelectNavigation;
 
-    private Task<ClinicDto[]> GetClinicsAsync() => ClinicsClient.GetClinicsAsync(CancellationToken.None);
+    private async Task<List<ClinicDto>> GetClinicsAsync() 
+        => (await ClinicsClient.GetClinicsAsync(CancellationToken.None)).Clinics;
 
     protected override async Task OnInitializedAsync()
     {
-        if (_clinics == null)
-            _clinics = await GetClinicsAsync();
+        _clinics ??= await GetClinicsAsync();
     }
 
     private async void ActionBegin(ActionEventArgs<ClinicDto> arg)
     {
-        if (arg.RequestType == Syncfusion.Blazor.Grids.Action.Save && arg.Action == "Add")
+        if (arg is { RequestType: Syncfusion.Blazor.Grids.Action.Save, Action: "Add" })
         {
             var newClinic = arg.Data;
             if (newClinic != null)
             {
-                var request = new Clinics.Contracts.AddClinicRequest
-                {
-                    Name = newClinic.Name,
-                    City = newClinic.City,
-                    Street = newClinic.Street,
-                    StreetNumber = newClinic.StreetNumber,
-                    AdditionalInfo = newClinic.AdditionalInfo
-                };
+                var request = new AddClinicRequest(
+                    newClinic.Name,
+                    newClinic.City,
+                    newClinic.Street,
+                    newClinic.StreetNumber,
+                    newClinic.AdditionalInfo);
+                
                 await ClinicsClient.AddClinicAsync(request);
                 arg.Cancel = true;
                 _clinics = await GetClinicsAsync();
@@ -77,7 +74,7 @@
         }
     }
 
-    private void OnRowSelected(RowSelectEventArgs<ClinicDto> args)
+    private void OnRowSelected(RowSelectEventArgs<ClinicDto>? args)
     {
         if (_suppressRowSelectNavigation)
         {

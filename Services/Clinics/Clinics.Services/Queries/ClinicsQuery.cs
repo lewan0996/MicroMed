@@ -1,7 +1,6 @@
-﻿using Clinics.Contracts;
+﻿using Clinics.Contracts.Dto;
 using MediatR;
 using Shared.Services;
-using ClinicDto = Clinics.Contracts.GetClinicsResponse.Types.ClinicDto;
 
 namespace Clinics.Services.Queries;
 
@@ -23,8 +22,7 @@ FROM {Tables.Clinics}";
 
         var clinics = await sqlConnectionProvider.CallAsync(x => x.QueryAsync<ClinicDto>(sql, cancellationToken));
 
-        var result = new GetClinicsResponse();
-        result.Clinics.AddRange(clinics);
+        var result = new GetClinicsResponse(clinics.ToList());
 
         return result;
     }
