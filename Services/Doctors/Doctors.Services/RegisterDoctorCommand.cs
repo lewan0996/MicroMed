@@ -1,4 +1,5 @@
 ﻿using Doctors.Contracts;
+using Doctors.Contracts.Dto;
 using Doctors.Domain.DoctorAggregate;
 using MassTransit;
 using MediatR;
@@ -9,7 +10,11 @@ namespace Doctors.Services;
 
 public record RegisterDoctorCommand(Name Name, Specialty Specialty) : IRequest<int>
 {
-    public RegisterDoctorCommand(string firstName, string lastName, int specialtyId) : this(new Name(firstName, lastName), Specialty.Get(specialtyId)) { }
+    public RegisterDoctorCommand(string firstName, string lastName, int specialtyId) 
+        : this(new Name(firstName, lastName), Specialty.Get(specialtyId)) { }
+    
+    public RegisterDoctorCommand(RegisterDoctorDto dto) 
+        : this(new Name(dto.FirstName, dto.LastName), Specialty.Get(dto.SpecialtyId)) { }
 }
 
 public class RegisterDoctorCommandHandler : IRequestHandler<RegisterDoctorCommand, int>
