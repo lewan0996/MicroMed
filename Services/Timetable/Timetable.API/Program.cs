@@ -9,7 +9,7 @@ var builder = WebApplication.CreateBuilder(args);
 
 builder.Services
     .AddEndpointsApiExplorer()
-    .AddSwaggerGen()
+    .AddOpenApi()
     .AddMediatRWithTransactionBehavior()
     .AddDbContext<TimetableDbContext>(options =>
     {
@@ -26,8 +26,7 @@ var app = builder.Build();
 
 if (app.Environment.IsDevelopment())
 {
-    app.UseSwagger();
-    app.UseSwaggerUI();
+    app.UseSwaggerUIWithOpenApi();
 
     await EnsureDbCreated();
 

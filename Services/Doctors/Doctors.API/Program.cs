@@ -18,7 +18,7 @@ builder.Services
     .AddScoped<IUnitOfWork>(services => services.GetRequiredService<DoctorsDbContext>())
     .AddMassTransit<DoctorsDbContext>(builder.Configuration)
     .AddEndpointsApiExplorer()
-    .AddSwaggerGen()
+    .AddOpenApi()
     .AddSqlConnectionProvider(builder.Configuration);
 
 var app = builder.Build();
@@ -27,8 +27,7 @@ if (app.Environment.IsDevelopment())
 {
     await EnsureDbCreated();
 
-    app.UseSwagger();
-    app.UseSwaggerUI();
+    app.UseSwaggerUIWithOpenApi();
 
     async Task EnsureDbCreated()
     {

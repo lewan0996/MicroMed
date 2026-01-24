@@ -11,7 +11,7 @@ public static class ModelBuilderExtensions
     public static ComplexTypePropertyBuilder<TStringValueObject> HasStringValueObject<TEntity, TStringValueObject>(
         this ComplexPropertyBuilder<TEntity> builder,
         Expression<Func<TEntity, TStringValueObject>> navigationExpression,
-        string? columnName = null) where TStringValueObject : StringValueObject
+        string? columnName = null) where TStringValueObject : StringValueObject where TEntity : notnull
     {
         var ctor = typeof(TStringValueObject).GetConstructor(new[] { typeof(string) })!;
 

@@ -4,13 +4,13 @@ using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Syncfusion.Blazor;
 using System.Security.Claims;
+using Shared.API;
 
 var builder = WebApplication.CreateBuilder(args);
 
 builder.Services
     .AddEndpointsApiExplorer()
-    .AddSwaggerGen()
-    .AddGlobalExceptionHandler()
+    .AddOpenApi()
     .AddAuthorization()
     .AddAuthentication(options =>
     {
@@ -61,9 +61,7 @@ var app = builder.Build();
 
 if (app.Environment.IsDevelopment())
 {
-    app
-        .UseSwagger()
-        .UseSwaggerUI();
+    app.UseSwaggerUIWithOpenApi();
 }
 else
 {
@@ -72,11 +70,12 @@ else
 
 app
     .UseDefaultFiles()
-    .UseStaticFiles()
     .UseRouting()
     .UseAuthentication()
     .UseAuthorization()
     .UseAntiforgery();
+
+app.MapStaticAssets();
 
 app.MapRazorComponents<App>()
     .AddInteractiveServerRenderMode();
