@@ -1,0 +1,29 @@
+<component name="ProjectRunConfigurationManager">
+  <configuration default="false" name="Doctors.API/Dockerfile" type="docker-deploy" factoryName="dockerfile" server-name="Podman">
+    <deployment type="dockerfile">
+      <settings>
+        <option name="containerName" value="doctors.api" />
+        <option name="contextFolderPath" value="Services" />
+        <option name="envVars">
+          <list>
+            <DockerEnvVarImpl>
+              <option name="name" value="ASPNETCORE_HTTP_PORTS" />
+              <option name="value" value="8080" />
+            </DockerEnvVarImpl>
+          </list>
+        </option>
+        <option name="portBindings">
+          <list>
+            <DockerPortBindingImpl>
+              <option name="containerPort" value="8080" />
+              <option name="hostPort" value="5004" />
+            </DockerPortBindingImpl>
+          </list>
+        </option>
+        <option name="sourceFilePath" value="Services/Doctors/Doctors.API/Dockerfile" />
+      </settings>
+    </deployment>
+    <EXTENSION ID="com.jetbrains.rider.docker.debug" isFastModeEnabled="true" isSslEnabled="false" />
+    <method v="2" />
+  </configuration>
+</component>

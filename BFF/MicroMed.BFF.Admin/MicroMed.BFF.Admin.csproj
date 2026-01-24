@@ -15,11 +15,6 @@
 	</ItemGroup>
 
 	<ItemGroup>
-		<Protobuf Include="Protos\Clinics.proto" GrpcServices="Client" />
-		<Protobuf Include="Protos\Doctors.proto" GrpcServices="Client" />
-	</ItemGroup>
-
-	<ItemGroup>
 		<PackageReference Include="Grpc.Tools" Version="2.67.0">
 			<PrivateAssets>all</PrivateAssets>
 			<IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
@@ -34,6 +29,7 @@
 	</ItemGroup>
 
 	<ItemGroup>
+		<ProjectReference Include="..\..\Services\Clinics\Clinics.Contracts\Clinics.Contracts.csproj" />
 		<ProjectReference Include="..\..\Services\Shared\Shared.API\Shared.API.csproj" />
 	</ItemGroup>
 

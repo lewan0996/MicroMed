@@ -53,7 +53,9 @@ builder.Services.AddSyncfusionBlazor();
 
 var serviceUrls = builder.Configuration.GetSection("Services").Get<ServiceUrls>()!;
 
-builder.Services.AddSingleton(services => new ClinicsClient(builder.Environment.IsDevelopment(), serviceUrls.Clinics));
+builder.Services.AddSingleton(services
+    => new ClinicsClient(serviceUrls.Clinics, services.GetRequiredService<IHttpClientFactory>()));
+builder.Services.AddHttpClient();
 
 var app = builder.Build();
 
@@ -94,8 +96,6 @@ app.MapGet("/login", () => Results.Challenge(new AuthenticationProperties { Redi
 app.MapGet("/logout", () => Results.SignOut());
 
 app.Run();
-
-return;
 
 internal record ServiceUrls(string Clinics, string Doctors);
 

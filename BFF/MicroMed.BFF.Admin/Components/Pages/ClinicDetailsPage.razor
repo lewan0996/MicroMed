@@ -1,8 +1,5 @@
-@page "/clinics/{id:int}"  
-@using Clinics.Contracts  
-@using static Clinics.Contracts.GetClinicsResponse.Types  
-@using Microsoft.AspNetCore.Authorization  
-@using Microsoft.AspNetCore.Components
+@page "/clinics/{id:int}"
+@using Clinics.Contracts.Dto
 @inject ClinicsClient ClinicsClient  
 @attribute [Authorize]  
 
@@ -52,14 +49,14 @@
 </AuthorizeView>  
 
 @code {  
-    [Parameter] public int id { get; set; }  
-    private ClinicDto? _clinic;  
+    [Parameter] public int Id { get; set; }  
+    private ClinicDto? _clinic;
     private List<SurgeryDto> _surgeries = new();  
 
     protected override async Task OnInitializedAsync()  
     {  
-        var clinics = await ClinicsClient.GetClinicsAsync(CancellationToken.None);  
-        _clinic = clinics.FirstOrDefault(c => c.Id == id);  
+        var clinicsResponse = await ClinicsClient.GetClinicsAsync(CancellationToken.None);  
+        _clinic = clinicsResponse.Clinics.FirstOrDefault(c => c.Id == Id);  
     }  
 
     private class SurgeryDto  

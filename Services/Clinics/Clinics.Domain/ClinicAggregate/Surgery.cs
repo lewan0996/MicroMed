@@ -1,5 +1,6 @@
 ﻿using Clinics.Domain.EquipmentAggregate;
 using Shared.Domain;
+#pragma warning disable CS8618
 
 namespace Clinics.Domain.ClinicAggregate;
 

@@ -1,4 +1,4 @@
-using Doctors.API.Services;
+using Doctors.API;
 using Doctors.Infrastructure;
 using Doctors.Services;
 using Microsoft.EntityFrameworkCore;
@@ -17,13 +17,18 @@ builder.Services
     .AddScoped<IDoctorsRepository, DoctorsRepository>()
     .AddScoped<IUnitOfWork>(services => services.GetRequiredService<DoctorsDbContext>())
     .AddMassTransit<DoctorsDbContext>(builder.Configuration)
-    .AddGrpcWithExceptionInterceptor();
+    .AddEndpointsApiExplorer()
+    .AddSwaggerGen()
+    .AddSqlConnectionProvider(builder.Configuration);
 
 var app = builder.Build();
 
 if (app.Environment.IsDevelopment())
 {
     await EnsureDbCreated();
+
+    app.UseSwagger();
+    app.UseSwaggerUI();
 
     async Task EnsureDbCreated()
     {
@@ -35,8 +40,6 @@ if (app.Environment.IsDevelopment())
     }
 }
 
-app.UseHttpsRedirection();
-
-app.MapGrpcService<DoctorsService>();
+app.MapEndpoints();
 
 app.Run();

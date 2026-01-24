@@ -15,10 +15,4 @@
 		</PackageReference>
 	</ItemGroup>
 
-	<ItemGroup>
-		<Protobuf Include="Protos\Doctors.proto">
-			<GrpcServices>Server</GrpcServices>
-		</Protobuf>
-	</ItemGroup>
-
 </Project>

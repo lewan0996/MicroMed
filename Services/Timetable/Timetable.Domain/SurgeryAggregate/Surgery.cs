@@ -1,4 +1,5 @@
 ﻿using Shared.Domain;
+#pragma warning disable CS8618
 
 namespace Timetable.Domain.SurgeryAggregate;
 
