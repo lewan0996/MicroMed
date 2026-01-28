@@ -1,6 +1,7 @@
 using Doctors.API;
 using Doctors.Infrastructure;
 using Doctors.Services;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
 using Shared.API;
 using Shared.Services;
@@ -19,6 +20,23 @@ builder.Services
     .AddMassTransit<DoctorsDbContext>(builder.Configuration)
     .AddEndpointsApiExplorer()
     .AddOpenApi()
+    .AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
+    .AddJwtBearer(options =>
+    {
+        var authSettings = builder.Configuration.GetSection("Authentication");
+        options.Authority = authSettings["Authority"];
+        options.Audience = "doctors.api";
+        options.RequireHttpsMetadata = false;
+        options.TokenValidationParameters = new()
+        {
+            ValidateAudience = true,
+            ValidateIssuer = true,
+            ValidateLifetime = true
+        };
+    });
+
+builder.Services
+    .AddAuthorization()
     .AddSqlConnectionProvider(builder.Configuration);
 
 var app = builder.Build();
@@ -38,6 +56,9 @@ if (app.Environment.IsDevelopment())
         await dbContext.Database.EnsureCreatedAsync();
     }
 }
+
+app.UseAuthentication();
+app.UseAuthorization();
 
 app.MapEndpoints();
 

@@ -12,6 +12,7 @@ builder.Services
     .AddEndpointsApiExplorer()
     .AddOpenApi()
     .AddAuthorization()
+    .AddHttpContextAccessor()
     .AddAuthentication(options =>
     {
         options.DefaultScheme = CookieAuthenticationDefaults.AuthenticationScheme;
@@ -32,6 +33,9 @@ builder.Services
         options.ResponseMode = "query";
         options.UsePkce = true;
         options.Scope.Add("admin");
+        options.Scope.Add("clinics.api");
+        options.Scope.Add("doctors.api");
+        options.Scope.Add("timetable.api");
         options.SaveTokens = true;
         options.GetClaimsFromUserInfoEndpoint = true;
         options.RequireHttpsMetadata = false;
@@ -53,8 +57,11 @@ builder.Services.AddSyncfusionBlazor();
 
 var serviceUrls = builder.Configuration.GetSection("Services").Get<ServiceUrls>()!;
 
-builder.Services.AddSingleton(services
-    => new ClinicsClient(serviceUrls.Clinics, services.GetRequiredService<IHttpClientFactory>()));
+builder.Services.AddScoped(services
+    => new ClinicsClient(
+        serviceUrls.Clinics, 
+        services.GetRequiredService<IHttpClientFactory>(),
+        services.GetRequiredService<IHttpContextAccessor>()));
 builder.Services.AddHttpClient();
 
 var app = builder.Build();

@@ -1,3 +1,4 @@
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
 using Shared.API;
 using Shared.Services;
@@ -16,6 +17,23 @@ builder.Services
         options.UseSqlServer(builder.Configuration.GetConnectionString("SqlServer"));
         options.EnableSensitiveDataLogging();
     })
+    .AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
+    .AddJwtBearer(options =>
+    {
+        var authSettings = builder.Configuration.GetSection("Authentication");
+        options.Authority = authSettings["Authority"];
+        options.Audience = "timetable.api";
+        options.RequireHttpsMetadata = false;
+        options.TokenValidationParameters = new()
+        {
+            ValidateAudience = true,
+            ValidateIssuer = true,
+            ValidateLifetime = true
+        };
+    });
+
+builder.Services
+    .AddAuthorization()
     .AddScoped<ISurgeryRepository, SurgeryRepository>()
     .AddScoped<IDoctorsRepository, DoctorsRepository>()
     .AddScoped<IAppointmentRepository, AppointmentRepository>()
@@ -39,5 +57,8 @@ if (app.Environment.IsDevelopment())
         await dbContext.Database.EnsureCreatedAsync();
     }
 }
+
+app.UseAuthentication();
+app.UseAuthorization();
 
 app.Run();

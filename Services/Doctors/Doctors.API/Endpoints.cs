@@ -12,6 +12,6 @@ public static class Endpoints
         {
             var result = await mediator.Send(new RegisterDoctorCommand(dto), cancellationToken);
             return Results.Ok(new RegisterDoctorResponse(result)); // todo: change to Created
-        });
+        }).RequireAuthorization();
     }
 }

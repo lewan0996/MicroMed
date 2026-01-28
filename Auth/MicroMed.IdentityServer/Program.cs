@@ -23,6 +23,7 @@ builder.Services
     .AddIdentityServer()
     .AddInMemoryIdentityResources(Config.IdentityResources)
     .AddInMemoryApiScopes(Config.ApiScopes)
+    .AddInMemoryApiResources(Config.ApiResources)
     .AddInMemoryClients(Config.BuildClients(builder.Configuration.GetSection("Clients").Get<ClientConfiguration[]>()!))
     .AddAspNetIdentity<IdentityUser>();
 
@@ -146,7 +147,26 @@ internal static class Config
         [
             new ApiScope("admin"),
             new ApiScope("doctor"),
-            new ApiScope("patient")
+            new ApiScope("patient"),
+            new ApiScope("clinics.api", "Clinics API"),
+            new ApiScope("doctors.api", "Doctors API"),
+            new ApiScope("timetable.api", "Timetable API")
+        ];
+
+    public static IEnumerable<ApiResource> ApiResources =>
+        [
+            new ApiResource("clinics.api", "Clinics API")
+            {
+                Scopes = { "clinics.api" }
+            },
+            new ApiResource("doctors.api", "Doctors API")
+            {
+                Scopes = { "doctors.api" }
+            },
+            new ApiResource("timetable.api", "Timetable API")
+            {
+                Scopes = { "timetable.api" }
+            }
         ];
 
     public static IEnumerable<Client> BuildClients(ClientConfiguration[] clientsConfiguration) =>
@@ -158,13 +178,28 @@ internal static class Config
             AllowedGrantTypes = GrantTypes.Code,
             RedirectUris = { $"{clientConfig.BaseUrl}/signin-oidc" },
             PostLogoutRedirectUris = { $"{clientConfig.BaseUrl}signout-callback-oidc" },
-            AllowedScopes =
-                [
-                    IdentityServerConstants.StandardScopes.OpenId,
-                    IdentityServerConstants.StandardScopes.Profile,
-                    clientConfig.Scope
-                ]
-        });        
+            AllowedScopes = GetAllowedScopes(clientConfig)
+        });
+
+    private static List<string> GetAllowedScopes(ClientConfiguration clientConfig)
+    {
+        var scopes = new List<string>
+        {
+            IdentityServerConstants.StandardScopes.OpenId,
+            IdentityServerConstants.StandardScopes.Profile,
+            clientConfig.Scope
+        };
+
+        // Admin portal gets access to all APIs
+        if (clientConfig.Name == "AdminPortal")
+        {
+            scopes.Add("clinics.api");
+            scopes.Add("doctors.api");
+            scopes.Add("timetable.api");
+        }
+
+        return scopes;
+    }
 }
 
 internal record ClientConfiguration(string Name, string Scope, string BaseUrl, string Secret);

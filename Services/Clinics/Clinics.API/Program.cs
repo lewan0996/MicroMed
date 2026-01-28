@@ -2,6 +2,7 @@ using Clinics.API;
 using Clinics.Infrastructure;
 using Clinics.Infrastructure.Repositories;
 using Clinics.Services.Repositories;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
 using Shared.API;
 using Shared.Services;
@@ -17,6 +18,23 @@ builder.Services
     })
     .AddEndpointsApiExplorer()
     .AddOpenApi()
+    .AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
+    .AddJwtBearer(options =>
+    {
+        var authSettings = builder.Configuration.GetSection("Authentication");
+        options.Authority = authSettings["Authority"];
+        options.Audience = "clinics.api";
+        options.RequireHttpsMetadata = false;
+        options.TokenValidationParameters = new()
+        {
+            ValidateAudience = true,
+            ValidateIssuer = true,
+            ValidateLifetime = true
+        };
+    });
+
+builder.Services
+    .AddAuthorization()
     .AddScoped<IClinicRepository, ClinicRepository>()
     .AddScoped<IEquipmentRepository, EquipmentRepository>()
     .AddScoped<IUnitOfWork>(services => services.GetRequiredService<ClinicsDbContext>())
@@ -40,6 +58,9 @@ if (app.Environment.IsDevelopment())
         await dbContext.Database.EnsureCreatedAsync();
     }
 }
+
+app.UseAuthentication();
+app.UseAuthorization();
 
 app.MapEndpoints();
 
