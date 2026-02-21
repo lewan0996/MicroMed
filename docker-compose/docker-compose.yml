@@ -1,65 +1,99 @@
 version: '3.4'
 
 services:
-  # doctors.api:
-  #   image: ${DOCKER_REGISTRY-}doctorsapi
-  #   build:
-  #     context: ../Services
-  #     dockerfile: Doctors/Doctors.API/Dockerfile
-  #   depends_on: 
-  #    - sqlServer
-  #    - rabbitMQ
-
   clinics.api:
     image: ${DOCKER_REGISTRY-}clinicsapi
     build:
       context: ../Services
       dockerfile: Clinics/Clinics.API/Dockerfile
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
+      - ASPNETCORE_HTTP_PORTS=8080
+      - DOTNET_HOSTBUILDER__RELOADCONFIGONCHANGE=false
+    ports:
+      - "5001:8080"
+    restart: on-failure
     depends_on:
-    - sqlServer
-    #- rabbitMQ
+      - sqlServer
+      - rabbitMQ
+      - keycloak
 
-  # timetable.api:
-  #   image: ${DOCKER_REGISTRY-}timetableapi
-  #   build:
-  #     context: ../Services
-  #     dockerfile: Timetable/Timetable.API/Dockerfile
-  #   depends_on:
-  #   - sqlServer
-  #   - rabbitMQ
- 
+  doctors.api:
+    image: ${DOCKER_REGISTRY-}doctorsapi
+    build:
+      context: ../Services
+      dockerfile: Doctors/Doctors.API/Dockerfile
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
+      - ASPNETCORE_HTTP_PORTS=8080
+      - DOTNET_HOSTBUILDER__RELOADCONFIGONCHANGE=false
+    ports:
+      - "5002:8080"
+    restart: on-failure
+    depends_on:
+      - sqlServer
+      - rabbitMQ
+      - keycloak
+
+  timetable.api:
+    image: ${DOCKER_REGISTRY-}timetableapi
+    build:
+      context: ../Services
+      dockerfile: Timetable/Timetable.API/Dockerfile
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
+      - ASPNETCORE_HTTP_PORTS=8080
+      - DOTNET_HOSTBUILDER__RELOADCONFIGONCHANGE=false
+    ports:
+      - "5003:8080"
+    restart: on-failure
+    depends_on:
+      - sqlServer
+      - rabbitMQ
+      - keycloak
+  
   sqlServer:
     image: mcr.microsoft.com/mssql/server:2022-latest
     container_name: sqlServer
     environment:
-     - MSSQL_SA_PASSWORD=P@ssword1
-     - ACCEPT_EULA=Y
+      - MSSQL_SA_PASSWORD=P@ssword1
+      - ACCEPT_EULA=Y
     ports:
-     - 1435:1433
+      - "1435:1433"
 
   rabbitMQ:
     image: rabbitmq:3-management
     container_name: rabbitMq
     ports:
-    - 5672:5672
-    - 15672:15672
+      - "5672:5672"
+      - "15672:15672"
 
   micromed.bff.admin:
     image: ${DOCKER_REGISTRY-}bffadmin
     build:
       context: ..
       dockerfile: BFF/MicroMed.BFF.Admin/Dockerfile
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
+      - ASPNETCORE_HTTP_PORTS=8080
+      - DOTNET_HOSTBUILDER__RELOADCONFIGONCHANGE=false
+    ports:
+      - "6001:8080"
+    restart: on-failure
     depends_on:
-    # - doctors.api
-    - clinics.api
-    # - timetable.api
-    - micromed.identityserver 
+      - doctors.api
+      - clinics.api
+      - timetable.api
+      - keycloak
 
-  micromed.identityserver:
-    image: ${DOCKER_REGISTRY-}micromedidentityserver
-    build:
-      context: ..
-      dockerfile: Auth/MicroMed.IdentityServer/Dockerfile
-    depends_on:
-    - sqlServer
-
+  keycloak:
+    image: quay.io/keycloak/keycloak:latest
+    container_name: keycloak
+    command: start-dev --import-realm
+    environment:
+      - KC_BOOTSTRAP_ADMIN_USERNAME=admin
+      - KC_BOOTSTRAP_ADMIN_PASSWORD=admin
+    volumes:
+      - "./containers/keycloak:/opt/keycloak/data"
+    ports:
+      - "5000:8080"

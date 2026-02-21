@@ -1,6 +1,7 @@
 using Microsoft.EntityFrameworkCore;
 using Shared.API;
 using Shared.Services;
+using Timetable.API;
 using Timetable.Infrastructure;
 using Timetable.Infrastructure.Repositories;
 using Timetable.Services.Repositories;
@@ -8,26 +9,26 @@ using Timetable.Services.Repositories;
 var builder = WebApplication.CreateBuilder(args);
 
 builder.Services
-    .AddEndpointsApiExplorer()
-    .AddOpenApi()
+    .AddScoped<ISurgeryRepository, SurgeryRepository>()
+    .AddScoped<IDoctorsRepository, DoctorsRepository>()
+    .AddScoped<IAppointmentRepository, AppointmentRepository>()
+    .AddScoped<IUnitOfWork>(services => services.GetRequiredService<TimetableDbContext>())
+    .AddMassTransit<TimetableDbContext>(builder.Configuration)
+    .AddSqlConnectionProvider(builder.Configuration)
     .AddMediatRWithTransactionBehavior()
     .AddDbContext<TimetableDbContext>(options =>
     {
         options.UseSqlServer(builder.Configuration.GetConnectionString("SqlServer"));
         options.EnableSensitiveDataLogging();
     })
-    .AddScoped<ISurgeryRepository, SurgeryRepository>()
-    .AddScoped<IDoctorsRepository, DoctorsRepository>()
-    .AddScoped<IAppointmentRepository, AppointmentRepository>()
-    .AddScoped<IUnitOfWork>(services => services.GetRequiredService<TimetableDbContext>())
-    .AddMassTransit<TimetableDbContext>(builder.Configuration);
+    .AddEndpointsApiExplorer()
+    .AddSwagger(builder.Configuration, builder.Environment)
+    .AddAuth(builder.Configuration, builder.Environment);
 
 var app = builder.Build();
 
 if (app.Environment.IsDevelopment())
 {
-    app.UseSwaggerUIWithOpenApi();
-
     await EnsureDbCreated();
 
     async Task EnsureDbCreated()
@@ -39,5 +40,12 @@ if (app.Environment.IsDevelopment())
         await dbContext.Database.EnsureCreatedAsync();
     }
 }
+
+app.UseSwaggerUI();
+app.MapEndpoints();
+
+app
+    .UseAuthentication()
+    .UseAuthorization();
 
 app.Run();

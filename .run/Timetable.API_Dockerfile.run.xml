@@ -1,9 +1,10 @@
 <component name="ProjectRunConfigurationManager">
-  <configuration default="false" name="MicroMed.BFF.Admin/Dockerfile" type="docker-deploy" factoryName="dockerfile" server-name="Podman">
+  <configuration default="false" name="Timetable.API/Dockerfile" type="docker-deploy" factoryName="dockerfile" server-name="Podman">
     <deployment type="dockerfile">
       <settings>
-        <option name="containerName" value="micromed.bff.admin" />
-        <option name="contextFolderPath" value="." />
+        <option name="imageTag" value="timetable" />
+        <option name="containerName" value="timetable.api" />
+        <option name="contextFolderPath" value="Services" />
         <option name="envVars">
           <list>
             <DockerEnvVarImpl>
@@ -16,11 +17,11 @@
           <list>
             <DockerPortBindingImpl>
               <option name="containerPort" value="8080" />
-              <option name="hostPort" value="6001" />
+              <option name="hostPort" value="5004" />
             </DockerPortBindingImpl>
           </list>
         </option>
-        <option name="sourceFilePath" value="BFF/MicroMed.BFF.Admin/Dockerfile" />
+        <option name="sourceFilePath" value="Services/Timetable/Timetable.API/Dockerfile" />
       </settings>
     </deployment>
     <EXTENSION ID="com.jetbrains.rider.docker.debug" isFastModeEnabled="true" isSslEnabled="false" />

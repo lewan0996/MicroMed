@@ -8,26 +8,25 @@ using Shared.Services;
 var builder = WebApplication.CreateBuilder(args);
 
 builder.Services
+    .AddScoped<IDoctorsRepository, DoctorsRepository>()
+    .AddScoped<IUnitOfWork>(services => services.GetRequiredService<DoctorsDbContext>())
+    .AddMassTransit<DoctorsDbContext>(builder.Configuration)
+    .AddSqlConnectionProvider(builder.Configuration)
     .AddMediatRWithTransactionBehavior()
     .AddDbContext<DoctorsDbContext>(options =>
     {
         options.UseSqlServer(builder.Configuration.GetConnectionString("SqlServer"));
         options.EnableSensitiveDataLogging();
     })
-    .AddScoped<IDoctorsRepository, DoctorsRepository>()
-    .AddScoped<IUnitOfWork>(services => services.GetRequiredService<DoctorsDbContext>())
-    .AddMassTransit<DoctorsDbContext>(builder.Configuration)
     .AddEndpointsApiExplorer()
-    .AddOpenApi()
-    .AddSqlConnectionProvider(builder.Configuration);
+    .AddSwagger(builder.Configuration, builder.Environment)
+    .AddAuth(builder.Configuration, builder.Environment);
 
 var app = builder.Build();
 
 if (app.Environment.IsDevelopment())
 {
     await EnsureDbCreated();
-
-    app.UseSwaggerUIWithOpenApi();
 
     async Task EnsureDbCreated()
     {
@@ -39,6 +38,11 @@ if (app.Environment.IsDevelopment())
     }
 }
 
+app.UseSwaggerUI();
 app.MapEndpoints();
+
+app
+    .UseAuthentication()
+    .UseAuthorization();
 
 app.Run();
