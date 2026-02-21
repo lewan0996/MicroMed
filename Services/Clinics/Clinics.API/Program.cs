@@ -9,6 +9,11 @@ using Shared.Services;
 var builder = WebApplication.CreateBuilder(args);
 
 builder.Services
+    .AddScoped<IClinicRepository, ClinicRepository>()
+    .AddScoped<IEquipmentRepository, EquipmentRepository>()
+    .AddScoped<IUnitOfWork>(services => services.GetRequiredService<ClinicsDbContext>())
+    .AddMassTransit<ClinicsDbContext>(builder.Configuration)
+    .AddSqlConnectionProvider(builder.Configuration)
     .AddMediatRWithTransactionBehavior()
     .AddDbContext<ClinicsDbContext>(options =>
     {
@@ -16,20 +21,14 @@ builder.Services
         options.EnableSensitiveDataLogging();
     })
     .AddEndpointsApiExplorer()
-    .AddOpenApi()
-    .AddScoped<IClinicRepository, ClinicRepository>()
-    .AddScoped<IEquipmentRepository, EquipmentRepository>()
-    .AddScoped<IUnitOfWork>(services => services.GetRequiredService<ClinicsDbContext>())
-    .AddMassTransit<ClinicsDbContext>(builder.Configuration)
-    .AddSqlConnectionProvider(builder.Configuration);
+    .AddSwagger(builder.Configuration, builder.Environment)
+    .AddAuth(builder.Configuration, builder.Environment);
 
 var app = builder.Build();
 
 if (app.Environment.IsDevelopment())
 {
     await EnsureDbCreated();
-
-    app.UseSwaggerUIWithOpenApi();
 
     async Task EnsureDbCreated()
     {
@@ -41,6 +40,11 @@ if (app.Environment.IsDevelopment())
     }
 }
 
+app.UseSwaggerUI();
 app.MapEndpoints();
+
+app
+    .UseAuthentication()
+    .UseAuthorization();
 
 app.Run();

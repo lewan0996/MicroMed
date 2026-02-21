@@ -10,7 +10,8 @@ public static class Endpoints
     public static void MapEndpoints(this WebApplication app)
     {
         app.MapGet("Clinics", (IMediator mediator, CancellationToken cancellationToken)
-            => mediator.Send(new ClinicsQuery(), cancellationToken));
+                => mediator.Send(new ClinicsQuery(), cancellationToken))
+            .RequireAuthorization();
 
         app.MapPost("Clinics", async (IMediator mediator, AddClinicRequest request, CancellationToken cancellationToken) =>
         {

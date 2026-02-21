@@ -61,9 +61,12 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "BFF", "BFF", "{4AE98041-E88
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MicroMed.BFF.Admin", "BFF\MicroMed.BFF.Admin\MicroMed.BFF.Admin.csproj", "{75B61574-D414-4DFF-A08A-8B680FC8587C}"
 EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Auth", "Auth", "{EF10BE84-54C9-4897-95F4-47BA8A0E975D}"
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "docs", "docs", "{A467E829-17AC-4C50-A074-2DFE65A02F4B}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MicroMed.IdentityServer", "Auth\MicroMed.IdentityServer\MicroMed.IdentityServer.csproj", "{B310DD10-5EBA-4B51-A707-B0FBD70222F5}"
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "keycloak", "keycloak", "{BD717688-A8CE-434F-A542-BD8E305F58DB}"
+	ProjectSection(SolutionItems) = preProject
+		docs\keycloak\realm-export.md = docs\keycloak\realm-export.md
+	EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -151,10 +154,6 @@ Global
 		{75B61574-D414-4DFF-A08A-8B680FC8587C}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{75B61574-D414-4DFF-A08A-8B680FC8587C}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{75B61574-D414-4DFF-A08A-8B680FC8587C}.Release|Any CPU.Build.0 = Release|Any CPU
-		{B310DD10-5EBA-4B51-A707-B0FBD70222F5}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{B310DD10-5EBA-4B51-A707-B0FBD70222F5}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{B310DD10-5EBA-4B51-A707-B0FBD70222F5}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{B310DD10-5EBA-4B51-A707-B0FBD70222F5}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -186,7 +185,7 @@ Global
 		{8B500CC3-3F91-400A-AC1C-E3D3A8B0574C} = {7AD5B254-8555-4DDA-8F1C-34B6DDE7FF16}
 		{3DB647F3-140C-4450-83CE-60DCCDB26442} = {3F1D7D5D-B370-4420-8910-41991B52E15A}
 		{75B61574-D414-4DFF-A08A-8B680FC8587C} = {4AE98041-E880-49E9-B368-6FFC7B93CE70}
-		{B310DD10-5EBA-4B51-A707-B0FBD70222F5} = {EF10BE84-54C9-4897-95F4-47BA8A0E975D}
+		{BD717688-A8CE-434F-A542-BD8E305F58DB} = {A467E829-17AC-4C50-A074-2DFE65A02F4B}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {91AC8CE2-8495-4A43-B7C6-B9595ECA7EE1}
