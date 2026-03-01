@@ -1,0 +1,14 @@
+<component name="ProjectRunConfigurationManager">
+  <configuration default="false" name="Clinics.DbMigrator/Dockerfile" type="docker-deploy" factoryName="dockerfile" server-name="Podman">
+    <deployment type="dockerfile">
+      <settings>
+        <option name="imageTag" value="clinics.dbmigrator" />
+        <option name="containerName" value="clinics.dbmigrator" />
+        <option name="contextFolderPath" value="Services" />
+        <option name="sourceFilePath" value="Services/Clinics/Clinics.DbMigrator/Dockerfile" />
+      </settings>
+    </deployment>
+    <EXTENSION ID="com.jetbrains.rider.docker.debug" isFastModeEnabled="true" isSslEnabled="false" />
+    <method v="2" />
+  </configuration>
+</component>
