@@ -76,12 +76,12 @@ services:
     healthcheck:
       test: [
         "CMD-SHELL",
-        "/opt/mssql-tools/bin/sqlcmd -S localhost -U sa -P P@ssword1 -Q 'SELECT 1' || exit 1"
+        "/opt/mssql-tools18/bin/sqlcmd -S localhost -U sa -P P@ssword1 -C -Q 'SELECT 1' || exit 1" # -C trust server cert, -Q - query
       ]
       interval: 5s
       timeout: 3s
       retries: 20
-      start_period: 20s
+      start_period: 5s
 
   rabbitMQ:
     image: rabbitmq:3-management
