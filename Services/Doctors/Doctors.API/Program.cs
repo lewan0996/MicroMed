@@ -24,20 +24,6 @@ builder.Services
 
 var app = builder.Build();
 
-if (app.Environment.IsDevelopment())
-{
-    await EnsureDbCreated();
-
-    async Task EnsureDbCreated()
-    {
-        using var scope = app.Services.CreateScope();
-
-        var dbContext = scope.ServiceProvider.GetRequiredService<DoctorsDbContext>();
-
-        await dbContext.Database.EnsureCreatedAsync();
-    }
-}
-
 app.UseSwaggerUI();
 app.MapEndpoints();
 

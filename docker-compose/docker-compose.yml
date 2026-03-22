@@ -31,6 +31,16 @@ services:
       sqlServer:
         condition: service_healthy
 
+  doctors.migrator:
+    image: ${DOCKER_REGISTRY-}doctorsdbmigrator
+    build:
+      context: ../Services
+      dockerfile: Doctors/Doctors.DbMigrator/Dockerfile
+    restart: no
+    depends_on:
+      sqlServer:
+        condition: service_healthy
+
   doctors.api:
     image: ${DOCKER_REGISTRY-}doctorsapi
     build:
