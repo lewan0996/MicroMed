@@ -22,12 +22,10 @@ services:
         condition: service_started
   
   clinics.migrator:
-    image: ${DOCKER_REGISTRY-}clinicsmigrator
+    image: ${DOCKER_REGISTRY-}clinicsdbmigrator
     build:
       context: ../Services
-      dockerfile: Clinics/Clinics.Migrator/Dockerfile
-    environment:
-
+      dockerfile: Clinics/Clinics.DbMigrator/Dockerfile
     restart: no
     depends_on:
       sqlServer:

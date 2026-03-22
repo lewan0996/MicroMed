@@ -1,28 +1,12 @@
 ﻿using Clinics.Infrastructure;
-using Microsoft.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore.Design;
-using Microsoft.Extensions.Configuration;
+using Shared.Infrastructure;
 
-var configuration = new ConfigurationBuilder()
-    .AddJsonFile("appsettings.Development.json")
-    .AddEnvironmentVariables()
-    .Build();
+await using var migrator = new DbMigrator<ClinicsDbContext>(Consts.Assembly);
+await migrator.MigrateAsync();
 
-var options = new DbContextOptionsBuilder<ClinicsDbContext>()
-    .UseSqlServer(configuration.GetConnectionString("SqlServer"))
-    .Options;
-
-await using var context = new ClinicsDbContext(options);
-await context.Database.MigrateAsync();
-
-public class ClinicsDbContextFactory : IDesignTimeDbContextFactory<ClinicsDbContext>
+public static class Consts
 {
-    public ClinicsDbContext CreateDbContext(string[] args)
-    {
-        var options = new DbContextOptionsBuilder<ClinicsDbContext>()
-            .UseSqlServer(b => b.MigrationsAssembly("Clinics.DbMigrator"))
-            .Options;
-
-        return new ClinicsDbContext(options);
-    }
+    public const string Assembly = "Clinics.DbMigrator";
 }
+
+public class ClinicsDbContextFactory() : DbContextFactory<ClinicsDbContext>(Consts.Assembly);
