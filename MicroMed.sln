@@ -1,5 +1,4 @@
-﻿
-Microsoft Visual Studio Solution File, Format Version 12.00
+﻿Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.6.33815.320
 MinimumVisualStudioVersion = 10.0.40219.1
@@ -66,11 +65,14 @@ EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "keycloak", "keycloak", "{BD717688-A8CE-434F-A542-BD8E305F58DB}"
 	ProjectSection(SolutionItems) = preProject
 		docs\keycloak\realm-export.md = docs\keycloak\realm-export.md
+		docs\keycloak\test-users.md = docs\keycloak\test-users.md
 	EndProjectSection
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Clinics.DbMigrator", "Services\Clinics\Clinics.DbMigrator\Clinics.DbMigrator.csproj", "{09FFD51F-8D61-4F2E-A7F5-E03E75F0D230}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Doctors.DbMigrator", "Services\Doctors\Doctors.DbMigrator\Doctors.DbMigrator.csproj", "{9522693C-E48F-470B-8F3F-CFC693EB49EC}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Timetable.DbMigrator", "Services\Timetable\Timetable.DbMigrator\Timetable.DbMigrator.csproj", "{4F84DB70-EA5F-45D1-AA6B-35291F06BD41}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -166,6 +168,10 @@ Global
 		{9522693C-E48F-470B-8F3F-CFC693EB49EC}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{9522693C-E48F-470B-8F3F-CFC693EB49EC}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{9522693C-E48F-470B-8F3F-CFC693EB49EC}.Release|Any CPU.Build.0 = Release|Any CPU
+		{4F84DB70-EA5F-45D1-AA6B-35291F06BD41}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{4F84DB70-EA5F-45D1-AA6B-35291F06BD41}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{4F84DB70-EA5F-45D1-AA6B-35291F06BD41}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{4F84DB70-EA5F-45D1-AA6B-35291F06BD41}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -200,6 +206,7 @@ Global
 		{BD717688-A8CE-434F-A542-BD8E305F58DB} = {A467E829-17AC-4C50-A074-2DFE65A02F4B}
 		{09FFD51F-8D61-4F2E-A7F5-E03E75F0D230} = {3F1D7D5D-B370-4420-8910-41991B52E15A}
 		{9522693C-E48F-470B-8F3F-CFC693EB49EC} = {5B6B416C-C0BA-4AAD-A5BF-9010D0BC585D}
+		{4F84DB70-EA5F-45D1-AA6B-35291F06BD41} = {7AD5B254-8555-4DDA-8F1C-34B6DDE7FF16}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {91AC8CE2-8495-4A43-B7C6-B9595ECA7EE1}

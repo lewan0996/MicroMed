@@ -1,4 +1,6 @@
-version: '3.4'
+version: '3.8'
+
+# dependency graph does not work reliably with podman - dependency on migrators are thus disabled
 
 services:
   clinics.api:
@@ -14,8 +16,8 @@ services:
       - "5001:8080"
     restart: on-failure
     depends_on:
-      clinics.migrator:
-        condition: service_completed_successfully
+#      clinics.migrator:
+#        condition: service_completed_successfully
       rabbitMQ:
         condition: service_started
       keycloak:
@@ -26,17 +28,7 @@ services:
     build:
       context: ../Services
       dockerfile: Clinics/Clinics.DbMigrator/Dockerfile
-    restart: no
-    depends_on:
-      sqlServer:
-        condition: service_healthy
-
-  doctors.migrator:
-    image: ${DOCKER_REGISTRY-}doctorsdbmigrator
-    build:
-      context: ../Services
-      dockerfile: Doctors/Doctors.DbMigrator/Dockerfile
-    restart: no
+    restart:  on-failure
     depends_on:
       sqlServer:
         condition: service_healthy
@@ -54,9 +46,22 @@ services:
       - "5002:8080"
     restart: on-failure
     depends_on:
-      - sqlServer
-      - rabbitMQ
-      - keycloak
+#      doctors.migrator:
+#        condition: service_completed_successfully
+      rabbitMQ:
+        condition: service_started
+      keycloak:
+        condition: service_started
+        
+  doctors.migrator:
+    image: ${DOCKER_REGISTRY-}doctorsdbmigrator
+    build:
+      context: ../Services
+      dockerfile: Doctors/Doctors.DbMigrator/Dockerfile
+    restart: on-failure
+    depends_on:
+      sqlServer:
+        condition: service_healthy
 
   timetable.api:
     image: ${DOCKER_REGISTRY-}timetableapi
@@ -71,13 +76,25 @@ services:
       - "5003:8080"
     restart: on-failure
     depends_on:
-      - sqlServer
-      - rabbitMQ
-      - keycloak
+#      timetable.migrator:
+#        condition: service_completed_successfully
+      rabbitMQ:
+        condition: service_started
+      keycloak:
+        condition: service_started
+        
+  timetable.migrator:
+    image: ${DOCKER_REGISTRY-}timetabledbmigrator
+    build:
+      context: ../Services
+      dockerfile: Timetable/Timetable.DbMigrator/Dockerfile
+    restart: on-failure
+    depends_on:
+      sqlServer:
+        condition: service_healthy
   
   sqlServer:
     image: mcr.microsoft.com/mssql/server:2022-latest
-    container_name: sqlServer
     environment:
       - MSSQL_SA_PASSWORD=P@ssword1
       - ACCEPT_EULA=Y
@@ -95,7 +112,6 @@ services:
 
   rabbitMQ:
     image: rabbitmq:3-management
-    container_name: rabbitMq
     ports:
       - "5672:5672"
       - "15672:15672"
@@ -120,12 +136,11 @@ services:
 
   keycloak:
     image: quay.io/keycloak/keycloak:latest
-    container_name: keycloak
     command: start-dev --import-realm
     environment:
       - KC_BOOTSTRAP_ADMIN_USERNAME=admin
       - KC_BOOTSTRAP_ADMIN_PASSWORD=admin
     volumes:
-      - "./containers/keycloak:/opt/keycloak/data"
+      - "./containers/keycloak/import:/opt/keycloak/data/import:ro"
     ports:
       - "5000:8080"
