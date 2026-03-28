@@ -14,7 +14,11 @@ public class DbMigrator<TDbContext> : IAsyncDisposable where TDbContext : DbCont
         _dbContext = factory.CreateDbContext([]);
     }
     
-    public async Task MigrateAsync() => await _dbContext.Database.MigrateAsync();
+    public async Task MigrateAsync()
+    {
+        await _dbContext.Database.MigrateAsync();
+        Console.WriteLine("Database migration completed successfully.");
+    }
 
     public ValueTask DisposeAsync() => _dbContext.DisposeAsync();
 }
@@ -31,7 +35,11 @@ public class DbContextFactory<TDbContext>(string migrationsAssembly)
 
         var options = new DbContextOptionsBuilder<TDbContext>()
             .UseSqlServer(configuration.GetConnectionString("SqlServer"),
-                b => b.MigrationsAssembly(migrationsAssembly))
+                b =>
+                {
+                    b.MigrationsAssembly(migrationsAssembly);
+                    b.EnableRetryOnFailure();
+                })
             .Options;
 
         return (TDbContext)Activator.CreateInstance(typeof(TDbContext), options)!;
