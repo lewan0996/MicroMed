@@ -6,7 +6,7 @@ using Shared.Services;
 
 namespace Clinics.Services.Commands;
 
-public record AddClinicCommand(ClinicName Name, Address Address) : IRequest<int>
+public record AddClinicCommand(ClinicName Name, Address Address) : IRequest<Guid>
 {
     public AddClinicCommand(string name, string city, string street, string streetNumber, string additionalInfo)
         : this(
@@ -33,23 +33,15 @@ public record AddClinicCommand(ClinicName Name, Address Address) : IRequest<int>
     { }
 }
 
-public class AddClinicCommandHandler : IRequestHandler<AddClinicCommand, int>
+public class AddClinicCommandHandler(IClinicRepository clinicRepository, IUnitOfWork unitOfWork)
+    : IRequestHandler<AddClinicCommand, Guid>
 {
-    private readonly IClinicRepository _clinicRepository;
-    private readonly IUnitOfWork _unitOfWork;
-
-    public AddClinicCommandHandler(IClinicRepository clinicRepository, IUnitOfWork unitOfWork)
-    {
-        _clinicRepository = clinicRepository;
-        _unitOfWork = unitOfWork;
-    }
-
-    public async Task<int> Handle(AddClinicCommand request, CancellationToken cancellationToken)
+    public async Task<Guid> Handle(AddClinicCommand request, CancellationToken cancellationToken)
     {
         var clinic = new Clinic(request.Name, request.Address);
 
-        await _clinicRepository.AddAsync(clinic, cancellationToken);
-        await _unitOfWork.SaveChangesAsync(cancellationToken);
+        await clinicRepository.AddAsync(clinic, cancellationToken);
+        await unitOfWork.SaveChangesAsync(cancellationToken);
 
         return clinic.Id;
     }

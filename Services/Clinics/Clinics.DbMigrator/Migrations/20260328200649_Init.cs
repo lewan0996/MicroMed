@@ -3,7 +3,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 #nullable disable
 
-namespace Timetable.DbMigrator.Migrations
+namespace Clinics.DbMigrator.Migrations
 {
     /// <inheritdoc />
     public partial class Init : Migration
@@ -12,17 +12,31 @@ namespace Timetable.DbMigrator.Migrations
         protected override void Up(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.CreateTable(
-                name: "Doctors",
+                name: "Clinics",
                 columns: table => new
                 {
-                    Id = table.Column<int>(type: "int", nullable: false),
-                    Specialty = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    FirstName = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    LastName = table.Column<string>(type: "nvarchar(max)", nullable: false)
+                    Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    Name = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    AdditionalInfo = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    City = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    StreetNumber = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Street = table.Column<string>(type: "nvarchar(max)", nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Doctors", x => x.Id);
+                    table.PrimaryKey("PK_Clinics", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "Equipment",
+                columns: table => new
+                {
+                    Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    Name = table.Column<string>(type: "nvarchar(max)", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Equipment", x => x.Id);
                 });
 
             migrationBuilder.CreateTable(
@@ -68,13 +82,19 @@ namespace Timetable.DbMigrator.Migrations
                 name: "Surgeries",
                 columns: table => new
                 {
-                    Id = table.Column<int>(type: "int", nullable: false),
+                    Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    ClinicId = table.Column<Guid>(type: "uniqueidentifier", nullable: true),
                     Floor = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     Number = table.Column<string>(type: "nvarchar(max)", nullable: false)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Surgeries", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_Surgeries_Clinics_ClinicId",
+                        column: x => x.ClinicId,
+                        principalTable: "Clinics",
+                        principalColumn: "Id");
                 });
 
             migrationBuilder.CreateTable(
@@ -120,42 +140,28 @@ namespace Timetable.DbMigrator.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "Appointments",
+                name: "SurgeryEquipment",
                 columns: table => new
                 {
-                    Id = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    DoctorId = table.Column<int>(type: "int", nullable: false),
-                    SurgeryId = table.Column<int>(type: "int", nullable: false),
-                    Date_DateTime = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    Date_DurationMinutes = table.Column<int>(type: "int", nullable: false)
+                    AvailableEquipmentId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    SurgeryId = table.Column<Guid>(type: "uniqueidentifier", nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Appointments", x => x.Id);
+                    table.PrimaryKey("PK_SurgeryEquipment", x => new { x.AvailableEquipmentId, x.SurgeryId });
                     table.ForeignKey(
-                        name: "FK_Appointments_Doctors_DoctorId",
-                        column: x => x.DoctorId,
-                        principalTable: "Doctors",
+                        name: "FK_SurgeryEquipment_Equipment_AvailableEquipmentId",
+                        column: x => x.AvailableEquipmentId,
+                        principalTable: "Equipment",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
-                        name: "FK_Appointments_Surgeries_SurgeryId",
+                        name: "FK_SurgeryEquipment_Surgeries_SurgeryId",
                         column: x => x.SurgeryId,
                         principalTable: "Surgeries",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                 });
-
-            migrationBuilder.CreateIndex(
-                name: "IX_Appointments_DoctorId",
-                table: "Appointments",
-                column: "DoctorId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_Appointments_SurgeryId",
-                table: "Appointments",
-                column: "SurgeryId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_InboxState_Delivered",
@@ -190,28 +196,41 @@ namespace Timetable.DbMigrator.Migrations
                 name: "IX_OutboxState_Created",
                 table: "OutboxState",
                 column: "Created");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Surgeries_ClinicId",
+                table: "Surgeries",
+                column: "ClinicId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_SurgeryEquipment_SurgeryId",
+                table: "SurgeryEquipment",
+                column: "SurgeryId");
         }
 
         /// <inheritdoc />
         protected override void Down(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DropTable(
-                name: "Appointments");
-
-            migrationBuilder.DropTable(
                 name: "OutboxMessage");
 
             migrationBuilder.DropTable(
-                name: "Doctors");
-
-            migrationBuilder.DropTable(
-                name: "Surgeries");
+                name: "SurgeryEquipment");
 
             migrationBuilder.DropTable(
                 name: "InboxState");
 
             migrationBuilder.DropTable(
                 name: "OutboxState");
+
+            migrationBuilder.DropTable(
+                name: "Equipment");
+
+            migrationBuilder.DropTable(
+                name: "Surgeries");
+
+            migrationBuilder.DropTable(
+                name: "Clinics");
         }
     }
 }

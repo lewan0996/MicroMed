@@ -1,3 +1,3 @@
 namespace Clinics.Contracts.Dto;
 
-public record UpdateSurgeryRequest(string Number, string Floor, IReadOnlyList<int> EquipmentIds);
+public record UpdateSurgeryRequest(string Number, string Floor, IReadOnlyList<Guid> EquipmentIds);

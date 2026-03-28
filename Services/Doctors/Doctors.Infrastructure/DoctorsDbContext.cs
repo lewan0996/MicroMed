@@ -15,7 +15,7 @@ public class DoctorsDbContext(DbContextOptions<DoctorsDbContext> options) : DbCo
 
         doctorsBuilder.ToTable("Doctors");
 
-        doctorsBuilder.Property(x => x.Id).UseHiLo("doctoridseq");
+        doctorsBuilder.HasKey(x => x.Id);
 
         doctorsBuilder.ComplexProperty(x => x.Name, x =>
         {

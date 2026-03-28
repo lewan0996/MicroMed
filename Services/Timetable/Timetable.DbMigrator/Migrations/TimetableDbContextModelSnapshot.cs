@@ -195,17 +195,15 @@ namespace Timetable.DbMigrator.Migrations
 
             modelBuilder.Entity("Timetable.Domain.AppointmentAggregate.Appointment", b =>
                 {
-                    b.Property<int>("Id")
+                    b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
+                        .HasColumnType("uniqueidentifier");
 
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+                    b.Property<Guid>("DoctorId")
+                        .HasColumnType("uniqueidentifier");
 
-                    b.Property<int>("DoctorId")
-                        .HasColumnType("int");
-
-                    b.Property<int>("SurgeryId")
-                        .HasColumnType("int");
+                    b.Property<Guid>("SurgeryId")
+                        .HasColumnType("uniqueidentifier");
 
                     b.ComplexProperty(typeof(Dictionary<string, object>), "Date", "Timetable.Domain.AppointmentAggregate.Appointment.Date#AppointmentDate", b1 =>
                         {
@@ -229,8 +227,8 @@ namespace Timetable.DbMigrator.Migrations
 
             modelBuilder.Entity("Timetable.Domain.DoctorAggregate.Doctor", b =>
                 {
-                    b.Property<int>("Id")
-                        .HasColumnType("int");
+                    b.Property<Guid>("Id")
+                        .HasColumnType("uniqueidentifier");
 
                     b.Property<string>("Specialty")
                         .IsRequired()
@@ -258,8 +256,8 @@ namespace Timetable.DbMigrator.Migrations
 
             modelBuilder.Entity("Timetable.Domain.SurgeryAggregate.Surgery", b =>
                 {
-                    b.Property<int>("Id")
-                        .HasColumnType("int");
+                    b.Property<Guid>("Id")
+                        .HasColumnType("uniqueidentifier");
 
                     b.Property<string>("Floor")
                         .IsRequired()

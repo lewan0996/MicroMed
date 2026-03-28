@@ -8,7 +8,7 @@ using Shared.Services;
 
 namespace Doctors.Services;
 
-public record RegisterDoctorCommand(Name Name, Specialty Specialty) : IRequest<int>
+public record RegisterDoctorCommand(Name Name, Specialty Specialty) : IRequest<Guid>
 {
     public RegisterDoctorCommand(string firstName, string lastName, int specialtyId) 
         : this(new Name(firstName, lastName), Specialty.Get(specialtyId)) { }
@@ -17,28 +17,21 @@ public record RegisterDoctorCommand(Name Name, Specialty Specialty) : IRequest<i
         : this(new Name(dto.FirstName, dto.LastName), Specialty.Get(dto.SpecialtyId)) { }
 }
 
-public class RegisterDoctorCommandHandler : IRequestHandler<RegisterDoctorCommand, int>
+public class RegisterDoctorCommandHandler(
+    IDoctorsRepository doctorsRepository,
+    IUnitOfWork unitOfWork,
+    IPublishEndpoint publishEndpoint)
+    : IRequestHandler<RegisterDoctorCommand, Guid>
 {
-    private readonly IDoctorsRepository _doctorsRepository;
-    private readonly IUnitOfWork _unitOfWork;
-    private readonly IPublishEndpoint _publishEndpoint;
-
-    public RegisterDoctorCommandHandler(IDoctorsRepository doctorsRepository, IUnitOfWork unitOfWork, IPublishEndpoint publishEndpoint)
-    {
-        _doctorsRepository = doctorsRepository;
-        _unitOfWork = unitOfWork;
-        _publishEndpoint = publishEndpoint;
-    }
-
-    public async Task<int> Handle(RegisterDoctorCommand request, CancellationToken cancellationToken)
+    public async Task<Guid> Handle(RegisterDoctorCommand request, CancellationToken cancellationToken)
     {
         var doctor = new Doctor(request.Name, request.Specialty);
 
-        await _doctorsRepository.AddDoctorAsync(doctor, cancellationToken);
+        await doctorsRepository.AddDoctorAsync(doctor, cancellationToken);
 
-        await _publishEndpoint.Publish(new DoctorRegisteredEvent(doctor.Id, doctor.Name.FirstName, doctor.Name.LastName, doctor.Specialty.Id), cancellationToken: cancellationToken);
+        await publishEndpoint.Publish(new DoctorRegisteredEvent(doctor.Id, doctor.Name.FirstName, doctor.Name.LastName, doctor.Specialty.Id), cancellationToken: cancellationToken);
 
-        await _unitOfWork.SaveChangesAsync(cancellationToken);
+        await unitOfWork.SaveChangesAsync(cancellationToken);
 
         return doctor.Id;
     }

@@ -6,31 +6,23 @@ using Shared.Services;
 
 namespace Clinics.Services.Commands;
 
-public record AddSurgeryEquipmentCommand(EquipmentName Name) : IRequest<int>
+public record AddSurgeryEquipmentCommand(EquipmentName Name) : IRequest<Guid>
 {
     public AddSurgeryEquipmentCommand(string name) : this(new EquipmentName(name)) { }
     
     public AddSurgeryEquipmentCommand(AddSurgeryEquipmentRequest request) : this(new EquipmentName(request.Name)) { }
 }
 
-public class AddSurgeryEquipmentCommandHandler : IRequestHandler<AddSurgeryEquipmentCommand, int>
+public class AddSurgeryEquipmentCommandHandler(IEquipmentRepository equipmentRepository, IUnitOfWork unitOfWork)
+    : IRequestHandler<AddSurgeryEquipmentCommand, Guid>
 {
-    private readonly IEquipmentRepository _equipmentRepository;
-    private readonly IUnitOfWork _unitOfWork;
-
-    public AddSurgeryEquipmentCommandHandler(IEquipmentRepository equipmentRepository, IUnitOfWork unitOfWork)
-    {
-        _equipmentRepository = equipmentRepository;
-        _unitOfWork = unitOfWork;
-    }
-
-    public async Task<int> Handle(AddSurgeryEquipmentCommand request, CancellationToken cancellationToken)
+    public async Task<Guid> Handle(AddSurgeryEquipmentCommand request, CancellationToken cancellationToken)
     {
         var equipment = new Equipment(request.Name);
 
-        await _equipmentRepository.AddAsync(equipment, cancellationToken);
+        await equipmentRepository.AddAsync(equipment, cancellationToken);
 
-        await _unitOfWork.SaveChangesAsync(cancellationToken);
+        await unitOfWork.SaveChangesAsync(cancellationToken);
 
         return equipment.Id;
     }

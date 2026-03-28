@@ -16,7 +16,7 @@ public class ClinicsDbContext(DbContextOptions<ClinicsDbContext> options) : DbCo
 
         clinicsBuilder.ToTable("Clinics");
 
-        clinicsBuilder.Property(x => x.Id).UseHiLo("clinicidseq");
+        clinicsBuilder.HasKey(x => x.Id);
 
         clinicsBuilder.HasStringValueObject(x => x.Name);
 
@@ -42,13 +42,13 @@ public class ClinicsDbContext(DbContextOptions<ClinicsDbContext> options) : DbCo
             })
             .HasMany(x => x.AvailableEquipment).WithMany().UsingEntity(x => x.ToTable("SurgeryEquipment"));
 
-        surgeryBuilder.Property(x => x.Id).UseHiLo("surgeryidseq");
+        surgeryBuilder.HasKey(x => x.Id);
 
         var equipmentBuilder = modelBuilder.Entity<Equipment>();
 
         equipmentBuilder.ToTable("Equipment");
 
-        equipmentBuilder.Property(x => x.Id).UseHiLo("equipmentidseq");
+        equipmentBuilder.HasKey(x => x.Id);
 
         equipmentBuilder.HasStringValueObject(x => x.Name);
 

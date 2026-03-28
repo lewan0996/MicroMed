@@ -13,7 +13,7 @@ public static class ModelBuilderExtensions
         Expression<Func<TEntity, TStringValueObject>> navigationExpression,
         string? columnName = null) where TStringValueObject : StringValueObject where TEntity : notnull
     {
-        var ctor = typeof(TStringValueObject).GetConstructor(new[] { typeof(string) })!;
+        var ctor = typeof(TStringValueObject).GetConstructor([typeof(string)])!;
 
         return builder
             .Property(navigationExpression)
@@ -26,7 +26,7 @@ public static class ModelBuilderExtensions
         Expression<Func<TEntity, TStringValueObject>> navigationExpression,
         string? columnName = null) where TStringValueObject : StringValueObject where TEntity: class
     {
-        var ctor = typeof(TStringValueObject).GetConstructor(new[] { typeof(string) })!;
+        var ctor = typeof(TStringValueObject).GetConstructor([typeof(string)])!;
 
         return builder
             .Property(navigationExpression)

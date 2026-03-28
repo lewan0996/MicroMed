@@ -11,15 +11,11 @@ namespace Doctors.DbMigrator.Migrations
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
         {
-            migrationBuilder.CreateSequence(
-                name: "doctoridseq",
-                incrementBy: 10);
-
             migrationBuilder.CreateTable(
                 name: "Doctors",
                 columns: table => new
                 {
-                    Id = table.Column<int>(type: "int", nullable: false),
+                    Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     Specialty = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     FirstName = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     LastName = table.Column<string>(type: "nvarchar(max)", nullable: false)
@@ -159,9 +155,6 @@ namespace Doctors.DbMigrator.Migrations
 
             migrationBuilder.DropTable(
                 name: "OutboxState");
-
-            migrationBuilder.DropSequence(
-                name: "doctoridseq");
         }
     }
 }

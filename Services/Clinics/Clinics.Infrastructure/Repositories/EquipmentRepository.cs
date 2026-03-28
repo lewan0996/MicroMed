@@ -5,26 +5,18 @@ using Shared.Domain.Exceptions;
 
 namespace Clinics.Infrastructure.Repositories;
 
-public class EquipmentRepository : IEquipmentRepository
+public class EquipmentRepository(ClinicsDbContext dbContext) : IEquipmentRepository
 {
-    private readonly ClinicsDbContext _dbContext;
+    public async Task AddAsync(Equipment equipment, CancellationToken cancellationToken) => await dbContext.AddAsync(equipment, cancellationToken);
 
-    public EquipmentRepository(ClinicsDbContext dbContext)
+    public async Task<IReadOnlyList<Equipment>> GetEquipmentAsync(IEnumerable<Guid> ids, CancellationToken cancellationToken)
     {
-        _dbContext = dbContext;
-    }
-
-    public async Task AddAsync(Equipment equipment, CancellationToken cancellationToken) => await _dbContext.AddAsync(equipment, cancellationToken);
-
-    public async Task<IReadOnlyList<Equipment>> GetEquipmentAsync(IEnumerable<int> ids, CancellationToken cancellationToken)
-    {
-        var result = await _dbContext.Equipment.Where(x => ids.Contains(x.Id)).ToListAsync(cancellationToken);
+        var result = await dbContext.Equipment.Where(x => ids.Contains(x.Id)).ToListAsync(cancellationToken);
 
         var notFoundEquipmentIds = ids.Where(id => result.All(y => y.Id != id)).ToList();
 
-        if (notFoundEquipmentIds.Any())
-            throw new ObjectNotFoundException($"Equipment of ids {string.Join(", ", notFoundEquipmentIds)} not found");
-
-        return result.ToList();
+        return notFoundEquipmentIds.Count > 0 
+            ? throw new ObjectNotFoundException($"Equipment of ids {string.Join(", ", notFoundEquipmentIds)} not found") 
+            : result.ToList();
     }
 }

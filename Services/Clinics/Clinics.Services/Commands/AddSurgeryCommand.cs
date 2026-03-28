@@ -8,12 +8,12 @@ using Shared.Services;
 
 namespace Clinics.Services.Commands;
 
-public record AddSurgeryCommand(int ClinicId, SurgeryNumber Number, SurgeryFloor Floor, IReadOnlyList<int> EquipmentIds) : IRequest<int>
+public record AddSurgeryCommand(Guid ClinicId, SurgeryNumber Number, SurgeryFloor Floor, IReadOnlyList<Guid> EquipmentIds) : IRequest<Guid>
 {
-    public AddSurgeryCommand(int clinicId, string number, string floor, IReadOnlyList<int> equipmentIds)
+    public AddSurgeryCommand(Guid clinicId, string number, string floor, IReadOnlyList<Guid> equipmentIds)
         : this(clinicId, new SurgeryNumber(number), new SurgeryFloor(floor), equipmentIds) { }
     
-    public AddSurgeryCommand(int clinicId, AddSurgeryRequest request)
+    public AddSurgeryCommand(Guid clinicId, AddSurgeryRequest request)
         : this(clinicId, new SurgeryNumber(request.Number), new SurgeryFloor(request.Floor), request.EquipmentIds) { }
 }
 
@@ -22,9 +22,9 @@ public class AddSurgeryCommandHandler(
     IEquipmentRepository equipmentRepository,
     IUnitOfWork unitOfWork,
     IPublishEndpoint publishEndpoint)
-    : IRequestHandler<AddSurgeryCommand, int>
+    : IRequestHandler<AddSurgeryCommand, Guid>
 {
-    public async Task<int> Handle(AddSurgeryCommand request, CancellationToken cancellationToken)
+    public async Task<Guid> Handle(AddSurgeryCommand request, CancellationToken cancellationToken)
     {
         var clinic = await clinicRepository.GetAsync(request.ClinicId, cancellationToken);
 

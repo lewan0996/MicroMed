@@ -1,3 +1,3 @@
 ﻿namespace Doctors.Contracts;
 
-public record DoctorRegisteredEvent(int Id, string FirstName, string LastName, int SpecialtyId);
+public record DoctorRegisteredEvent(Guid Id, string FirstName, string LastName, int SpecialtyId);

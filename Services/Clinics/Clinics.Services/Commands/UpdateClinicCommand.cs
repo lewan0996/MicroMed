@@ -6,9 +6,9 @@ using Shared.Services;
 
 namespace Clinics.Services.Commands;
 
-public record UpdateClinicCommand(int ClinicId, ClinicName Name, Address Address) : IRequest
+public record UpdateClinicCommand(Guid ClinicId, ClinicName Name, Address Address) : IRequest
 {
-    public UpdateClinicCommand(int clinicId, string name, string city, string street, string streetNumber, string additionalInfo)
+    public UpdateClinicCommand(Guid clinicId, string name, string city, string street, string streetNumber, string additionalInfo)
         : this(
             clinicId,
             new ClinicName(name),
@@ -21,7 +21,7 @@ public record UpdateClinicCommand(int ClinicId, ClinicName Name, Address Address
         )
     { }
     
-    public UpdateClinicCommand(int clinicId, UpdateClinicRequest request)
+    public UpdateClinicCommand(Guid clinicId, UpdateClinicRequest request)
         : this(
             clinicId,
             new ClinicName(request.Name),
@@ -35,23 +35,15 @@ public record UpdateClinicCommand(int ClinicId, ClinicName Name, Address Address
     { }
 }
 
-public class UpdateClinicCommandHandler : IRequestHandler<UpdateClinicCommand>
+public class UpdateClinicCommandHandler(IClinicRepository clinicRepository, IUnitOfWork unitOfWork)
+    : IRequestHandler<UpdateClinicCommand>
 {
-    private readonly IClinicRepository _clinicRepository;
-    private readonly IUnitOfWork _unitOfWork;
-
-    public UpdateClinicCommandHandler(IClinicRepository clinicRepository, IUnitOfWork unitOfWork)
-    {
-        _clinicRepository = clinicRepository;
-        _unitOfWork = unitOfWork;
-    }
-
     public async Task Handle(UpdateClinicCommand request, CancellationToken cancellationToken)
     {
-        var clinic = await _clinicRepository.GetAsync(request.ClinicId, cancellationToken);
+        var clinic = await clinicRepository.GetAsync(request.ClinicId, cancellationToken);
 
         clinic.Update(request.Name, request.Address);
 
-        await _unitOfWork.SaveChangesAsync(cancellationToken);
+        await unitOfWork.SaveChangesAsync(cancellationToken);
     }
 }

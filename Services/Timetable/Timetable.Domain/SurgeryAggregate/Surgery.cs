@@ -8,7 +8,7 @@ public class Surgery : Entity
     public string Floor { get; private set; }
     public string Number { get; private set; }
 
-    public Surgery(int id, string floor, string number) : base(id) => (Floor, Number) = (floor, number);
+    public Surgery(Guid id, string floor, string number) : base(id) => (Floor, Number) = (floor, number);
     
 
     protected Surgery() { }

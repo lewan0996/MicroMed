@@ -19,29 +19,29 @@ public static class Endpoints
             return Results.Ok(new AddClinicResponse(result)); // todo change to Created
         });
 
-        app.MapPut("Clinics/{clinicId:int}", async (IMediator mediator, int clinicId, UpdateClinicRequest request) =>
+        app.MapPut("Clinics/{clinicId:guid}", async (IMediator mediator, Guid clinicId, UpdateClinicRequest request) =>
         {
             await mediator.Send(new UpdateClinicCommand(clinicId, request));
             return Results.NoContent();
         });
 
-        app.MapPost("Clinics/{clinicId:int}/Surgeries",
-            async (IMediator mediator, int clinicId, AddSurgeryRequest request, CancellationToken cancellationToken) =>
+        app.MapPost("Clinics/{clinicId:guid}/Surgeries",
+            async (IMediator mediator, Guid clinicId, AddSurgeryRequest request, CancellationToken cancellationToken) =>
             {
                 var result = await mediator.Send(new AddSurgeryCommand(clinicId, request), cancellationToken);
                 return Results.Ok(new AddSurgeryResponse(result)); // todo change to Created
             });
 
-        app.MapPut("Clinics/{clinicId:int}/Surgeries/{surgeryId:int}",
-            async (IMediator mediator, int clinicId, int surgeryId, UpdateSurgeryRequest request,
+        app.MapPut("Clinics/{clinicId:guid}/Surgeries/{surgeryId:guid}",
+            async (IMediator mediator, Guid clinicId, Guid surgeryId, UpdateSurgeryRequest request,
                 CancellationToken cancellationToken) =>
             {
                 await mediator.Send(new UpdateSurgeryCommand(clinicId, surgeryId, request), cancellationToken);
                 return Results.NoContent();
             });
 
-        app.MapDelete("Clinics/{clinicId:int}/Surgeries/{surgeryId:int}",
-            async (IMediator mediator, int clinicId, int surgeryId, CancellationToken cancellationToken) =>
+        app.MapDelete("Clinics/{clinicId:guid}/Surgeries/{surgeryId:guid}",
+            async (IMediator mediator, Guid clinicId, Guid surgeryId, CancellationToken cancellationToken) =>
             {
                 await mediator.Send(new RemoveSurgeryCommand(clinicId, surgeryId), cancellationToken);
                 return Results.NoContent();

@@ -6,30 +6,23 @@ using Shared.Services;
 
 namespace Clinics.Services.Commands;
 
-public record RemoveSurgeryCommand(int ClinicId, int SurgeryId) : IRequest;
+public record RemoveSurgeryCommand(Guid ClinicId, Guid SurgeryId) : IRequest;
 
-public class RemoveSurgeryCommandHandler : IRequestHandler<RemoveSurgeryCommand>
+public class RemoveSurgeryCommandHandler(
+    IClinicRepository clinicRepository,
+    IUnitOfWork unitOfWork,
+    IPublishEndpoint publishEndpoint)
+    : IRequestHandler<RemoveSurgeryCommand>
 {
-    private readonly IClinicRepository _clinicRepository;
-    private readonly IUnitOfWork _unitOfWork;
-    private readonly IPublishEndpoint _publishEndpoint;
-
-    public RemoveSurgeryCommandHandler(IClinicRepository clinicRepository, IUnitOfWork unitOfWork, IPublishEndpoint publishEndpoint)
-    {
-        _clinicRepository = clinicRepository;
-        _unitOfWork = unitOfWork;
-        _publishEndpoint = publishEndpoint;
-    }
-
     public async Task Handle(RemoveSurgeryCommand request, CancellationToken cancellationToken)
     {
-        var clinic = await _clinicRepository.GetAsync(request.ClinicId, cancellationToken);
+        var clinic = await clinicRepository.GetAsync(request.ClinicId, cancellationToken);
 
         clinic.RemoveSurgery(request.SurgeryId);
 
-        await _publishEndpoint.Publish(GetEvent(), cancellationToken: cancellationToken);
+        await publishEndpoint.Publish(GetEvent(), cancellationToken: cancellationToken);
 
-        await _unitOfWork.SaveChangesAsync(cancellationToken);
+        await unitOfWork.SaveChangesAsync(cancellationToken);
 
         SurgeryRemovedEvent GetEvent() => new(request.SurgeryId);
     }

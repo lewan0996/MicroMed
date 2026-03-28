@@ -1,3 +1,3 @@
 namespace Clinics.Contracts.Dto;
 
-public record AddSurgeryResponse(int Id);
+public record AddSurgeryResponse(Guid Id);

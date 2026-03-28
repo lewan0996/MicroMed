@@ -23,16 +23,11 @@ namespace Doctors.DbMigrator.Migrations
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
 
-            modelBuilder.HasSequence("doctoridseq")
-                .IncrementsBy(10);
-
             modelBuilder.Entity("Doctors.Domain.DoctorAggregate.Doctor", b =>
                 {
-                    b.Property<int>("Id")
+                    b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseHiLo(b.Property<int>("Id"), "doctoridseq");
+                        .HasColumnType("uniqueidentifier");
 
                     b.Property<string>("Specialty")
                         .IsRequired()

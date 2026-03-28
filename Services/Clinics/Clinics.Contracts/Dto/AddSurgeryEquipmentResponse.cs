@@ -1,3 +1,3 @@
 namespace Clinics.Contracts.Dto;
 
-public record AddSurgeryEquipmentResponse(int Id);
+public record AddSurgeryEquipmentResponse(Guid Id);

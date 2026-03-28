@@ -1,3 +1,3 @@
 namespace Doctors.Contracts.Dto;
 
-public record RegisterDoctorResponse(int Id);
+public record RegisterDoctorResponse(Guid Id);

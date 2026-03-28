@@ -23,22 +23,11 @@ namespace Clinics.DbMigrator.Migrations
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
 
-            modelBuilder.HasSequence("clinicidseq")
-                .IncrementsBy(10);
-
-            modelBuilder.HasSequence("equipmentidseq")
-                .IncrementsBy(10);
-
-            modelBuilder.HasSequence("surgeryidseq")
-                .IncrementsBy(10);
-
             modelBuilder.Entity("Clinics.Domain.ClinicAggregate.Clinic", b =>
                 {
-                    b.Property<int>("Id")
+                    b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseHiLo(b.Property<int>("Id"), "clinicidseq");
+                        .HasColumnType("uniqueidentifier");
 
                     b.Property<string>("Name")
                         .IsRequired()
@@ -77,14 +66,12 @@ namespace Clinics.DbMigrator.Migrations
 
             modelBuilder.Entity("Clinics.Domain.ClinicAggregate.Surgery", b =>
                 {
-                    b.Property<int>("Id")
+                    b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
+                        .HasColumnType("uniqueidentifier");
 
-                    SqlServerPropertyBuilderExtensions.UseHiLo(b.Property<int>("Id"), "surgeryidseq");
-
-                    b.Property<int?>("ClinicId")
-                        .HasColumnType("int");
+                    b.Property<Guid?>("ClinicId")
+                        .HasColumnType("uniqueidentifier");
 
                     b.ComplexProperty(typeof(Dictionary<string, object>), "SurgeryInfo", "Clinics.Domain.ClinicAggregate.Surgery.SurgeryInfo#SurgeryInfo", b1 =>
                         {
@@ -110,11 +97,9 @@ namespace Clinics.DbMigrator.Migrations
 
             modelBuilder.Entity("Clinics.Domain.EquipmentAggregate.Equipment", b =>
                 {
-                    b.Property<int>("Id")
+                    b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseHiLo(b.Property<int>("Id"), "equipmentidseq");
+                        .HasColumnType("uniqueidentifier");
 
                     b.Property<string>("Name")
                         .IsRequired()
@@ -128,11 +113,11 @@ namespace Clinics.DbMigrator.Migrations
 
             modelBuilder.Entity("EquipmentSurgery", b =>
                 {
-                    b.Property<int>("AvailableEquipmentId")
-                        .HasColumnType("int");
+                    b.Property<Guid>("AvailableEquipmentId")
+                        .HasColumnType("uniqueidentifier");
 
-                    b.Property<int>("SurgeryId")
-                        .HasColumnType("int");
+                    b.Property<Guid>("SurgeryId")
+                        .HasColumnType("uniqueidentifier");
 
                     b.HasKey("AvailableEquipmentId", "SurgeryId");
 
