@@ -1,14 +1,14 @@
-﻿using Microsoft.Data.SqlClient;
+﻿using Npgsql;
 
 namespace Shared.Services;
 
-public class SqlConnectionProvider(string connectionString)
+public class PostgresConnectionProvider(string connectionString)
 {
-    public async Task<TResult> CallAsync<TResult>(Func<SqlConnection, Task<TResult>> func)
+    public async Task<TResult> CallAsync<TResult>(Func<NpgsqlConnection, Task<TResult>> func)
     {
-        using (var connection = new SqlConnection(connectionString))
-        {
-            return await func(connection);
-        }
+        await using var connection = new NpgsqlConnection(connectionString);
+        await connection.OpenAsync();
+        
+        return await func(connection);
     }
 }

@@ -3,8 +3,8 @@ using System;
 using System.Collections.Generic;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
-using Microsoft.EntityFrameworkCore.Metadata;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
+using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 using Timetable.Infrastructure;
 
 #nullable disable
@@ -18,221 +18,279 @@ namespace Timetable.DbMigrator.Migrations
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .HasAnnotation("ProductVersion", "10.0.3")
-                .HasAnnotation("Relational:MaxIdentifierLength", 128);
+                .HasAnnotation("ProductVersion", "10.0.4")
+                .HasAnnotation("Relational:MaxIdentifierLength", 63);
 
-            SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
+            NpgsqlModelBuilderExtensions.UseIdentityByDefaultColumns(modelBuilder);
 
             modelBuilder.Entity("MassTransit.EntityFrameworkCoreIntegration.InboxState", b =>
                 {
                     b.Property<long>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("bigint");
+                        .HasColumnType("bigint")
+                        .HasColumnName("id");
 
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<long>("Id"));
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<long>("Id"));
 
                     b.Property<DateTime?>("Consumed")
-                        .HasColumnType("datetime2");
+                        .HasColumnType("timestamp with time zone")
+                        .HasColumnName("consumed");
 
                     b.Property<Guid>("ConsumerId")
-                        .HasColumnType("uniqueidentifier");
+                        .HasColumnType("uuid")
+                        .HasColumnName("consumer_id");
 
                     b.Property<DateTime?>("Delivered")
-                        .HasColumnType("datetime2");
+                        .HasColumnType("timestamp with time zone")
+                        .HasColumnName("delivered");
 
                     b.Property<DateTime?>("ExpirationTime")
-                        .HasColumnType("datetime2");
+                        .HasColumnType("timestamp with time zone")
+                        .HasColumnName("expiration_time");
 
                     b.Property<long?>("LastSequenceNumber")
-                        .HasColumnType("bigint");
+                        .HasColumnType("bigint")
+                        .HasColumnName("last_sequence_number");
 
                     b.Property<Guid>("LockId")
-                        .HasColumnType("uniqueidentifier");
+                        .HasColumnType("uuid")
+                        .HasColumnName("lock_id");
 
                     b.Property<Guid>("MessageId")
-                        .HasColumnType("uniqueidentifier");
+                        .HasColumnType("uuid")
+                        .HasColumnName("message_id");
 
                     b.Property<int>("ReceiveCount")
-                        .HasColumnType("int");
+                        .HasColumnType("integer")
+                        .HasColumnName("receive_count");
 
                     b.Property<DateTime>("Received")
-                        .HasColumnType("datetime2");
+                        .HasColumnType("timestamp with time zone")
+                        .HasColumnName("received");
 
                     b.Property<byte[]>("RowVersion")
                         .IsConcurrencyToken()
                         .ValueGeneratedOnAddOrUpdate()
-                        .HasColumnType("rowversion");
+                        .HasColumnType("bytea")
+                        .HasColumnName("row_version");
 
-                    b.HasKey("Id");
+                    b.HasKey("Id")
+                        .HasName("pk_inbox_state");
 
-                    b.HasIndex("Delivered");
+                    b.HasAlternateKey("MessageId", "ConsumerId")
+                        .HasName("ak_inbox_state_message_id_consumer_id");
 
-                    b.ToTable("InboxState");
+                    b.HasIndex("Delivered")
+                        .HasDatabaseName("ix_inbox_state_delivered");
+
+                    b.ToTable("inbox_state", (string)null);
                 });
 
             modelBuilder.Entity("MassTransit.EntityFrameworkCoreIntegration.OutboxMessage", b =>
                 {
                     b.Property<long>("SequenceNumber")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("bigint");
+                        .HasColumnType("bigint")
+                        .HasColumnName("sequence_number");
 
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<long>("SequenceNumber"));
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<long>("SequenceNumber"));
 
                     b.Property<string>("Body")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("text")
+                        .HasColumnName("body");
 
                     b.Property<string>("ContentType")
                         .IsRequired()
                         .HasMaxLength(256)
-                        .HasColumnType("nvarchar(256)");
+                        .HasColumnType("character varying(256)")
+                        .HasColumnName("content_type");
 
                     b.Property<Guid?>("ConversationId")
-                        .HasColumnType("uniqueidentifier");
+                        .HasColumnType("uuid")
+                        .HasColumnName("conversation_id");
 
                     b.Property<Guid?>("CorrelationId")
-                        .HasColumnType("uniqueidentifier");
+                        .HasColumnType("uuid")
+                        .HasColumnName("correlation_id");
 
                     b.Property<string>("DestinationAddress")
                         .HasMaxLength(256)
-                        .HasColumnType("nvarchar(256)");
+                        .HasColumnType("character varying(256)")
+                        .HasColumnName("destination_address");
 
                     b.Property<DateTime?>("EnqueueTime")
-                        .HasColumnType("datetime2");
+                        .HasColumnType("timestamp with time zone")
+                        .HasColumnName("enqueue_time");
 
                     b.Property<DateTime?>("ExpirationTime")
-                        .HasColumnType("datetime2");
+                        .HasColumnType("timestamp with time zone")
+                        .HasColumnName("expiration_time");
 
                     b.Property<string>("FaultAddress")
                         .HasMaxLength(256)
-                        .HasColumnType("nvarchar(256)");
+                        .HasColumnType("character varying(256)")
+                        .HasColumnName("fault_address");
 
                     b.Property<string>("Headers")
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("text")
+                        .HasColumnName("headers");
 
                     b.Property<Guid?>("InboxConsumerId")
-                        .HasColumnType("uniqueidentifier");
+                        .HasColumnType("uuid")
+                        .HasColumnName("inbox_consumer_id");
 
                     b.Property<Guid?>("InboxMessageId")
-                        .HasColumnType("uniqueidentifier");
+                        .HasColumnType("uuid")
+                        .HasColumnName("inbox_message_id");
 
                     b.Property<Guid?>("InitiatorId")
-                        .HasColumnType("uniqueidentifier");
+                        .HasColumnType("uuid")
+                        .HasColumnName("initiator_id");
 
                     b.Property<Guid>("MessageId")
-                        .HasColumnType("uniqueidentifier");
+                        .HasColumnType("uuid")
+                        .HasColumnName("message_id");
 
                     b.Property<string>("MessageType")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("text")
+                        .HasColumnName("message_type");
 
                     b.Property<Guid?>("OutboxId")
-                        .HasColumnType("uniqueidentifier");
+                        .HasColumnType("uuid")
+                        .HasColumnName("outbox_id");
 
                     b.Property<string>("Properties")
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("text")
+                        .HasColumnName("properties");
 
                     b.Property<Guid?>("RequestId")
-                        .HasColumnType("uniqueidentifier");
+                        .HasColumnType("uuid")
+                        .HasColumnName("request_id");
 
                     b.Property<string>("ResponseAddress")
                         .HasMaxLength(256)
-                        .HasColumnType("nvarchar(256)");
+                        .HasColumnType("character varying(256)")
+                        .HasColumnName("response_address");
 
                     b.Property<DateTime>("SentTime")
-                        .HasColumnType("datetime2");
+                        .HasColumnType("timestamp with time zone")
+                        .HasColumnName("sent_time");
 
                     b.Property<string>("SourceAddress")
                         .HasMaxLength(256)
-                        .HasColumnType("nvarchar(256)");
+                        .HasColumnType("character varying(256)")
+                        .HasColumnName("source_address");
 
-                    b.HasKey("SequenceNumber");
+                    b.HasKey("SequenceNumber")
+                        .HasName("pk_outbox_message");
 
-                    b.HasIndex("EnqueueTime");
+                    b.HasIndex("EnqueueTime")
+                        .HasDatabaseName("ix_outbox_message_enqueue_time");
 
-                    b.HasIndex("ExpirationTime");
+                    b.HasIndex("ExpirationTime")
+                        .HasDatabaseName("ix_outbox_message_expiration_time");
 
                     b.HasIndex("OutboxId", "SequenceNumber")
                         .IsUnique()
-                        .HasFilter("[OutboxId] IS NOT NULL");
+                        .HasDatabaseName("ix_outbox_message_outbox_id_sequence_number");
 
                     b.HasIndex("InboxMessageId", "InboxConsumerId", "SequenceNumber")
                         .IsUnique()
-                        .HasFilter("[InboxMessageId] IS NOT NULL AND [InboxConsumerId] IS NOT NULL");
+                        .HasDatabaseName("ix_outbox_message_inbox_message_id_inbox_consumer_id_sequence_");
 
-                    b.ToTable("OutboxMessage");
+                    b.ToTable("outbox_message", (string)null);
                 });
 
             modelBuilder.Entity("MassTransit.EntityFrameworkCoreIntegration.OutboxState", b =>
                 {
                     b.Property<Guid>("OutboxId")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("uniqueidentifier");
+                        .HasColumnType("uuid")
+                        .HasColumnName("outbox_id");
 
                     b.Property<DateTime>("Created")
-                        .HasColumnType("datetime2");
+                        .HasColumnType("timestamp with time zone")
+                        .HasColumnName("created");
 
                     b.Property<DateTime?>("Delivered")
-                        .HasColumnType("datetime2");
+                        .HasColumnType("timestamp with time zone")
+                        .HasColumnName("delivered");
 
                     b.Property<long?>("LastSequenceNumber")
-                        .HasColumnType("bigint");
+                        .HasColumnType("bigint")
+                        .HasColumnName("last_sequence_number");
 
                     b.Property<Guid>("LockId")
-                        .HasColumnType("uniqueidentifier");
+                        .HasColumnType("uuid")
+                        .HasColumnName("lock_id");
 
                     b.Property<byte[]>("RowVersion")
                         .IsConcurrencyToken()
                         .ValueGeneratedOnAddOrUpdate()
-                        .HasColumnType("rowversion");
+                        .HasColumnType("bytea")
+                        .HasColumnName("row_version");
 
-                    b.HasKey("OutboxId");
+                    b.HasKey("OutboxId")
+                        .HasName("pk_outbox_state");
 
-                    b.HasIndex("Created");
+                    b.HasIndex("Created")
+                        .HasDatabaseName("ix_outbox_state_created");
 
-                    b.ToTable("OutboxState");
+                    b.ToTable("outbox_state", (string)null);
                 });
 
             modelBuilder.Entity("Timetable.Domain.AppointmentAggregate.Appointment", b =>
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("uniqueidentifier");
+                        .HasColumnType("uuid")
+                        .HasColumnName("id");
 
                     b.Property<Guid>("DoctorId")
-                        .HasColumnType("uniqueidentifier");
+                        .HasColumnType("uuid")
+                        .HasColumnName("doctor_id");
 
                     b.Property<Guid>("SurgeryId")
-                        .HasColumnType("uniqueidentifier");
+                        .HasColumnType("uuid")
+                        .HasColumnName("surgery_id");
 
                     b.ComplexProperty(typeof(Dictionary<string, object>), "Date", "Timetable.Domain.AppointmentAggregate.Appointment.Date#AppointmentDate", b1 =>
                         {
                             b1.IsRequired();
 
                             b1.Property<DateTime>("DateTime")
-                                .HasColumnType("datetime2");
+                                .HasColumnType("timestamp with time zone")
+                                .HasColumnName("date_date_time");
 
                             b1.Property<int>("DurationMinutes")
-                                .HasColumnType("int");
+                                .HasColumnType("integer")
+                                .HasColumnName("date_duration_minutes");
                         });
 
-                    b.HasKey("Id");
+                    b.HasKey("Id")
+                        .HasName("pk_appointments");
 
-                    b.HasIndex("DoctorId");
+                    b.HasIndex("DoctorId")
+                        .HasDatabaseName("ix_appointments_doctor_id");
 
-                    b.HasIndex("SurgeryId");
+                    b.HasIndex("SurgeryId")
+                        .HasDatabaseName("ix_appointments_surgery_id");
 
-                    b.ToTable("Appointments");
+                    b.ToTable("appointments", (string)null);
                 });
 
             modelBuilder.Entity("Timetable.Domain.DoctorAggregate.Doctor", b =>
                 {
                     b.Property<Guid>("Id")
-                        .HasColumnType("uniqueidentifier");
+                        .HasColumnType("uuid")
+                        .HasColumnName("id");
 
                     b.Property<string>("Specialty")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("text")
+                        .HasColumnName("specialty");
 
                     b.ComplexProperty(typeof(Dictionary<string, object>), "Name", "Timetable.Domain.DoctorAggregate.Doctor.Name#Name", b1 =>
                         {
@@ -240,48 +298,55 @@ namespace Timetable.DbMigrator.Migrations
 
                             b1.Property<string>("FirstName")
                                 .IsRequired()
-                                .HasColumnType("nvarchar(max)")
-                                .HasColumnName("FirstName");
+                                .HasColumnType("text")
+                                .HasColumnName("first_name");
 
                             b1.Property<string>("LastName")
                                 .IsRequired()
-                                .HasColumnType("nvarchar(max)")
-                                .HasColumnName("LastName");
+                                .HasColumnType("text")
+                                .HasColumnName("last_name");
                         });
 
-                    b.HasKey("Id");
+                    b.HasKey("Id")
+                        .HasName("pk_doctors");
 
-                    b.ToTable("Doctors", (string)null);
+                    b.ToTable("doctors", (string)null);
                 });
 
             modelBuilder.Entity("Timetable.Domain.SurgeryAggregate.Surgery", b =>
                 {
                     b.Property<Guid>("Id")
-                        .HasColumnType("uniqueidentifier");
+                        .HasColumnType("uuid")
+                        .HasColumnName("id");
 
                     b.Property<string>("Floor")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("text")
+                        .HasColumnName("floor");
 
                     b.Property<string>("Number")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("text")
+                        .HasColumnName("number");
 
-                    b.HasKey("Id");
+                    b.HasKey("Id")
+                        .HasName("pk_surgeries");
 
-                    b.ToTable("Surgeries", (string)null);
+                    b.ToTable("surgeries", (string)null);
                 });
 
             modelBuilder.Entity("MassTransit.EntityFrameworkCoreIntegration.OutboxMessage", b =>
                 {
                     b.HasOne("MassTransit.EntityFrameworkCoreIntegration.OutboxState", null)
                         .WithMany()
-                        .HasForeignKey("OutboxId");
+                        .HasForeignKey("OutboxId")
+                        .HasConstraintName("fk_outbox_message_outbox_state_outbox_id");
 
                     b.HasOne("MassTransit.EntityFrameworkCoreIntegration.InboxState", null)
                         .WithMany()
                         .HasForeignKey("InboxMessageId", "InboxConsumerId")
-                        .HasPrincipalKey("MessageId", "ConsumerId");
+                        .HasPrincipalKey("MessageId", "ConsumerId")
+                        .HasConstraintName("fk_outbox_message_inbox_state_inbox_message_id_inbox_consumer_");
                 });
 
             modelBuilder.Entity("Timetable.Domain.AppointmentAggregate.Appointment", b =>
@@ -290,13 +355,15 @@ namespace Timetable.DbMigrator.Migrations
                         .WithMany()
                         .HasForeignKey("DoctorId")
                         .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .IsRequired()
+                        .HasConstraintName("fk_appointments_doctors_doctor_id");
 
                     b.HasOne("Timetable.Domain.SurgeryAggregate.Surgery", "Surgery")
                         .WithMany()
                         .HasForeignKey("SurgeryId")
                         .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .IsRequired()
+                        .HasConstraintName("fk_appointments_surgeries_surgery_id");
 
                     b.Navigation("Doctor");
 

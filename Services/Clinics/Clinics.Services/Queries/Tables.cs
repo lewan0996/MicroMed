@@ -2,5 +2,5 @@
 
 public static class Tables
 {
-    public const string Clinics = "dbo.Clinics";
+    public const string Clinics = "clinics";
 }

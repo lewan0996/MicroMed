@@ -1,5 +1,5 @@
 using Timetable.Infrastructure;
-using Shared.Infrastructure;
+using Shared.Infrastructure.EntityFramework;
 
 await using var migrator = new DbMigrator<TimetableDbContext>(Consts.Assembly);
 await migrator.MigrateAsync();

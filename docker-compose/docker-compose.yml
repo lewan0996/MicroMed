@@ -22,7 +22,7 @@ services:
         condition: service_started
       keycloak:
         condition: service_started
-  
+
   clinics.migrator:
     image: ${DOCKER_REGISTRY-}clinicsdbmigrator
     build:
@@ -30,7 +30,7 @@ services:
       dockerfile: Clinics/Clinics.DbMigrator/Dockerfile
     restart:  on-failure
     depends_on:
-      sqlServer:
+      postgres:
         condition: service_healthy
 
   doctors.api:
@@ -52,7 +52,7 @@ services:
         condition: service_started
       keycloak:
         condition: service_started
-        
+
   doctors.migrator:
     image: ${DOCKER_REGISTRY-}doctorsdbmigrator
     build:
@@ -60,7 +60,7 @@ services:
       dockerfile: Doctors/Doctors.DbMigrator/Dockerfile
     restart: on-failure
     depends_on:
-      sqlServer:
+      postgres:
         condition: service_healthy
 
   timetable.api:
@@ -82,7 +82,7 @@ services:
         condition: service_started
       keycloak:
         condition: service_started
-        
+
   timetable.migrator:
     image: ${DOCKER_REGISTRY-}timetabledbmigrator
     build:
@@ -90,25 +90,25 @@ services:
       dockerfile: Timetable/Timetable.DbMigrator/Dockerfile
     restart: on-failure
     depends_on:
-      sqlServer:
+      postgres:
         condition: service_healthy
-  
-  sqlServer:
-    image: mcr.microsoft.com/mssql/server:2022-latest
+
+  postgres:
+    image: postgres:18
     environment:
-      - MSSQL_SA_PASSWORD=P@ssword1
-      - ACCEPT_EULA=Y
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=postgres
+      - POSTGRES_DB=master
     ports:
-      - "1435:1433"
+      - "5432:5432"
     healthcheck:
-      test: [
-        "CMD-SHELL",
-        "/opt/mssql-tools18/bin/sqlcmd -S localhost -U sa -P P@ssword1 -C -Q 'SELECT 1' || exit 1" # -C trust server cert, -Q - query
-      ]
+      test: ["CMD-SHELL", "pg_isready -U postgres"]
       interval: 5s
       timeout: 3s
-      retries: 20
+      retries: 5
       start_period: 5s
+    volumes:
+      - ./containers/postgres:/var/lib/postgresql
 
   rabbitMQ:
     image: rabbitmq:3-management

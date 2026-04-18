@@ -1,20 +1,23 @@
 ﻿using Clinics.Domain.ClinicAggregate;
 using Clinics.Domain.EquipmentAggregate;
+using Clinics.Services.Queries;
 using Microsoft.EntityFrameworkCore;
-using Shared.Infrastructure;
+using Shared.Infrastructure.EntityFramework;
+// ReSharper disable UnassignedGetOnlyAutoProperty
+// ReSharper disable UnusedAutoPropertyAccessor.Global
 
 namespace Clinics.Infrastructure;
 
 public class ClinicsDbContext(DbContextOptions<ClinicsDbContext> options) : DbContextBase(options)
 {
-    public DbSet<Clinic> Clinics { get; set; }
-    public DbSet<Equipment> Equipment { get; set; }
+    public DbSet<Clinic> Clinics { get; init; }
+    public DbSet<Equipment> Equipment { get; init; }
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         var clinicsBuilder = modelBuilder.Entity<Clinic>();
 
-        clinicsBuilder.ToTable("Clinics");
+        clinicsBuilder.ToTable(Tables.Clinics);
 
         clinicsBuilder.HasKey(x => x.Id);
 
@@ -24,7 +27,7 @@ public class ClinicsDbContext(DbContextOptions<ClinicsDbContext> options) : DbCo
             {
                 x.HasStringValueObject(y => y.City);
                 x.HasStringValueObject(y => y.Street);
-                x.HasStringValueObject(y => y.Number, "StreetNumber");
+                x.HasStringValueObject(y => y.Number, "street_number");
                 x.HasStringValueObject(y => y.AdditionalInfo);
             })
             .HasMany(x => x.Surgeries).WithOne();
@@ -33,20 +36,20 @@ public class ClinicsDbContext(DbContextOptions<ClinicsDbContext> options) : DbCo
 
         var surgeryBuilder = modelBuilder.Entity<Surgery>();
 
-        surgeryBuilder.ToTable("Surgeries")
+        surgeryBuilder.ToTable("surgeries")
             .ComplexProperty(x => x.SurgeryInfo, x =>
             {
                 x.HasStringValueObject(y => y.Floor);
                 x.HasStringValueObject(y => y.Number);
 
             })
-            .HasMany(x => x.AvailableEquipment).WithMany().UsingEntity(x => x.ToTable("SurgeryEquipment"));
+            .HasMany(x => x.AvailableEquipment).WithMany().UsingEntity(x => x.ToTable("surgery_equipment"));
 
         surgeryBuilder.HasKey(x => x.Id);
 
         var equipmentBuilder = modelBuilder.Entity<Equipment>();
 
-        equipmentBuilder.ToTable("Equipment");
+        equipmentBuilder.ToTable("equipment");
 
         equipmentBuilder.HasKey(x => x.Id);
 

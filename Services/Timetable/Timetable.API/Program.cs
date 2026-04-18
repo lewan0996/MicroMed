@@ -1,5 +1,5 @@
-using Microsoft.EntityFrameworkCore;
 using Shared.API;
+using Shared.Infrastructure;
 using Shared.Services;
 using Timetable.API;
 using Timetable.Infrastructure;
@@ -14,32 +14,14 @@ builder.Services
     .AddScoped<IAppointmentRepository, AppointmentRepository>()
     .AddScoped<IUnitOfWork>(services => services.GetRequiredService<TimetableDbContext>())
     .AddMassTransit<TimetableDbContext>(builder.Configuration)
-    .AddSqlConnectionProvider(builder.Configuration)
+    .AddPostgresConnectionProvider(builder.Configuration)
     .AddMediatRWithTransactionBehavior()
-    .AddDbContext<TimetableDbContext>(options =>
-    {
-        options.UseSqlServer(builder.Configuration.GetConnectionString("SqlServer"));
-        options.EnableSensitiveDataLogging();
-    })
+    .AddEfDbContextWithPostgres<TimetableDbContext>(builder.Configuration)
     .AddEndpointsApiExplorer()
     .AddSwagger(builder.Configuration, builder.Environment)
     .AddAuth(builder.Configuration, builder.Environment);
 
 var app = builder.Build();
-
-if (app.Environment.IsDevelopment())
-{
-    await EnsureDbCreated();
-
-    async Task EnsureDbCreated()
-    {
-        using var scope = app.Services.CreateScope();
-
-        var dbContext = scope.ServiceProvider.GetRequiredService<TimetableDbContext>();
-
-        await dbContext.Database.EnsureCreatedAsync();
-    }
-}
 
 app.UseSwaggerUI();
 app.MapEndpoints();

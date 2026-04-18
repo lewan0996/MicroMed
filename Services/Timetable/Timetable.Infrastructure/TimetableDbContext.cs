@@ -1,23 +1,25 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Shared.Domain;
-using Shared.Infrastructure;
+using Shared.Infrastructure.EntityFramework;
 using Timetable.Domain.AppointmentAggregate;
 using Timetable.Domain.DoctorAggregate;
 using Timetable.Domain.SurgeryAggregate;
+// ReSharper disable UnassignedGetOnlyAutoProperty
+// ReSharper disable UnusedAutoPropertyAccessor.Global
 
 namespace Timetable.Infrastructure;
 
 public class TimetableDbContext(DbContextOptions<TimetableDbContext> options) : DbContextBase(options)
 {
-    public DbSet<Doctor> Doctors { get; set; } = null!;
-    public DbSet<Surgery> Surgeries { get; set; } = null!;
-    public DbSet<Appointment> Appointments { get; set; } = null!;
+    public DbSet<Doctor> Doctors { get; init; }
+    public DbSet<Surgery> Surgeries { get; init; }
+    public DbSet<Appointment> Appointments { get; init; }
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         var doctorsBuilder = modelBuilder.Entity<Doctor>();
 
-        doctorsBuilder.ToTable("Doctors");
+        doctorsBuilder.ToTable("doctors");
 
         doctorsBuilder.Property(x => x.Id).ValueGeneratedNever();
 
@@ -31,7 +33,7 @@ public class TimetableDbContext(DbContextOptions<TimetableDbContext> options) : 
 
         var surgeryBuilder = modelBuilder.Entity<Surgery>();
 
-        surgeryBuilder.ToTable("Surgeries");
+        surgeryBuilder.ToTable("surgeries");
 
         surgeryBuilder.Property(x => x.Id).ValueGeneratedNever();
 
@@ -50,6 +52,5 @@ public class TimetableDbContext(DbContextOptions<TimetableDbContext> options) : 
         });
 
         modelBuilder.AddMassTransitOutbox();
-        //todo base entitybuilder
     }
 }

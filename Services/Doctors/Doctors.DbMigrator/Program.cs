@@ -1,5 +1,5 @@
 using Doctors.Infrastructure;
-using Shared.Infrastructure;
+using Shared.Infrastructure.EntityFramework;
 
 await using var migrator = new DbMigrator<DoctorsDbContext>(Consts.Assembly);
 await migrator.MigrateAsync();

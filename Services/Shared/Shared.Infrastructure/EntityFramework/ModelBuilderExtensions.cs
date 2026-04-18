@@ -1,0 +1,50 @@
+﻿using System.Linq.Expressions;
+using System.Text.Json;
+using MassTransit;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Metadata.Builders;
+using Shared.Domain;
+
+namespace Shared.Infrastructure.EntityFramework;
+
+public static class ModelBuilderExtensions
+{
+    public static ComplexTypePropertyBuilder<TStringValueObject> HasStringValueObject<TEntity, TStringValueObject>(
+        this ComplexPropertyBuilder<TEntity> builder,
+        Expression<Func<TEntity, TStringValueObject>> navigationExpression,
+        string? columnName = null) where TStringValueObject : StringValueObject where TEntity : notnull
+    {
+        var ctor = typeof(TStringValueObject).GetConstructor([typeof(string)])!;
+
+        return builder
+            .Property(navigationExpression)
+            .HasConversion(x => x.Value, x => (TStringValueObject)ctor.Invoke(new object[] { x }))
+            .HasColumnName(columnName ?? GetExpressionMemberName(navigationExpression));
+    }
+
+    public static PropertyBuilder<TStringValueObject> HasStringValueObject<TEntity, TStringValueObject>(
+        this EntityTypeBuilder<TEntity> builder,
+        Expression<Func<TEntity, TStringValueObject>> navigationExpression,
+        string? columnName = null) where TStringValueObject : StringValueObject where TEntity: class
+    {
+        var ctor = typeof(TStringValueObject).GetConstructor([typeof(string)])!;
+
+        return builder
+            .Property(navigationExpression)
+            .HasConversion(x => x.Value, x => (TStringValueObject)ctor.Invoke(new object[] { x }))
+            .HasColumnName(columnName ?? GetExpressionMemberName(navigationExpression));
+    }
+
+    private static string GetExpressionMemberName<TEntity, TStringValueObject>(
+        Expression<Func<TEntity, TStringValueObject>> expression)
+        => JsonNamingPolicy.SnakeCaseLower.ConvertName(((MemberExpression)expression.Body).Member.Name);
+
+    public static ModelBuilder AddMassTransitOutbox(this ModelBuilder builder)
+    {
+        builder.AddInboxStateEntity();
+        builder.AddOutboxMessageEntity();
+        builder.AddOutboxStateEntity();
+
+        return builder;
+    }
+}
