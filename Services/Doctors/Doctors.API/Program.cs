@@ -1,8 +1,8 @@
 using Doctors.API;
 using Doctors.Infrastructure;
 using Doctors.Services;
-using Microsoft.EntityFrameworkCore;
 using Shared.API;
+using Shared.Infrastructure;
 using Shared.Services;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -11,13 +11,9 @@ builder.Services
     .AddScoped<IDoctorsRepository, DoctorsRepository>()
     .AddScoped<IUnitOfWork>(services => services.GetRequiredService<DoctorsDbContext>())
     .AddMassTransit<DoctorsDbContext>(builder.Configuration)
-    .AddSqlConnectionProvider(builder.Configuration)
+    .AddPostgresConnectionProvider(builder.Configuration)
     .AddMediatRWithTransactionBehavior()
-    .AddDbContext<DoctorsDbContext>(options =>
-    {
-        options.UseSqlServer(builder.Configuration.GetConnectionString("SqlServer"));
-        options.EnableSensitiveDataLogging();
-    })
+    .AddEfDbContextWithPostgres<DoctorsDbContext>(builder.Configuration)
     .AddEndpointsApiExplorer()
     .AddSwagger(builder.Configuration, builder.Environment)
     .AddAuth(builder.Configuration, builder.Environment);

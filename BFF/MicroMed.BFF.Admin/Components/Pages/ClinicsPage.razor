@@ -51,7 +51,7 @@
         _clinics ??= await GetClinicsAsync();
     }
 
-    private async void ActionBegin(ActionEventArgs<ClinicDto> arg)
+    private async Task ActionBegin(ActionEventArgs<ClinicDto> arg)
     {
         if (arg is { RequestType: Syncfusion.Blazor.Grids.Action.Save, Action: "Add" })
         {
@@ -82,7 +82,7 @@
             return;
         }
 
-        if (args != null && args.Data != null && args.Data.Id > 0)
+        if (args?.Data != null)
         {
             NavigationManager.NavigateTo($"/clinics/{args.Data.Id}");
         }

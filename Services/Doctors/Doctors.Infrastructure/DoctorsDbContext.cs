@@ -1,19 +1,21 @@
 ﻿using Doctors.Domain.DoctorAggregate;
 using Microsoft.EntityFrameworkCore;
 using Shared.Domain;
-using Shared.Infrastructure;
+using Shared.Infrastructure.EntityFramework;
+// ReSharper disable UnassignedGetOnlyAutoProperty
+// ReSharper disable UnusedAutoPropertyAccessor.Global
 
 namespace Doctors.Infrastructure;
 
 public class DoctorsDbContext(DbContextOptions<DoctorsDbContext> options) : DbContextBase(options)
 {
-    public DbSet<Doctor> Doctors { get; set; } = null!;
+    public DbSet<Doctor> Doctors { get; init; }
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         var doctorsBuilder = modelBuilder.Entity<Doctor>();
 
-        doctorsBuilder.ToTable("Doctors");
+        doctorsBuilder.ToTable("doctors");
 
         doctorsBuilder.HasKey(x => x.Id);
 

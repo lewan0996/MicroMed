@@ -6,19 +6,21 @@ namespace Clinics.Services.Queries;
 
 public class ClinicsQuery : IRequest<GetClinicsResponse>;
 
-public class ClinicsQueryHandler(SqlConnectionProvider sqlConnectionProvider) : IRequestHandler<ClinicsQuery, GetClinicsResponse>
+public class ClinicsQueryHandler(PostgresConnectionProvider sqlConnectionProvider) : IRequestHandler<ClinicsQuery, GetClinicsResponse>
 {
     public async Task<GetClinicsResponse> Handle(ClinicsQuery request, CancellationToken cancellationToken)
     {
-        const string sql = $@"
-SELECT
-    Id,
-    Name,
-    City,
-    Street,
-    StreetNumber,
-    AdditionalInfo
-FROM {Tables.Clinics}";
+        const string sql = $"""
+
+                            SELECT
+                                id,
+                                name,
+                                city,
+                                street,
+                                street_number,
+                                additional_info
+                            FROM {Tables.Clinics}
+                            """;
 
         var clinics = await sqlConnectionProvider.CallAsync(x => x.QueryAsync<ClinicDto>(sql, cancellationToken));
 
