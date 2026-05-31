@@ -1,0 +1,28 @@
+{
+    "name": "MicroMed",
+
+    "dockerComposeFile": "docker-compose.yml",
+
+    "service": "devcontainer",
+
+    "workspaceFolder": "/workspace",
+
+    "shutdownAction": "stopCompose",
+
+    "remoteEnv": {
+        "ASPNETCORE_ENVIRONMENT": "Development"
+    },
+
+    "forwardPorts": [
+        5000,
+        5001,
+        5002,
+        5003,
+        5432,
+        5672,
+        15672,
+        6001
+    ],
+
+    "postCreateCommand": "dotnet restore"
+}
