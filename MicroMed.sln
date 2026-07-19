@@ -30,8 +30,6 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Shared.Infrastructure", "Se
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Doctors.API", "Services\Doctors\Doctors.API\Doctors.API.csproj", "{3DAB5C3F-1086-4FF2-B84B-1C3B755904BA}"
 EndProject
-Project("{E53339B2-1760-4266-BCC7-CA923CBCF16C}") = "docker-compose", "docker-compose\docker-compose.dcproj", "{E455AF9E-6D51-4579-9296-B1992616637B}"
-EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Shared.API", "Services\Shared\Shared.API\Shared.API.csproj", "{BA7D9855-DE22-4129-9FD9-15DDCFD1D399}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Clinics.Domain", "Services\Clinics\Clinics.Domain\Clinics.Domain.csproj", "{6C4412FD-CAC4-4853-A266-665902EF4DAF}"
@@ -108,10 +106,6 @@ Global
 		{3DAB5C3F-1086-4FF2-B84B-1C3B755904BA}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{3DAB5C3F-1086-4FF2-B84B-1C3B755904BA}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{3DAB5C3F-1086-4FF2-B84B-1C3B755904BA}.Release|Any CPU.Build.0 = Release|Any CPU
-		{E455AF9E-6D51-4579-9296-B1992616637B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{E455AF9E-6D51-4579-9296-B1992616637B}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{E455AF9E-6D51-4579-9296-B1992616637B}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{E455AF9E-6D51-4579-9296-B1992616637B}.Release|Any CPU.Build.0 = Release|Any CPU
 		{BA7D9855-DE22-4129-9FD9-15DDCFD1D399}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{BA7D9855-DE22-4129-9FD9-15DDCFD1D399}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{BA7D9855-DE22-4129-9FD9-15DDCFD1D399}.Release|Any CPU.ActiveCfg = Release|Any CPU

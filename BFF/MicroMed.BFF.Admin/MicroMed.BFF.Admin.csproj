@@ -16,10 +16,10 @@
 	</ItemGroup>
 
 	<ItemGroup>
-		<PackageReference Include="Microsoft.VisualStudio.Azure.Containers.Tools.Targets" Version="1.22.1" />
-		<PackageReference Include="Syncfusion.Blazor.Cards" Version="32.1.24" />
-		<PackageReference Include="Syncfusion.Blazor.Grid" Version="32.1.24" />
-		<PackageReference Include="Syncfusion.Blazor.Themes" Version="32.1.24" />
+		<PackageReference Include="Microsoft.VisualStudio.Azure.Containers.Tools.Targets" Version="1.23.0" />
+		<PackageReference Include="Syncfusion.Blazor.Cards" Version="34.1.31" />
+		<PackageReference Include="Syncfusion.Blazor.Grid" Version="34.1.31" />
+		<PackageReference Include="Syncfusion.Blazor.Themes" Version="34.1.31" />
 	</ItemGroup>
 
 	<ItemGroup>

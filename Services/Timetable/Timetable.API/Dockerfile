@@ -1,23 +1,20 @@
-FROM mcr.microsoft.com/dotnet/aspnet:10.0 AS base
+FROM mcr.microsoft.com/dotnet/sdk:10.0 AS build
+
+WORKDIR /src
+COPY . .
+
+WORKDIR /src/Timetable/Timetable.API
+
+RUN dotnet publish \
+    -c Release \
+    -o /app \
+    /p:UseAppHost=false
+
+FROM mcr.microsoft.com/dotnet/aspnet:10.0
+
 USER app
 WORKDIR /app
-EXPOSE 8080
-EXPOSE 8081
 
-FROM mcr.microsoft.com/dotnet/sdk:10.0 AS build
-ARG BUILD_CONFIGURATION=Release
-WORKDIR /src
-COPY ["Timetable/Timetable.API/Timetable.API.csproj", "Timetable/Timetable.API/"]
-RUN dotnet restore "./Timetable/Timetable.API/./Timetable.API.csproj"
-COPY . .
-WORKDIR "/src/Timetable/Timetable.API"
-RUN dotnet build "./Timetable.API.csproj" -c $BUILD_CONFIGURATION -o /app/build
+COPY --from=build /app .
 
-FROM build AS publish
-ARG BUILD_CONFIGURATION=Release
-RUN dotnet publish "./Timetable.API.csproj" -c $BUILD_CONFIGURATION -o /app/publish /p:UseAppHost=false
-
-FROM base AS final
-WORKDIR /app
-COPY --from=publish /app/publish .
 ENTRYPOINT ["dotnet", "Timetable.API.dll"]
