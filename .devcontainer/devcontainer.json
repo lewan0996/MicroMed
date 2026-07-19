@@ -7,6 +7,8 @@
 
     "workspaceFolder": "/workspace",
 
+    "remoteUser": "root",
+
     "shutdownAction": "stopCompose",
 
     "remoteEnv": {
@@ -24,5 +26,7 @@
         6001
     ],
 
-    "postCreateCommand": "dotnet restore"
+    "postCreateCommand": "dotnet restore",
+
+    "postStartCommand": "nohup bash scripts/run-migrations.sh > /dev/null 2>&1 &"
 }

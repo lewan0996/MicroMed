@@ -1,23 +1,20 @@
-FROM mcr.microsoft.com/dotnet/aspnet:10.0 AS base
+FROM mcr.microsoft.com/dotnet/sdk:10.0 AS build
+
+WORKDIR /src
+COPY . .
+
+WORKDIR /src/Clinics/Clinics.API
+
+RUN dotnet publish \
+    -c Release \
+    -o /app \
+    /p:UseAppHost=false
+
+FROM mcr.microsoft.com/dotnet/aspnet:10.0
+
 USER app
 WORKDIR /app
-EXPOSE 8080
-EXPOSE 8081
 
-FROM mcr.microsoft.com/dotnet/sdk:10.0 AS build
-ARG BUILD_CONFIGURATION=Release
-WORKDIR /src
-COPY ["Clinics/Clinics.API/Clinics.API.csproj", "Clinics/Clinics.API/"]
-RUN dotnet restore "./Clinics/Clinics.API/./Clinics.API.csproj"
-COPY . .
-WORKDIR "/src/Clinics/Clinics.API"
-RUN dotnet build "./Clinics.API.csproj" -c $BUILD_CONFIGURATION -o /app/build
+COPY --from=build /app .
 
-FROM build AS publish
-ARG BUILD_CONFIGURATION=Release
-RUN dotnet publish "./Clinics.API.csproj" -c $BUILD_CONFIGURATION -o /app/publish /p:UseAppHost=false
-
-FROM base AS final
-WORKDIR /app
-COPY --from=publish /app/publish .
 ENTRYPOINT ["dotnet", "Clinics.API.dll"]
