@@ -60,6 +60,7 @@ void AddAuth()
             options.SignInScheme = CookieAuthenticationDefaults.AuthenticationScheme;
             options.SignOutScheme = CookieAuthenticationDefaults.AuthenticationScheme;
             options.Authority = config.Authority;
+            options.MetadataAddress = config.MetadataUrl;
             options.ClientId = "admin-app";
             options.ClientSecret = config.Secret;
             options.ResponseType = "code";
@@ -83,7 +84,7 @@ void AddAuth()
             {
                 options.BackchannelHttpHandler = new HttpClientHandler
                 {
-                    Proxy = new WebProxy(config.Authority.Replace("localhost", "host.docker.internal")),
+                    Proxy = new WebProxy(config.MetadataUrl),
                 };
             }
         });
@@ -113,4 +114,4 @@ void MapEndpoints()
 
 internal record ServiceUrls(string Clinics, string Doctors);
 
-internal record AuthConfig(string Authority, string Audience, string Secret);
+internal record AuthConfig(string Authority, string Audience, string Secret, string MetadataUrl);
