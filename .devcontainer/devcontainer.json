@@ -2,12 +2,13 @@
     "name": "MicroMed",
 
     "dockerComposeFile": "docker-compose.yml",
-
     "service": "devcontainer",
 
     "workspaceFolder": "/workspace",
 
-    "remoteUser": "root",
+    "remoteUser": "vscode",
+
+    "updateRemoteUserUID": true,
 
     "shutdownAction": "stopCompose",
 
